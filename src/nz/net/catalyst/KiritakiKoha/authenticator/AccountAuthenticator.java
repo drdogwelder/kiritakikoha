@@ -1,6 +1,7 @@
 package nz.net.catalyst.KiritakiKoha.authenticator;
 
 import nz.net.catalyst.KiritakiKoha.log.LogConfig;
+import nz.net.catalyst.KiritakiKoha.search.SearchKoha;
 import android.accounts.AbstractAccountAuthenticator;
 import android.accounts.Account;
 import android.accounts.AccountAuthenticatorResponse;
@@ -20,9 +21,15 @@ import android.util.Log;
  */
 
 public class AccountAuthenticator extends AbstractAccountAuthenticator {
+	static final String TAG = LogConfig.getLogTag(AccountAuthenticator.class);
+	// whether DEBUG level logging is enabled (whether globally, or explicitly
+	// for this log tag)
+	static final boolean DEBUG = LogConfig.isDebug(TAG);
+	// whether VERBOSE level logging is enabled
+	static final boolean VERBOSE = LogConfig.VERBOSE;
+
 	private Context mContext;
 	public static final String ACCOUNT_TYPE = "nz.net.catalyst.kiritahikoha.account";
-	private static final String TAG = "AbstractAccountAuthenticator";
 	
 	public AccountAuthenticator(Context context) {
 		super(context);
