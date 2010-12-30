@@ -1,0 +1,8 @@
+<!-- API Version 7 requires the accountType attribute to be hard-coded as a string -->
+<account-authenticator xmlns:android="http://schemas.android.com/apk/res/android"
+    android:accountType="nz.net.catalyst.kiritakikoha.account"
+    android:icon="@drawable/icon"
+    android:smallIcon="@drawable/icon"
+    android:label="@string/label"
+/>
+    <!-- android:accountPreferences="@xml/koha_sync_preferences" -->

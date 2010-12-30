@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">Kiritaki Koha</string>
+    <string name="label">Kiritaki Koha</string>
+    <string name="label_username">Login ID:</string>
+    <string name="label_password">Password:</string>
+    <string name="button_submit">Submit!</string>
+    <string name="login_activity_label">Please login</string>
+    <string name="login_activity_authenticating">Authenticating...</string>
+    <string name="login_press_menu">Press MENU for Server Preferences</string>
+    <string name="login_no_name">Please enter a username</string>
+    <string name="login_no_password">Please enter a password</string>
+    <string name="auth_result_no_connection">Server address or port number incorrect</string>
+    <string name="auth_result_success">Authentication successful!</string>
+    <string name="auth_result_fail">Authentication failed.</string>
+    <string name="server_preferences_activity_label">Server Preferences</string>
+    <string name="attribute_mapping_preferences_activity_label">Attribute Mapping</string>
+    <string name="search_preferences_activity_label">Search Settings</string>
+    <string name="plugin_preferences_activity_label">LDAP Plug-in Preferences</string>
+    <string name="sms_received_action">android.provider.Telephony.SMS_RECEIVED</string>
+    
+    <string name="default_url">http://opac.koha.workbuffer.org/cgi-bin/koha/opac-search.pl?idx=kw&amp;format=rss2&amp;q=</string>
+    <string name="default_url_title">Koha Login URL</string>
+    <string name="default_url_summary">Enter the URL for the Koha instance you wish to log-in to.</string>
+    <string name="search_starting">Search starting...</string>
+    <string name="search_finished">Search finished...</string>
+    <string name="search_failed">Search failed...</string>
+</resources>

@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="DISPLAY_NAME">display_name</string>
+    <string name="GIVEN_NAME">given_name</string>
+    <string name="FAMILY_NAME">family_name</string>
+    <string name="BIND_RDN_ATTRIBUTE">bind_rdn_attribute</string>
+    <string name="HOME_PHONE">home_phone</string>
+    <string name="WORK_PHONE">work_phone</string>
+    <string name="MOBILE_PHONE">mobile_phone</string>
+    <string name="ORGANISATION_NAME">organisation_name</string>
+    <string name="ORGANISATION_TITLE">organisation_title</string>
+    <string name="EMAIL">email</string>
+    <string name="WEBSITE">website</string>
+    <string name="PHOTO">photo</string>
+    <string name="HOME_ADDRESS">home_address</string>
+    <string name="WORK_ADDRESS">work_address</string>
+    <string name="CONTACT_GROUP">contact_group</string>
+    <string name="LDAP_URL">ldap_url</string>
+    <string name="LDAP_PORT">ldap_port</string>
+    <string name="LDAP_BASEDN">ldap_basedn</string>
+    <string name="LDAP_SEARCH_FILTER">ldap_search_filter</string>
+    <string name="LDAP_USE_AUTH_BASEDN">ldap_use_auth_basedn</string>
+    <string name="LDAP_SEARCH_BASEDN">ldap_search_basedn</string>
+    <string name="LDAP_ALLOW_DELETION">ldap_allow_deletion</string>
+    <string name="LDAP_FORCE_UPDATE">ldap_force_update</string>
+    <string name="LDAP_ALLOW_ADDITION">ldap_allow_addition</string>
+    <string name="POST_NOTIFICATIONS">post_notifications</string>
+    <string name="FIRST_RUN">first_run</string>
+    <string name="COUNTRY_CODE">country_code</string>
+</resources>

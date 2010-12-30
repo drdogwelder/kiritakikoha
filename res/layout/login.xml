@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+		android:orientation="vertical"
+    	android:layout_width="fill_parent"
+    	android:layout_height="wrap_content"
+    	android:minWidth="250dp"
+    	android:layout_gravity="center">
+    
+    <TextView android:id="@+id/login_message"
+    		android:layout_width="wrap_content"
+			android:layout_height="wrap_content"
+			android:layout_gravity="center_horizontal"
+			android:layout_marginLeft="10dp"
+			android:layout_marginRight="10dp"
+			android:layout_marginBottom="5dp"
+			android:textColor="#F00"
+		/>
+	<TextView
+			android:layout_width="wrap_content"
+			android:layout_height="wrap_content"
+			android:layout_gravity="center_horizontal"
+			android:text="@string/label_username"
+		/>
+	<EditText android:id="@+id/username_field"
+			android:layout_width="fill_parent"
+			android:layout_height="wrap_content"
+			android:singleLine="true"
+			android:layout_gravity="center_horizontal"
+			android:layout_marginLeft="10dp"
+			android:layout_marginRight="10dp"
+			android:inputType="textEmailAddress"
+		/>
+	<TextView
+			android:layout_width="wrap_content"
+			android:layout_height="wrap_content"
+			android:layout_gravity="center_horizontal"
+			android:text="@string/label_password"
+		/>
+	<EditText android:id="@+id/password_field"
+			android:layout_width="fill_parent"
+			android:layout_height="wrap_content"
+			android:singleLine="true"
+			android:password="true"
+			android:inputType="textPassword"
+			android:layout_gravity="center_horizontal"
+			android:layout_marginLeft="10dp"
+			android:layout_marginRight="10dp"
+		/>
+	<Button android:id="@+id/submit_button"
+			android:layout_width="wrap_content"
+			android:layout_height="wrap_content"
+			android:layout_gravity="center_horizontal"
+			android:text="@string/button_submit"
+			android:onClick="onSubmit"
+		/>
+	<TextView
+			android:layout_width="wrap_content"
+			android:layout_height="wrap_content"
+			android:layout_gravity="center_horizontal"
+			android:layout_marginTop="10dp"
+			android:text="@string/login_press_menu"
+		/>
+</LinearLayout>
