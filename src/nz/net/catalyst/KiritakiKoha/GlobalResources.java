@@ -2,6 +2,6 @@ package nz.net.catalyst.KiritakiKoha;
 
 public class GlobalResources {
     
-	public static final int ITEM_FOUND = 1;
+	public static final int PREFERENCES = 1;
 
 }

@@ -2,6 +2,9 @@
 <resources>
     <string name="app_name">Kiritaki Koha</string>
     <string name="label">Kiritaki Koha</string>
+    <string name="itemdetails">Details</string>
+    <string name="prefs_app_name">Settings</string>
+    
     <string name="label_username">Login ID:</string>
     <string name="label_password">Password:</string>
     <string name="button_submit">Submit!</string>
@@ -16,13 +19,24 @@
     <string name="server_preferences_activity_label">Server Preferences</string>
     <string name="attribute_mapping_preferences_activity_label">Attribute Mapping</string>
     <string name="search_preferences_activity_label">Search Settings</string>
-    <string name="plugin_preferences_activity_label">LDAP Plug-in Preferences</string>
     <string name="sms_received_action">android.provider.Telephony.SMS_RECEIVED</string>
     
-    <string name="default_url">http://opac.koha.workbuffer.org/cgi-bin/koha/opac-search.pl?idx=kw&amp;format=rss2&amp;q=</string>
+    <!-- http://opac.koha.workbuffer.org/cgi-bin/koha/opac-search.pl?idx=kw&amp;format=rss2&amp;q= -->
+    <string name="default_url">http://192.168.1.65/~alan/fish.rss?q=</string>
     <string name="default_url_title">Koha Login URL</string>
     <string name="default_url_summary">Enter the URL for the Koha instance you wish to log-in to.</string>
     <string name="search_starting">Search starting...</string>
     <string name="search_finished">Search finished...</string>
     <string name="search_failed">Search failed...</string>
+    
+    <string name="prefcat_advanced">Advanced</string>
+    
+    <string name="pref_menu_reset">Reset</string>
+    <string name="pref_default_url_key">default.url</string>
+    <string name="pref_default_url_title">Search URL</string>
+    <string name="pref_default_url_summary">Enter the search RSS URL (keywords query string will be appended).</string>
+    
+    <string name="search_form_keywords">Keyword(s)</string>
+    <string name="search_form_go">Run search</string>
+    
 </resources>

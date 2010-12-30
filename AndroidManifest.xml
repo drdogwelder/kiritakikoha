@@ -3,7 +3,7 @@
       package="nz.net.catalyst.KiritakiKoha"
       android:versionCode="1"
       android:versionName="1.0"      >
-    <application android:icon="@drawable/icon" android:label="@string/label" android:debuggable="false">
+    <application android:icon="@drawable/icon" android:label="@string/label" android:debuggable="true">
         
         <!-- authenticator service -->
 	    <service android:name=".authenticator.AccountAuthenticatorService"
@@ -39,9 +39,19 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+        
+  	    <activity android:name=".search.ItemDetailsActivity" android:label="@string/itemdetails">
+            <intent-filter>
+                <action android:name="nz.net.catalyst.KiritakiKoha.ItemDetailsActivity" />
+                <category android:name="android.intent.category.DEFAULT" />
+            </intent-filter>
+        </activity>
+        
+        <activity android:name=".EditPreferences"
+			android:label="@string/prefs_app_name" />
 
     </application>
-    <uses-sdk android:minSdkVersion="5" />
+    <uses-sdk android:minSdkVersion="7" />
     <!-- permissions -->
     <uses-permission
         android:name="android.permission.GET_ACCOUNTS" />

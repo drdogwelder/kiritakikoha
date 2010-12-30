@@ -34,5 +34,16 @@ class Article extends Object {
 	public String isbn;
 	public String description;
 	public URL url;
+	
+	public Article clone() {
+		Article a = new Article();
+		a.articleId = this.articleId;
+		a.feedId = this.feedId;
+		a.title = this.title;
+		a.isbn = this.isbn;
+		a.description = this.description;
+		a.url = this.url;
+		return a;
+	}
 }
 

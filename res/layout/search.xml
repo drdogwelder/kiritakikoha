@@ -1,60 +1,18 @@
 <?xml version="1.0" encoding="utf-8"?>
-		<LinearLayout
+<LinearLayout
 		  xmlns:android="http://schemas.android.com/apk/res/android"
 		  android:layout_width="fill_parent"
 		  android:layout_height="fill_parent"
 		  android:padding="5dp"
 		  android:orientation="vertical">
 		
-			<LinearLayout
-				  xmlns:android="http://schemas.android.com/apk/res/android"
-				  android:layout_width="fill_parent"
-				  android:layout_height="wrap_content"
-				  android:layout_marginTop="10dp"
-				  android:orientation="horizontal">
-
-					<TextView android:text="Keywords"
-							  android:layout_width="100dip"
-							  android:singleLine="true"
-							  android:layout_height="wrap_content"
-			  				  android:padding="2dip"
-			  				  android:layout_margin="10dip"
-			  				  style="@android:style/TextAppearance.Small">
-					</TextView>
-				  
-					<EditText android:text=""
-							  android:id="@+id/searchKeywords"
-							  android:layout_width="fill_parent"
-							  android:singleLine="false"
-			  				  android:padding="2dip"
-			  				  android:layout_margin="10dip"
-							  android:layout_height="wrap_content">
-				  	</EditText>
-					
-			</LinearLayout>
-
-			<LinearLayout
-			  xmlns:android="http://schemas.android.com/apk/res/android"
-			  android:id="@+id/ArtifactSettingsButtonLayout"
-			  android:layout_width="fill_parent"
-			  android:layout_height="wrap_content"
-			  android:layout_marginTop="10dp"
-			  android:gravity="center_horizontal"
-			  android:orientation="horizontal">
-			  
-				<Button android:text="Go"
-						android:id="@+id/runSearchKoha"
-						android:layout_weight="1"
-						android:layout_width="200dp"
-						android:layout_height="wrap_content"
-						>
-				</Button>
-								
-			</LinearLayout>
+    <include android:id="@+id/search_form" layout="@layout/search_form"/>
+		
     <ListView android:id="@android:id/list"
         android:layout_width="fill_parent"
 		android:layout_height="0dip"
 		android:layout_weight="1"
+  	    android:layout_margin="10dip"
 		android:fastScrollEnabled="true"/>	
 		
-	</LinearLayout>
+</LinearLayout>

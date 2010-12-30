@@ -1,8 +1,11 @@
 package nz.net.catalyst.KiritakiKoha.search;
 
 import java.io.IOException;
+import java.net.ConnectException;
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.util.ArrayList;
+import java.util.List;
 
 import javax.xml.parsers.ParserConfigurationException;
 import javax.xml.parsers.SAXParser;
@@ -21,9 +24,10 @@ import android.content.Context;
 import android.os.Handler;
 import android.os.Message;
 import android.util.Log;
+import android.widget.Toast;
 
 public class RSSHandler extends DefaultHandler {
-	static final String TAG = LogConfig.getLogTag(SearchKoha.class);
+	static final String TAG = LogConfig.getLogTag(RSSHandler.class);
 	// whether DEBUG level logging is enabled (whether globally, or explicitly
 	// for this log tag)
 	static final boolean DEBUG = LogConfig.isDebug(TAG);
@@ -34,13 +38,15 @@ public class RSSHandler extends DefaultHandler {
 	private boolean inItem = false;
 	private boolean inTitle = false;
 	private boolean inLink = false;
+	private boolean inDescription = false;
+	private boolean inISBN = false;
 
 	// Feed and Article objects to use for temporary storage
 	private Article currentArticle = new Article();
 	private Feed currentFeed = new Feed();
 	
 	// Number of articles added so far
-	private int articlesAdded = 0;
+    List<Article> articles = new ArrayList<Article>();
 
 	// Number of articles to download
 	private static final int ARTICLES_LIMIT = 500;
@@ -51,15 +57,24 @@ public class RSSHandler extends DefaultHandler {
 
 	// A flag to know if looking for Articles or Feed name
 	private int targetFlag;
-	private Handler mHandler;
 	
+	public void unparsedEntityDecl (String name, String publicId, String systemId, String notationName) {
+		Log.d(TAG, "unparsedEntityDecl: " + name);
+	}	
+	public void skippedEntity (String name) {
+		Log.d(TAG, "skippedEntity: " + name);		
+	}
 	public void startElement(String uri, String name, String qName,
 			Attributes atts) {
 		if (name.trim().equals("title"))
 			inTitle = true;
 		else if (name.trim().equals("item"))
 			inItem = true;
-		else if (name.trim().equals("link"))
+		else if (name.trim().equals("description"))
+			inDescription = true;
+		else if (name.trim().equals("isbn"))
+			inISBN = true;
+		else if (name.trim().equals("guid"))
 			inLink = true;
 	}
 
@@ -70,7 +85,11 @@ public class RSSHandler extends DefaultHandler {
 			inTitle = false;
 		else if (name.trim().equals("item"))
 			inItem = false;
-		else if (name.trim().equals("link"))
+		else if (name.trim().equals("description"))
+			inDescription = false;
+		else if (name.trim().equals("isbn"))
+			inISBN = false;
+		else if (name.trim().equals("guid"))
 			inLink = false;
 
 		if (currentArticle.url != null && currentArticle.title != null) {
@@ -78,24 +97,28 @@ public class RSSHandler extends DefaultHandler {
 			Log.d(TAG, "TARGET_ARTICLE: ID = " + currentArticle.articleId + ", Title=" + currentArticle.title + 
 								"URL=" + currentArticle.url);
 			
-			Message msg =  mHandler.obtainMessage(GlobalResources.ITEM_FOUND, currentArticle.title);
-			msg.arg1 = articlesAdded;
-			mHandler.sendMessage(msg);		
-			if (VERBOSE) Log.v(TAG, "RSSHandler triggered item found");
+			//Message msg =  mHandler.obtainMessage(GlobalResources.ITEM_FOUND, currentArticle.title);
+			//msg.arg1 = articlesAdded;
+			//mHandler.sendMessage(msg);		
+			//if (VERBOSE) Log.v(TAG, "RSSHandler triggered item found");
 							
+			Article a = new Article();
+			a = currentArticle.clone();
+			articles.add(a);
+
+			// Lets check if we've hit our limit on number of articles
+			if (articles.size() >= ARTICLES_LIMIT)
+				throw new SAXException();
+
 			currentArticle.title = null;
 			currentArticle.url = null;
 
-			// Lets check if we've hit our limit on number of articles
-			articlesAdded++;
-			if (articlesAdded >= ARTICLES_LIMIT)
-				throw new SAXException();
 		}
 	}
 
-	public void characters(char ch[], int start, int length) {
-
-		String chars = (new String(ch).substring(start, start + length));
+	public void characters(char ch[], int start, int length) throws SAXException {
+		super.characters(ch, start, length);
+		String chars = new String(ch, start, length);
 
 		try {
 			// If not in item, then title/link refers to feed
@@ -105,19 +128,25 @@ public class RSSHandler extends DefaultHandler {
 			} else {
 				if (inLink)
 					currentArticle.url = new URL(chars);
-				if (inTitle)
-					currentArticle.title = chars;
+				else if (inTitle)
+					currentArticle.title = chars.trim();
+				else if (inDescription)
+					currentArticle.description = chars.trim();
+				else if (inISBN)
+					currentArticle.isbn = chars.trim();
+				else if ( chars.trim().length() > 0 )
+					Log.d(TAG, "Unwanted chars: " + chars.trim());
+				
 			}
 		} catch (MalformedURLException e) {
-			Log.e(TAG, e.toString());
+			Log.e(TAG, "characters" + e.toString());
 		}
 
 	}
 
-	public void getItems(Context ctx, URL url, Handler h) {
+	public List<Article> getItems(Context ctx, URL url) throws IOException {
 		try {
 			targetFlag = TARGET_ARTICLES;
-			mHandler = h;
 
 			currentFeed.url = url;
 
@@ -128,11 +157,13 @@ public class RSSHandler extends DefaultHandler {
 			xr.parse(new InputSource(url.openStream()));
 			
 		} catch (IOException e) {
-			Log.e(TAG, e.toString());
+			Log.e(TAG, "getItems: IOException: " + e.toString());
+			throw new IOException("Connection failed.");
 		} catch (SAXException e) {
-			Log.e(TAG, e.toString());
+			Log.e(TAG, "getItems: SAXException: " + e.toString());
 		} catch (ParserConfigurationException e) {
-			Log.e(TAG, e.toString());
+			Log.e(TAG, "getItems: ParserConfigurationException: " + e.toString());
 		}
+		return articles;
 	}
 }
