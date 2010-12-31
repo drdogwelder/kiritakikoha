@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
+    android:layout_width="fill_parent"
+    android:layout_height="wrap_content"
+    android:padding="2dip"
+    >			
+
+	<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+	    android:orientation="horizontal"
+	    android:layout_width="fill_parent"
+	    android:layout_height="wrap_content"
+	    android:padding="2dip"
+	    >			
+    
+    	<ImageView
+			android:id="@+id/icon"
+			android:layout_width="wrap_content"
+			android:layout_height="wrap_content"
+			android:layout_margin="5dp"
+			android:src="@drawable/icon"
+		/>
+    
+	<TextView android:text="Kiritaki Koha"
+			  android:layout_width="wrap_content" 
+			  android:singleLine="false" 
+			  android:layout_height="wrap_content" 
+			  android:textStyle="bold" 
+				android:layout_margin="5dp"
+				style="@android:style/TextAppearance.Large"
+			  />
+	</LinearLayout>
+			  
+	<TextView android:text="kiritaki - (noun) client, customer, consumer."
+			  android:layout_width="fill_parent" 
+			  android:singleLine="false" 
+			  android:layout_height="wrap_content"
+			  android:textStyle="italic" 
+				android:layout_margin="5dp"
+			  />
+	<TextView android:text="koha - (noun) gift, present, offering, donation, contribution."
+			  android:layout_width="fill_parent" 
+			  android:singleLine="false" 
+			  android:layout_height="wrap_content"
+			  android:textStyle="italic" 
+			android:layout_margin="5dp"
+			  />
+	<TextView android:text="kiritakikoha is an Android client for Koha. "
+				android:layout_margin="5dp"
+	
+			  android:layout_width="fill_parent" android:singleLine="false" android:layout_height="wrap_content" />
+							
+	<ImageView
+			android:id="@+id/logo"
+			android:layout_width="fill_parent"
+			android:layout_height="wrap_content"
+			android:layout_marginLeft="5dp"
+			android:layout_marginBottom="5dp"
+			android:src="@drawable/logo"
+			android:layout_marginTop="25dp"
+		/>
+							
+	<TextView android:text="Koha is the first open-source Integrated Library System (ILS). In use worldwide, its development is steered by a growing community of libraries collaborating to achieve their technology goals. Koha's impressive feature set continues to evolve and expand to meet the needs	of its user base."
+				android:layout_margin="5dp"
+			  android:layout_width="fill_parent" 
+			  android:singleLine="false" 
+			  android:layout_height="wrap_content" 
+	 		  style="@android:style/TextAppearance.Small"
+			  />
+
+</LinearLayout>
+			
