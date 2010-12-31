@@ -4,12 +4,13 @@ import nz.net.catalyst.KiritakiKoha.log.LogConfig;
 import nz.net.catalyst.KiritakiKoha.R;
 import android.app.Activity;
 import android.os.Bundle;
-import android.os.Handler;
 import android.util.Log;
+import android.webkit.WebView;
+import android.webkit.WebViewClient;
 import android.widget.TextView;
 
 public class ItemDetailsActivity extends Activity {
-	static final String TAG = LogConfig.getLogTag(SearchKoha.class);
+	static final String TAG = LogConfig.getLogTag(SearchActivity.class);
 	// whether DEBUG level logging is enabled (whether globally, or explicitly
 	// for this log tag)
 	static final boolean DEBUG = LogConfig.isDebug(TAG);
@@ -17,6 +18,7 @@ public class ItemDetailsActivity extends Activity {
 	static final boolean VERBOSE = LogConfig.VERBOSE;
 	
 	private Bundle m_extras;
+	private WebView mWebView;
 	
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -29,10 +31,18 @@ public class ItemDetailsActivity extends Activity {
         	finish();
         }
         else {
-        	((TextView)findViewById(R.id.title)).setText(m_extras.getString("title"));
-        	((TextView)findViewById(R.id.description)).setText(m_extras.getString("description"));
-        	((TextView)findViewById(R.id.isbn)).setText(m_extras.getString("isbn"));
-        	((TextView)findViewById(R.id.link)).setText(m_extras.getString("link"));
+       		((TextView)findViewById(R.id.title)).setText(m_extras.getString("title"));
+        	if ( m_extras.containsKey("description") ) {
+
+        		mWebView = (WebView) findViewById(R.id.webview);
+	    		mWebView.setWebViewClient(new WebViewClient());
+	    		mWebView.getSettings().setJavaScriptEnabled(false);
+	    		
+	    		mWebView.loadData(getResources().getString(R.string.details_description_style) + 
+	    								m_extras.getString("description"), 
+	    								"text/html", "utf-8");
+	    		mWebView.setBackgroundColor(0);
+        	}
         }
 	}
 }

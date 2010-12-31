@@ -3,9 +3,11 @@
       package="nz.net.catalyst.KiritakiKoha"
       android:versionCode="1"
       android:versionName="1.0"      >
-    <application android:icon="@drawable/icon" android:label="@string/label" android:debuggable="true">
+    <application android:icon="@drawable/icon" android:label="@string/label" android:debuggable="false">
+        <!-- 
         
-        <!-- authenticator service -->
+        	Disabled auth, sync and login stuff since it's not working yet
+        
 	    <service android:name=".authenticator.AccountAuthenticatorService"
 	    		android:exported="true">
 	    	<intent-filter>
@@ -15,7 +17,6 @@
 	    			android:resource="@xml/koha_authenticator" />
 	    </service>
 	    
-	    <!-- sync-adapter service -->
 	    <service android:name=".syncadapter.SyncAdapterService"
 	    		android:exported="true">
 	    	<intent-filter>
@@ -25,14 +26,13 @@
 	    			android:resource="@xml/koha_syncadapter" />
 	    </service>
 	    
-	    <!-- activity for logging in -->
 	    <activity android:name=".authenticator.LoginActivity"
 	    	android:label="@string/login_activity_label"
 	    	android:theme="@android:style/Theme.Dialog"
             android:excludeFromRecents="true" />
+	-->    
     
-    
-        <activity android:name=".search.SearchKoha"
+        <activity android:name=".search.SearchActivity"
                   android:label="@string/app_name">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -48,11 +48,12 @@
         </activity>
         
         <activity android:name=".EditPreferences"
-			android:label="@string/prefs_app_name" />
+			android:label="@string/menu_preferences" />
 
     </application>
     <uses-sdk android:minSdkVersion="7" />
     <!-- permissions -->
+    <!-- 
     <uses-permission
         android:name="android.permission.GET_ACCOUNTS" />
     <uses-permission
@@ -61,6 +62,7 @@
         android:name="android.permission.MANAGE_ACCOUNTS" />
     <uses-permission
         android:name="android.permission.AUTHENTICATE_ACCOUNTS" />
+         -->
     <uses-permission
         android:name="android.permission.INTERNET" />
 

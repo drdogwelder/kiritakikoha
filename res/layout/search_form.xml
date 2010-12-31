@@ -3,33 +3,44 @@
     android:orientation="vertical"
     android:layout_width="fill_parent"
     android:layout_height="wrap_content"
+    android:padding="2dip"
     >			
-			<LinearLayout
-				  xmlns:android="http://schemas.android.com/apk/res/android"
-				  android:layout_width="fill_parent"
-				  android:layout_height="wrap_content"
-				  android:layout_marginTop="10dp"
-				  android:orientation="horizontal">
-
-					<TextView android:text="@string/search_form_keywords"
-							  android:layout_width="100dip"
-							  android:singleLine="true"
-							  android:layout_height="wrap_content"
-			  				  android:padding="2dip"
-			  				  android:layout_margin="10dip"
-			  				  >
-					</TextView>
-				  
+	  		      <Spinner    android:id="@+id/spinner1"
+	  		              	  android:layout_width="fill_parent"
+        					  android:layout_height="wrap_content"
+       						  android:prompt="@string/search_options_prompt"
+       						  android:entries="@array/search_options_array"
+       						  android:entryValues="@array/search_options_arrayValues"    				/>
 					<EditText android:text=""
-							  android:id="@+id/searchKeywords"
+							  android:id="@+id/searchTerms1"
 							  android:layout_width="fill_parent"
 							  android:singleLine="false"
-			  				  android:padding="2dip"
-			  				  android:layout_margin="10dip"
-							  android:layout_height="wrap_content">
-				  	</EditText>
+							  android:layout_height="wrap_content" />
+
+	  		      <Spinner    android:id="@+id/spinner2"
+	  		              	  android:layout_width="fill_parent"
+        					  android:layout_height="wrap_content"
+       						  android:prompt="@string/search_options_prompt"
+       						  android:entries="@array/search_options_array"
+       						  android:entryValues="@array/search_options_arrayValues"    				/>
+					<EditText android:text=""
+							  android:id="@+id/searchTerms2"
+							  android:layout_width="fill_parent"
+							  android:singleLine="false"
+							  android:layout_height="wrap_content" />
+							  
+	  		      <Spinner    android:id="@+id/spinner3"
+	  		              	  android:layout_width="fill_parent"
+        					  android:layout_height="wrap_content"
+       						  android:prompt="@string/search_options_prompt"
+       						  android:entries="@array/search_options_array"
+       						  android:entryValues="@array/search_options_arrayValues"    				/>
+					<EditText android:text=""
+							  android:id="@+id/searchTerms3"
+							  android:layout_width="fill_parent"
+							  android:singleLine="false"
+							  android:layout_height="wrap_content" />
 					
-			</LinearLayout>
 			
 			<LinearLayout
 			  xmlns:android="http://schemas.android.com/apk/res/android"
@@ -41,9 +52,16 @@
 			  android:orientation="horizontal">
 			  
 				<Button android:text="@string/search_form_go"
-						android:id="@+id/runSearchKoha"
+						android:id="@+id/btnGo"
 						android:layout_weight="1"
-						android:layout_width="200dp"
+						android:layout_width="50dp"
+						android:layout_height="wrap_content"
+						>
+				</Button>
+				<Button android:text="@string/search_form_cancel"
+						android:id="@+id/btnCancel"
+						android:layout_weight="1"
+						android:layout_width="50dp"
 						android:layout_height="wrap_content"
 						>
 				</Button>

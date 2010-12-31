@@ -60,18 +60,34 @@ public class SearchActivity extends ListActivity implements OnClickListener  {
     
 	public void onClick(View v) {
 		if (v.getId() == R.id.btnGo) {
-	        EditText mText = (EditText) this.findViewById(R.id.searchTerms);
-	        
 			String mURL = mPrefs.getString(getResources().getString(R.string.pref_default_url_key).toString(),
 											getResources().getString(R.string.default_url).toString());
-			// TODO need to add 
-			//String param = ((Spinner) this.findViewById(R.id.spinner)).getSelectedItem().toString();
-			//String sep = "?";
-			//if ( mURL.indexOf('?') > 0 )
-			//	sep = "&";
-			//mURL = mURL + sep + param + "=" + Uri.encode(mText.getText().toString()); // Something fancy?
-			mURL = mURL + Uri.encode(mText.getText().toString().trim()); // Simple concatenation
+			EditText mText;
+			String qStr = "";
+			int pos;
+
+			String[] av = getResources().getStringArray(R.array.search_options_arrayValues);
+
+			// allow for 3 fields 
 			
+	        mText = (EditText) this.findViewById(R.id.searchTerms1);
+	        if ( mText.getText().toString().trim().length() > 0 ) {
+				pos = ((Spinner) this.findViewById(R.id.spinner1)).getSelectedItemPosition();
+				qStr = qStr + "&idx=" + av[pos] + "&q=" + Uri.encode(mText.getText().toString().trim());
+	        }
+	        mText = (EditText) this.findViewById(R.id.searchTerms2);
+	        if ( mText.getText().toString().trim().length() > 0 ) {
+				pos = ((Spinner) this.findViewById(R.id.spinner2)).getSelectedItemPosition();
+				qStr = qStr + "&idx=" + av[pos] + "&q=" + Uri.encode(mText.getText().toString().trim());
+	        }
+	        mText = (EditText) this.findViewById(R.id.searchTerms3);
+	        if ( mText.getText().toString().trim().length() > 0 ) {
+				pos = ((Spinner) this.findViewById(R.id.spinner3)).getSelectedItemPosition();
+				qStr = qStr + "&idx=" + av[pos] + "&q=" + Uri.encode(mText.getText().toString().trim());
+	        }
+	        // Finally add the querystring
+	        mURL = mURL + qStr;
+	        
 			try {
 				RSSHandler rh = new RSSHandler();
 				Log.d(TAG, "URL = " + mURL);
@@ -124,9 +140,15 @@ public class SearchActivity extends ListActivity implements OnClickListener  {
 		//TODO gotta be a better way
 		Article a = items.get(position);
 		d.putExtra("title", a.title );
-		d.putExtra("link", a.url.toString() );
-		d.putExtra("description", a.description );
-		d.putExtra("isbn", a.isbn );
+		if ( a.url.toString().trim().length() > 0 ) {
+			d.putExtra("link", a.url.toString() );
+			//Log.d(TAG, "- URL added to intent (" + a.url.toString() + ")");
+		}
+
+		if ( a.description.trim().length() > 0 ) {
+			d.putExtra("description", a.description );
+			//Log.d(TAG, "- description added to intent (" + a.description + ")");
+		}
 		
 		// Start the details dialog and pass in the intent containing item details.
 		startActivity(d);
@@ -137,6 +159,7 @@ public class SearchActivity extends ListActivity implements OnClickListener  {
 
 		menu.add(0, GlobalResources.SEARCH, 1, R.string.menu_search).setIcon(android.R.drawable.ic_menu_search);
 		menu.add(0, GlobalResources.PREFERENCES, 2, R.string.menu_preferences).setIcon(android.R.drawable.ic_menu_preferences);
+		menu.add(0, GlobalResources.INFO, 3, R.string.menu_info).setIcon(android.R.drawable.ic_menu_info_details);
 		return result;
 	}
 	@Override
@@ -157,6 +180,11 @@ public class SearchActivity extends ListActivity implements OnClickListener  {
 				this.findViewById(R.id.search_form).setVisibility(View.VISIBLE);
 				//Hide the info details
 				this.findViewById(R.id.info).setVisibility(View.GONE);
+				break;
+			case GlobalResources.INFO:
+				this.findViewById(R.id.search_form).setVisibility(View.GONE);
+				//Hide the info details
+				this.findViewById(R.id.info).setVisibility(View.VISIBLE);
 				break;
 		}
 		return true;

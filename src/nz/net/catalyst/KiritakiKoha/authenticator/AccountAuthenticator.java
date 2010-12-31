@@ -1,7 +1,7 @@
 package nz.net.catalyst.KiritakiKoha.authenticator;
 
 import nz.net.catalyst.KiritakiKoha.log.LogConfig;
-import nz.net.catalyst.KiritakiKoha.search.SearchKoha;
+import nz.net.catalyst.KiritakiKoha.search.SearchActivity;
 import android.accounts.AbstractAccountAuthenticator;
 import android.accounts.Account;
 import android.accounts.AccountAuthenticatorResponse;
