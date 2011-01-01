@@ -46,10 +46,6 @@
 			  android:textStyle="italic" 
 			android:layout_margin="5dp"
 			  />
-	<TextView android:text="kiritakikoha is an Android client for Koha. "
-				android:layout_margin="5dp"
-	
-			  android:layout_width="fill_parent" android:singleLine="false" android:layout_height="wrap_content" />
 
 	<TextView android:text="kiritakikoha is an Android client for Koha. "
 				android:layout_margin="5dp"
@@ -67,7 +63,7 @@
 			android:layout_marginTop="25dp"
 		/>
 							
-	<TextView android:text="Koha is the first open-source Integrated Library System (ILS). In use worldwide, its development is steered by a growing community of libraries collaborating to achieve their technology goals. Koha's impressive feature set continues to evolve and expand to meet the needs	of its user base."
+	<TextView android:text="Koha is the first free and open source software library automation package (ILS). Development is sponsored by libraries of varying types and sizes, volunteers, and support companies from around the world."
 				android:layout_margin="5dp"
 			  android:layout_width="fill_parent" 
 			  android:singleLine="false" 

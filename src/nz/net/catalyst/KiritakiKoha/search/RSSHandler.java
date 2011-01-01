@@ -4,7 +4,6 @@ import java.io.IOException;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.ArrayList;
-import java.util.List;
 
 import javax.xml.parsers.ParserConfigurationException;
 import javax.xml.parsers.SAXParser;
@@ -40,7 +39,7 @@ public class RSSHandler extends DefaultHandler {
 	private Article currentArticle = new Article();
 
 	// Number of articles added so far
-    List<Article> articles = new ArrayList<Article>();
+    ArrayList<Article> articles = new ArrayList<Article>();
 
 	// Number of articles to download
 	private static final int ARTICLES_LIMIT = 500;
@@ -138,7 +137,7 @@ public class RSSHandler extends DefaultHandler {
 
 	}
 
-	public List<Article> getItems(Context ctx, URL url) throws IOException {
+	public ArrayList<Article> getItems(Context ctx, URL url) throws IOException {
 		try {
 			SAXParserFactory spf = SAXParserFactory.newInstance();
 			SAXParser sp = spf.newSAXParser();

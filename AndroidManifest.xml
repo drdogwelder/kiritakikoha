@@ -32,7 +32,7 @@
             android:excludeFromRecents="true" />
 	-->    
     
-        <activity android:name=".search.SearchActivity"
+        <activity android:name=".InfoActivity"
                   android:label="@string/app_name"
                   android:screenOrientation="portrait">
             <intent-filter>
@@ -40,12 +40,27 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+
+  	    <activity android:name=".search.SearchFormActivity" 
+  	    			android:label="@string/searchform" >
+            <intent-filter>
+                <action android:name="nz.net.catalyst.KiritakiKoha.search.SearchFormActivity" />
+                <category android:name="android.intent.category.DEFAULT" />
+            </intent-filter>
+        </activity>
+        
+  	    <activity android:name=".search.SearchResultsActivity" 
+  	    			android:label="@string/searchresults" >
+            <intent-filter>
+                <action android:name="nz.net.catalyst.KiritakiKoha.search.SearchResultsActivity" />
+                <category android:name="android.intent.category.DEFAULT" />
+            </intent-filter>
+        </activity>
         
   	    <activity android:name=".search.ItemDetailsActivity" 
-  	    			android:label="@string/itemdetails"
-  	    			android:screenOrientation="portrait">
+  	    			android:label="@string/itemdetails">
             <intent-filter>
-                <action android:name="nz.net.catalyst.KiritakiKoha.ItemDetailsActivity" />
+                <action android:name="nz.net.catalyst.KiritakiKoha.search.ItemDetailsActivity" />
                 <category android:name="android.intent.category.DEFAULT" />
             </intent-filter>
         </activity>

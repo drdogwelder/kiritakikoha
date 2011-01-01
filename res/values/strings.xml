@@ -2,6 +2,8 @@
 <resources>
     <string name="app_name">Kiritaki Koha</string>
     <string name="label">Kiritaki Koha</string>
+    <string name="searchform">Library Search</string>
+    <string name="searchresults">Search Results</string>
     <string name="itemdetails">Details</string>
     <string name="menu_preferences">Settings</string>
     <string name="menu_search">Search</string>
@@ -40,7 +42,7 @@
         <item>nb</item>
     </string-array>
     <string name="search_form_go">Run search</string>
-    <string name="search_form_cancel">Cancel</string>
+    <string name="search_form_searching">Searching ...</string>
 
        <string name="details_description_style">
 &lt;style&gt;    
@@ -69,6 +71,13 @@ a {
     <string name="attribute_mapping_preferences_activity_label">Attribute Mapping</string>
     <string name="search_preferences_activity_label">Search Settings</string>
     <string name="sms_received_action">android.provider.Telephony.SMS_RECEIVED</string>
+    
+    <!--  Error strings -->
+    <string name="search_bad_request">Sorry, bad request!</string>
+    <string name="search_url_invalid">The URL you have entered is invalid.</string>
+    <string name="search_connection_failure">Sorry the search failed due to a connection problem.</string>
+    <string name="search_no_results">Sorry the search returned no results.</string>
+    <string name="search_no_search_terms">Sorry, no search terms entered.</string>
     
     
 </resources>

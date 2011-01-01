@@ -6,9 +6,6 @@
 		  android:orientation="vertical"
 		  >
 
-	    <include android:id="@+id/info" layout="@layout/info"/>
-			
-	    <include android:id="@+id/search_form" layout="@layout/search_form"  android:visibility="gone"/>
 	    <ListView android:id="@android:id/list"
 	        android:layout_width="fill_parent"
 			android:layout_height="0dip"
