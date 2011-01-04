@@ -9,6 +9,7 @@ import javax.xml.parsers.ParserConfigurationException;
 import javax.xml.parsers.SAXParser;
 import javax.xml.parsers.SAXParserFactory;
 
+import nz.net.catalyst.KiritakiKoha.Record;
 import nz.net.catalyst.KiritakiKoha.log.LogConfig;
 
 import org.xml.sax.Attributes;
@@ -35,17 +36,17 @@ public class RSSHandler extends DefaultHandler {
 	private boolean inDescription = false;
 	private boolean inISBN = false;
 
-	// Feed and Article objects to use for temporary storage
-	private Article currentArticle = new Article();
+	// Feed and Record objects to use for temporary storage
+	private Record currentRecord = new Record();
 
-	// Number of articles added so far
-    ArrayList<Article> articles = new ArrayList<Article>();
+	// Number of Records added so far
+    ArrayList<Record> Records = new ArrayList<Record>();
 
-	// Number of articles to download
-	private static final int ARTICLES_LIMIT = 500;
+	// Number of Records to download
+	private static final int RECORDS_LIMIT = 500;
 
 	// The possible values for targetFlag
-	// A flag to know if looking for Articles or Feed name
+	// A flag to know if looking for Records or Feed name
 	//private int targetFlag = 5;
 	
 	public void unparsedEntityDecl (String name, String publicId, String systemId, String notationName) {
@@ -82,50 +83,44 @@ public class RSSHandler extends DefaultHandler {
 		else if (name.trim().equals("guid"))
 			inLink = false;
 
-		if (currentArticle.url != null && currentArticle.title != null) {
-			//Message msg =  mHandler.obtainMessage(GlobalResources.ITEM_FOUND, currentArticle.title);
-			//msg.arg1 = articlesAdded;
-			//mHandler.sendMessage(msg);		
-			//if (VERBOSE) Log.v(TAG, "RSSHandler triggered item found");
-							
-			Article a = new Article();
-			a = currentArticle.clone();
-			articles.add(a);
+		if (currentRecord.getURL() != null && currentRecord.getTitle() != null) {
+			Record a = new Record();
+			a = currentRecord.clone();
+			Records.add(a);
 
-			// Lets check if we've hit our limit on number of articles
-			if (articles.size() >= ARTICLES_LIMIT)
+			// Lets check if we've hit our limit on number of Records
+			if (Records.size() >= RECORDS_LIMIT)
 				throw new SAXException();
 
-			currentArticle = new Article();
+			currentRecord = new Record();
 		}
 	}
 
 	public void characters(char ch[], int start, int length) throws SAXException {
-		//super.characters(ch, start, length);
 		String chars = new String(ch, start, length);
 
 		try {
 			// If not in item, then title/link refers to feed
 			if (inItem) {
 				if (inLink)
-					currentArticle.url = new URL(chars);
+					currentRecord.setURL(new URL(chars));
 				else if (inTitle) {
-					if ( currentArticle.title == null )
-						currentArticle.title = chars.trim();
+					if ( currentRecord.getTitle() == null ) 
+						currentRecord.setTitle(chars.trim());
 					else 
-						currentArticle.title = (currentArticle.title + " " + chars.trim()).trim();
+						currentRecord.setTitle((currentRecord.getTitle() + " " + chars.trim()).trim());
 				}
 				else if (inDescription) {
-					if ( currentArticle.description == null )
-						currentArticle.description = chars.trim();
+					if ( currentRecord.getDescription() == null )
+						currentRecord.setDescription(chars.trim());
 					else
-						currentArticle.description = (currentArticle.description + " " + chars.trim()).trim();
+						currentRecord.setDescription((currentRecord.getDescription() + " " + chars.trim()).trim());
 				}
 				else if (inISBN) {
-					if ( currentArticle.isbn == null )
-						currentArticle.isbn = chars.trim();
+					if ( currentRecord.getISBN() == null )
+						currentRecord.setISBN(chars.trim());
 					else
-						currentArticle.isbn = (currentArticle.isbn + " " + chars.trim()).trim();
+						currentRecord.setISBN((currentRecord.getISBN() + " " + chars.trim()).trim());
 				}
 				//else if ( chars.trim().length() > 0 )
 				//	Log.d(TAG, "Unwanted chars: " + chars.trim());
@@ -133,11 +128,12 @@ public class RSSHandler extends DefaultHandler {
 			}
 		} catch (MalformedURLException e) {
 			Log.e(TAG, "characters" + e.toString());
+		} catch (StringIndexOutOfBoundsException e) {
+			Log.e(TAG, "characters" + e.toString());
 		}
-
 	}
 
-	public ArrayList<Article> getItems(Context ctx, URL url) throws IOException {
+	public ArrayList<Record> getItems(Context ctx, URL url) throws IOException {
 		try {
 			SAXParserFactory spf = SAXParserFactory.newInstance();
 			SAXParser sp = spf.newSAXParser();
@@ -153,6 +149,6 @@ public class RSSHandler extends DefaultHandler {
 		} catch (ParserConfigurationException e) {
 			Log.e(TAG, "getItems: ParserConfigurationException: " + e.toString());
 		}
-		return articles;
+		return Records;
 	}
 }

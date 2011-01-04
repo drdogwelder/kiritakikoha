@@ -2,6 +2,7 @@ package nz.net.catalyst.KiritakiKoha;
 
 import nz.net.catalyst.KiritakiKoha.EditPreferences;
 import nz.net.catalyst.KiritakiKoha.GlobalResources;
+import nz.net.catalyst.KiritakiKoha.authenticator.AuthenticatorActivity;
 import nz.net.catalyst.KiritakiKoha.log.LogConfig;
 import nz.net.catalyst.KiritakiKoha.search.SearchFormActivity;
 import nz.net.catalyst.KiritakiKoha.R;
@@ -29,25 +30,30 @@ public class InfoActivity extends Activity {
 	public boolean onCreateOptionsMenu(Menu menu) {
 		boolean result = super.onCreateOptionsMenu(menu);
 
-		menu.add(0, GlobalResources.SEARCH, 1, R.string.menu_search).setIcon(android.R.drawable.ic_menu_search);
-		menu.add(0, GlobalResources.PREFERENCES, 2, R.string.menu_preferences).setIcon(android.R.drawable.ic_menu_preferences);
+		menu.add(Menu.NONE, GlobalResources.SEARCH, 1, R.string.menu_search).setIcon(android.R.drawable.ic_menu_search);
+		menu.add(Menu.NONE, GlobalResources.PREFERENCES, 2, R.string.menu_preferences).setIcon(android.R.drawable.ic_menu_preferences);
+		menu.add(Menu.NONE, GlobalResources.LOGIN, 3, R.string.menu_login).setIcon(R.drawable.ic_menu_login);
 		return result;
 	}
 	public boolean onSearchRequested() {
 		startActivity(new Intent(this, SearchFormActivity.class));
-		finish();
 		return true;
 	}
 	@Override
 	public boolean onOptionsItemSelected(MenuItem item) {
 
 		switch (item.getItemId()) {
+			case GlobalResources.SEARCH:
+				startActivity(new Intent(this, SearchFormActivity.class));
+				break;
 			case GlobalResources.PREFERENCES:
 				startActivity(new Intent(this, EditPreferences.class));
 				break;
-			case GlobalResources.SEARCH:
-				startActivity(new Intent(this, SearchFormActivity.class));
-				finish();
+			case GlobalResources.LOGIN:
+				startActivity(new Intent(this, AuthenticatorActivity.class));
+				break;
+			case GlobalResources.LOGOUT:
+				startActivity(new Intent(this, EditPreferences.class));
 				break;
 		}
 		return true;

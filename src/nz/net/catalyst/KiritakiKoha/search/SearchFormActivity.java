@@ -8,8 +8,12 @@ import nz.net.catalyst.KiritakiKoha.InfoActivity;
 import nz.net.catalyst.KiritakiKoha.log.LogConfig;
 import nz.net.catalyst.KiritakiKoha.R;
 import android.app.Activity;
+import android.app.Dialog;
+import android.app.ProgressDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -35,22 +39,10 @@ public class SearchFormActivity extends Activity implements OnClickListener  {
         setContentView(R.layout.search_form);
         
         // Set up click handlers for the text field and button
-        ((Button) this.findViewById(R.id.btnGo)).setOnClickListener(this);
-    }
-    private void enableSearchButton () {
-		// Disable while we process
-        ((Button) this.findViewById(R.id.btnGo)).setText(getString(R.string.search_form_go));
-        ((Button) this.findViewById(R.id.btnGo)).setEnabled(true);    	
-    }
-    private void disableSearchButton () {
-		// Disable while we process
-        ((Button) this.findViewById(R.id.btnGo)).setText(getString(R.string.search_form_searching));
-        ((Button) this.findViewById(R.id.btnGo)).setEnabled(false);
+        ((Button) this.findViewById(R.id.btnSearchGo)).setOnClickListener(this);
     }
     public void onClick(View v) {
-		if (v.getId() == R.id.btnGo) {
-			disableSearchButton();
-	        
+		if (v.getId() == R.id.btnSearchGo) {			
 	        EditText mText;
 			int pos;
 
@@ -84,36 +76,17 @@ public class SearchFormActivity extends Activity implements OnClickListener  {
         	if ( ! ( idxValues.size() > 0 && qValues.size() > 0 ) ) {
     			Toast.makeText(this, getString(R.string.search_no_search_terms), Toast.LENGTH_SHORT).show();
         	} else {
+            	
         		// Load up the search results intent
 		        Intent d = new Intent(this, SearchResultsActivity.class);
 				d.putStringArrayListExtra("idx", idxValues);
 				d.putStringArrayListExtra("q", qValues);
 				startActivity(d);
         	}
-        	
-			enableSearchButton();
-			v.invalidate();
 		}
 	}
-	
-	public boolean onCreateOptionsMenu(Menu menu) {
-		boolean result = super.onCreateOptionsMenu(menu);
 
-		menu.add(0, GlobalResources.PREFERENCES, 1, R.string.menu_preferences).setIcon(android.R.drawable.ic_menu_preferences);
-		menu.add(0, GlobalResources.INFO, 2, R.string.menu_info).setIcon(android.R.drawable.ic_menu_info_details);
-		return result;
-	}
-
-	public boolean onOptionsItemSelected(MenuItem item) {
-
-		switch (item.getItemId()) {
-			case GlobalResources.PREFERENCES:
-				startActivity(new Intent(this, EditPreferences.class));
-				break;
-			case GlobalResources.INFO:
-				startActivity(new Intent(this, InfoActivity.class));
-				break;
-		}
+	public boolean onSearchRequested() {
 		return true;
 	}
 }

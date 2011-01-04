@@ -6,12 +6,6 @@ import android.content.Intent;
 import android.os.IBinder;
 import android.util.Log;
 
-/**
- * Returns an IBinder of a concrete account-authenticator when onBind() is called.
- * 
- * @author David X Wang
- *
- */
 public class AccountAuthenticatorService extends Service {
 	private AccountAuthenticator mAccountAuthenticator;
 	private static final String TAG = "AccountAuthenticatorService";

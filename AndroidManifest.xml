@@ -1,36 +1,22 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
       package="nz.net.catalyst.KiritakiKoha"
-      android:versionCode="1"
-      android:versionName="1.0"      >
-    <application android:icon="@drawable/icon" android:label="@string/label" android:debuggable="false">
-        <!-- 
-        
-        	Disabled auth, sync and login stuff since it's not working yet
-        
+      android:versionCode="3"
+      android:versionName="1.2"      >
+    <application android:icon="@drawable/icon" android:label="@string/label" android:debuggable="true">
 	    <service android:name=".authenticator.AccountAuthenticatorService"
 	    		android:exported="true">
 	    	<intent-filter>
 	    		<action android:name="android.accounts.AccountAuthenticator" />
 	    	</intent-filter>
 	    	<meta-data android:name="android.accounts.AccountAuthenticator"
-	    			android:resource="@xml/koha_authenticator" />
+	    			android:resource="@xml/authenticator" />
 	    </service>
 	    
-	    <service android:name=".syncadapter.SyncAdapterService"
-	    		android:exported="true">
-	    	<intent-filter>
-	    		<action android:name="android.content.SyncAdapter" />
-	    	</intent-filter>
-	    	<meta-data android:name="android.content.SyncAdapter"
-	    			android:resource="@xml/koha_syncadapter" />
-	    </service>
-	    
-	    <activity android:name=".authenticator.LoginActivity"
-	    	android:label="@string/login_activity_label"
+	    <activity android:name=".authenticator.AuthenticatorActivity"
+	    	android:label="@string/login"
 	    	android:theme="@android:style/Theme.Dialog"
             android:excludeFromRecents="true" />
-	-->    
     
         <activity android:name=".InfoActivity"
                   android:label="@string/app_name"
@@ -56,14 +42,15 @@
                 <category android:name="android.intent.category.DEFAULT" />
             </intent-filter>
         </activity>
-        
-  	    <activity android:name=".search.ItemDetailsActivity" 
-  	    			android:label="@string/itemdetails">
+
+  	    <activity android:name=".hold.PlaceHoldFormActivity" 
+  	    			android:label="@string/placeholdform" >
             <intent-filter>
-                <action android:name="nz.net.catalyst.KiritakiKoha.search.ItemDetailsActivity" />
+                <action android:name="nz.net.catalyst.KiritakiKoha.hold.PlaceHoldFormActivity" />
                 <category android:name="android.intent.category.DEFAULT" />
             </intent-filter>
         </activity>
+        
         
         <activity android:name=".EditPreferences"
 			android:label="@string/menu_preferences" />
@@ -71,7 +58,6 @@
     </application>
     <uses-sdk android:minSdkVersion="7" />
     <!-- permissions -->
-    <!-- 
     <uses-permission
         android:name="android.permission.GET_ACCOUNTS" />
     <uses-permission
@@ -80,7 +66,6 @@
         android:name="android.permission.MANAGE_ACCOUNTS" />
     <uses-permission
         android:name="android.permission.AUTHENTICATE_ACCOUNTS" />
-         -->
     <uses-permission
         android:name="android.permission.INTERNET" />
 

@@ -3,15 +3,40 @@
 <PreferenceScreen
 	xmlns:android="http://schemas.android.com/apk/res/android">
 
+	<EditTextPreference
+		android:key="@string/pref_base_url_key"
+		android:title="@string/pref_base_url_title"
+		android:summary="@string/pref_base_url_summary"
+		android:defaultValue="@string/base_url" />	
+
 	<PreferenceCategory
 		android:title="@string/prefcat_advanced">
 
-	<EditTextPreference
-		android:key="@string/pref_default_url_key"
-		android:title="@string/pref_default_url_title"
-		android:summary="@string/pref_default_url_summary"
-		android:defaultValue="@string/default_url" />	
+		<EditTextPreference android:defaultValue="@string/search_url" 
+							android:key="@string/pref_search_url_key" 
+							android:title="@string/pref_search_url_title" 
+							android:summary="@string/pref_search_url_summary"/>
+
+		<EditTextPreference android:defaultValue="@string/login_url" 
+							android:key="@string/pref_login_url_key" 
+							android:title="@string/pref_login_url_title" 
+							android:summary="@string/pref_login_url_summary"/>
+
+		<EditTextPreference android:defaultValue="@string/placehold_url" 
+							android:key="@string/pref_placehold_url_key" 
+							android:title="@string/pref_placehold_url_title" 
+							android:summary="@string/pref_placehold_url_summary"/>
+	</PreferenceCategory>
+		<PreferenceCategory
+		android:title="@string/prefcat_debug">
+
+		<EditTextPreference android:defaultValue="@string/patron_id" 
+							android:key="@string/pref_patron_id_key" 
+							android:title="@string/pref_patron_id_title" 
+							android:summary="@string/pref_patron_id_summary"/>
+
 
 	</PreferenceCategory>
+	
 			
 </PreferenceScreen>
