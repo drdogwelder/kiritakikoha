@@ -53,6 +53,9 @@ public class SearchResultsActivity extends Activity {
 
 	private Thread mSearchThread;
     private final Handler mHandler = new Handler();
+    
+	ExpandableListAdapter adapter = new ExpandableListAdapter(this, new ArrayList<String>(), 
+			new ArrayList<ArrayList<Record>>());
 	
     /** Called when the activity is first created. */
     @Override
@@ -63,6 +66,7 @@ public class SearchResultsActivity extends Activity {
         
         setContentView(R.layout.search_results);
         ExpandableListView listview = (ExpandableListView) findViewById(R.id.listView);
+        listview.setOnChildClickListener(adapter);
         
         m_extras = getIntent().getExtras();
         if (m_extras == null) {
@@ -169,8 +173,7 @@ public class SearchResultsActivity extends Activity {
 		hideProgress();
         // Initialize the adapter with blank groups and children
         // We will be adding children on a thread, and then update the ListView
-		ExpandableListAdapter adapter = new ExpandableListAdapter(this, new ArrayList<String>(), 
-													new ArrayList<ArrayList<Record>>());
+
 		for (Iterator<Record> it = results.iterator(); it.hasNext(); ) { 
 				Record a = it.next();
 				adapter.addItem(a);
