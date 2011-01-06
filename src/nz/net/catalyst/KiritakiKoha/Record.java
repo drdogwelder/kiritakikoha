@@ -38,6 +38,7 @@ public class Record extends Object implements Parcelable {
 	private String isbn;
 	private String description;
 	private URL url;
+	private String id;
 	
 	public Record clone() {
 		Record a = new Record();
@@ -45,6 +46,7 @@ public class Record extends Object implements Parcelable {
 		a.isbn = this.isbn;
 		a.description = this.description;
 		a.url = this.url;
+		a.id= this.id;
 		return a;
 	}
 	
@@ -68,9 +70,13 @@ public class Record extends Object implements Parcelable {
 	}
 	public void setURL(URL u) {
 		url = u;
+		id = u.toString().substring(this.url.toString().indexOf("=") + 1);
 	}
 	public void setISBN(String i) {
 		isbn = i;
+	}
+	public String getID() {
+		return this.id;
 	}
 	public String getGroup() {
 		// In the meantime just set the article ID, i.e force no grouping
@@ -90,6 +96,7 @@ public class Record extends Object implements Parcelable {
 		dest.writeString(url.toString());
 		dest.writeString(title);
 		dest.writeString(description);
+		dest.writeString(id);
 	}
 		
 	/**
@@ -119,6 +126,7 @@ public class Record extends Object implements Parcelable {
 		}
 		title = in.readString();
 		description = in.readString();
+		id = in.readString();
 	}
 
 	public Record() {

@@ -32,7 +32,6 @@ public class InfoActivity extends Activity {
 
 		menu.add(Menu.NONE, GlobalResources.SEARCH, 1, R.string.menu_search).setIcon(android.R.drawable.ic_menu_search);
 		menu.add(Menu.NONE, GlobalResources.PREFERENCES, 2, R.string.menu_preferences).setIcon(android.R.drawable.ic_menu_preferences);
-		menu.add(Menu.NONE, GlobalResources.LOGIN, 3, R.string.menu_login).setIcon(R.drawable.ic_menu_login);
 		return result;
 	}
 	public boolean onSearchRequested() {
@@ -47,12 +46,6 @@ public class InfoActivity extends Activity {
 				startActivity(new Intent(this, SearchFormActivity.class));
 				break;
 			case GlobalResources.PREFERENCES:
-				startActivity(new Intent(this, EditPreferences.class));
-				break;
-			case GlobalResources.LOGIN:
-				startActivity(new Intent(this, AuthenticatorActivity.class));
-				break;
-			case GlobalResources.LOGOUT:
 				startActivity(new Intent(this, EditPreferences.class));
 				break;
 		}

@@ -2,7 +2,6 @@ package nz.net.catalyst.KiritakiKoha.authenticator;
 
 import nz.net.catalyst.KiritakiKoha.GlobalResources;
 import nz.net.catalyst.KiritakiKoha.R;
-import nz.net.catalyst.KiritakiKoha.ilsdi.KohaILSDIHandler;
 import nz.net.catalyst.KiritakiKoha.log.LogConfig;
 import android.accounts.AbstractAccountAuthenticator;
 import android.accounts.Account;
@@ -145,7 +144,7 @@ public class AccountAuthenticator extends AbstractAccountAuthenticator {
 	     * Validates user's password on the server
 	     */
 	    private boolean onlineConfirmPassword(String username, String password) {
-	        return KohaILSDIHandler.authenticate(username, password,
+	        return KohaAuthHandler.authenticate(username, password,
 	            null/* Handler */, null/* Context */);
 	    }
 

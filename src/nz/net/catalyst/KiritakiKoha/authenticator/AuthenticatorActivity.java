@@ -18,7 +18,6 @@ package nz.net.catalyst.KiritakiKoha.authenticator;
 
 import nz.net.catalyst.KiritakiKoha.GlobalResources;
 import nz.net.catalyst.KiritakiKoha.R;
-import nz.net.catalyst.KiritakiKoha.ilsdi.KohaILSDIHandler;
 import nz.net.catalyst.KiritakiKoha.log.LogConfig;
 import android.accounts.Account;
 import android.accounts.AccountAuthenticatorActivity;
@@ -135,12 +134,14 @@ public class AuthenticatorActivity extends AccountAuthenticatorActivity implemen
         }
         mPassword = mPasswordEdit.getText().toString();
         if (TextUtils.isEmpty(mUsername) || TextUtils.isEmpty(mPassword)) {
+            mMessage.setVisibility(View.VISIBLE);
             mMessage.setText(getMessage());
         } else {
             showProgress();
+            mMessage.setVisibility(View.GONE);
             // Start authenticating...
             mAuthThread =
-            	KohaILSDIHandler.attemptAuth(mUsername, mPassword, mHandler,
+            	KohaAuthHandler.attemptAuth(mUsername, mPassword, mHandler,
                     AuthenticatorActivity.this);
         }
     }
@@ -184,6 +185,8 @@ public class AuthenticatorActivity extends AccountAuthenticatorActivity implemen
         } else {
             mAccountManager.setPassword(account, mPassword);
         }
+        mAccountManager.setUserData(account, GlobalResources.AUTH_SESSION_KEY, mAuthtoken);        
+        
         final Intent intent = new Intent();
         mAuthtoken = mPassword;
         intent.putExtra(AccountManager.KEY_ACCOUNT_NAME, mUsername);
@@ -208,11 +211,13 @@ public class AuthenticatorActivity extends AccountAuthenticatorActivity implemen
     /**
      * Called when the authentication process completes (see attemptLogin()).
      */
-    public void onAuthenticationResult(boolean result) {
-        Log.i(TAG, "onAuthenticationResult(" + result + ")");
+    public void onAuthenticationResult(String authToken) {
+        Log.i(TAG, "onAuthenticationResult(" + authToken + ")");
         // Hide the progress dialog
         hideProgress();
-        if (result) {
+        
+        mAuthtoken = authToken;
+        if (authToken != null) {
             if (!mConfirmCredentials) {
                 finishLogin();
             } else {
@@ -220,6 +225,7 @@ public class AuthenticatorActivity extends AccountAuthenticatorActivity implemen
             }
         } else {
             Log.e(TAG, "onAuthenticationResult: failed to authenticate");
+            mMessage.setVisibility(View.VISIBLE);
             if (mRequestNewAccount) {
                 // "Please enter a valid username/password.
                 mMessage
@@ -251,6 +257,10 @@ public class AuthenticatorActivity extends AccountAuthenticatorActivity implemen
             return getText(R.string.login_no_password);
         }
         return null;
+    }
+    
+    public void isAuthenctiated() {
+    	
     }
 
     /**

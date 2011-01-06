@@ -25,6 +25,7 @@ import android.os.Handler;
 import android.os.Parcelable;
 import android.preference.PreferenceManager;
 import android.text.Html;
+import android.text.method.LinkMovementMethod;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -37,7 +38,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 import android.widget.ExpandableListView.OnChildClickListener;
 
-public class SearchResultsActivity extends Activity {
+public class SearchResultsActivity extends Activity implements OnChildClickListener {
 	static final String TAG = LogConfig.getLogTag(SearchResultsActivity.class);
 	// whether DEBUG level logging is enabled (whether globally, or explicitly
 	// for this log tag)
@@ -66,7 +67,7 @@ public class SearchResultsActivity extends Activity {
         
         setContentView(R.layout.search_results);
         ExpandableListView listview = (ExpandableListView) findViewById(R.id.listView);
-        listview.setOnChildClickListener(adapter);
+        listview.setOnChildClickListener(this);
         
         m_extras = getIntent().getExtras();
         if (m_extras == null) {
@@ -83,6 +84,7 @@ public class SearchResultsActivity extends Activity {
 
 		ArrayList<String> idxValues = m_extras.getStringArrayList("idx");
 		ArrayList<String> qValues = m_extras.getStringArrayList("q");
+		String pub_date_range = m_extras.getString(GlobalResources.SEARCH_PUB_DATE_RANGE_PARAM);
 		
     	if ( ! ( idxValues.size() > 0 && qValues.size() > 0 ) ) {
 			Toast.makeText(this, getString(R.string.search_no_search_terms), Toast.LENGTH_SHORT).show();
@@ -103,6 +105,7 @@ public class SearchResultsActivity extends Activity {
 			String idx = idxItr.next();
 			qStr = qStr + "&idx=" + idx + "&q=" + Uri.encode(q);
 		}
+		qStr = qStr + "&" + GlobalResources.SEARCH_PUB_DATE_RANGE_PARAM + "=" + Uri.encode(pub_date_range);
 
 			// Finally add the query string
         mURL = mURL + qStr;
@@ -305,8 +308,12 @@ public class SearchResultsActivity extends Activity {
 
 	        tv = (TextView) convertView.findViewById(R.id.description);
 	        tv.setText(Html.fromHtml(rec.getDescription()));
-	        //tv.setMovementMethod(LinkMovementMethod.getInstance());
-	        //tv.setLinksClickable(true);
+
+			Boolean useWeb = mPrefs.getBoolean(getResources().getString(R.string.pref_hold_via_web_key), false);
+			if ( useWeb ) {
+		        tv.setMovementMethod(LinkMovementMethod.getInstance());
+		        tv.setLinksClickable(true);
+			}
 	        return convertView;
 	    }
 
@@ -368,5 +375,13 @@ public class SearchResultsActivity extends Activity {
 			
 			return true;
 		}
+	}
+
+	@Override
+	public boolean onChildClick(ExpandableListView parent, View v,
+			int groupPosition, int childPosition, long id) {
+		adapter.onChildClick(parent, v, groupPosition, childPosition, id);
+		finish();
+		return false;
 	}
 }

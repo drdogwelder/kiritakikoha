@@ -19,12 +19,12 @@
     <string name="pref_base_url_key">base.url</string>
     <string name="pref_base_url_title">Base URL</string>
     <string name="pref_base_url_summary">Enter the base Koha URL.</string>
-    <string name="base_url">http://mykoha.localhost/cgi-bin/koha/</string>
+    <string name="base_url">http://demo.mykoha.co.nz/cgi-bin/koha/</string>
 
     <string name="pref_login_url_key">login.url</string>
     <string name="pref_login_url_title">Login URL</string>
-    <string name="pref_login_url_summary">Enter the login URL.</string>
-    <string name="login_url">ilsdi.pl?service=AuthenticatePatron</string>
+    <string name="pref_login_url_summary">Enter the login URL (will be appended to base URL).</string>
+    <string name="login_url">opac-user.pl</string>
 
     <string name="searchform">Library Search</string>
     <string name="search_options_prompt">Search by?</string>
@@ -46,6 +46,8 @@
         <item>pl,wrdl</item>
         <item>nb</item>
     </string-array>
+    <string name="search_pub_date_range">Publication Date Range</string>
+    <string name="search_pub_date_range_desc">(e.g. "1999-2001" or "-1987" or "2008-" )</string>
     <string name="search_form_go">Run search</string>
     <string name="pref_search_url_key">search.url</string>
     <string name="pref_search_url_title">Search URL</string>
@@ -61,16 +63,23 @@
     <string name="pref_placehold_url_key">placehold.url</string>
     <string name="pref_placehold_url_title">Place Hold URL</string>
     <string name="pref_placehold_url_summary">Enter the place hold URL components (will be appended to base URL).</string>
-    <string name="placehold_url">ilsdi.pl?service=HoldTitle</string>
+    <string name="placehold_url">opac-reserve.pl</string>
 
     <string name="pref_patron_id_key">patron.id</string>
     <string name="pref_patron_id_title">Patron ID</string>
     <string name="pref_patron_id_summary">Your patron ID.</string>
     <string name="patron_id"></string>
+
+    <string name="pref_hold_via_web_key">hold.web</string>
+    <string name="pref_hold_via_web_title">Place Hold via Web</string>
+    <string name="pref_hold_via_web_summary">Use a web browser to place a hold (i.e external to this app).</string>
     
     <string name="login">Login</string>
     <string name="login_username">Login:</string>
+        <string name="username">member</string>
+    
     <string name="login_password">Password:</string>
+        <string name="password">member1</string>
     <string name="login_submit">Submit</string>
     <string name="login_message">Please login</string>
     <string name="login_authenticating">Authenticating...</string>

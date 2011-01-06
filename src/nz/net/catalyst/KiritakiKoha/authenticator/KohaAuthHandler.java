@@ -1,4 +1,4 @@
-package nz.net.catalyst.KiritakiKoha.ilsdi;
+package nz.net.catalyst.KiritakiKoha.authenticator;
 
 /*
  * 
@@ -25,38 +25,34 @@ Example Response
  */
 import nz.net.catalyst.KiritakiKoha.GlobalResources;
 import nz.net.catalyst.KiritakiKoha.R;
-import nz.net.catalyst.KiritakiKoha.authenticator.AuthenticatorActivity;
 import nz.net.catalyst.KiritakiKoha.log.LogConfig;
 
-import org.apache.http.HttpEntity;
+import org.apache.http.Header;
 import org.apache.http.HttpResponse;
 import org.apache.http.HttpStatus;
+import org.apache.http.NameValuePair;
 import org.apache.http.client.HttpClient;
-import org.apache.http.client.methods.HttpGet;
+import org.apache.http.client.entity.UrlEncodedFormEntity;
+import org.apache.http.client.methods.HttpPost;
 import org.apache.http.conn.params.ConnManagerParams;
 import org.apache.http.impl.client.DefaultHttpClient;
+import org.apache.http.message.BasicNameValuePair;
 import org.apache.http.params.HttpConnectionParams;
 import org.apache.http.params.HttpParams;
-import org.w3c.dom.Document;
-import org.w3c.dom.Node;
-import org.w3c.dom.NodeList;
-import org.xml.sax.SAXException;
 
 import android.content.Context;
 import android.content.SharedPreferences;
-import android.net.Uri;
 import android.os.Handler;
 import android.preference.PreferenceManager;
 import android.util.Log;
 
 import java.io.IOException;
+import java.io.UnsupportedEncodingException;
+import java.util.ArrayList;
+import java.util.List;
 
-import javax.xml.parsers.DocumentBuilder;
-import javax.xml.parsers.DocumentBuilderFactory;
-import javax.xml.parsers.ParserConfigurationException;
-
-public class KohaILSDIHandler {
-	static final String TAG = LogConfig.getLogTag(KohaILSDIHandler.class);
+public class KohaAuthHandler {
+	static final String TAG = LogConfig.getLogTag(KohaAuthHandler.class);
 	// whether DEBUG level logging is enabled (whether globally, or explicitly
 	// for this log tag)
 	static final boolean DEBUG = LogConfig.isDebug(TAG);
@@ -69,9 +65,9 @@ public class KohaILSDIHandler {
      * Configures the httpClient to connect to the URL provided.
      */
     public static void maybeCreateHttpClient() {
-        if (mHttpClient == null) {
-            mHttpClient = new DefaultHttpClient();
-            final HttpParams params = mHttpClient.getParams();
+        if (getHttpClient() == null) {
+            setHttpClient(new DefaultHttpClient());
+            final HttpParams params = getHttpClient().getParams();
             HttpConnectionParams.setConnectionTimeout(params,
                 GlobalResources.REGISTRATION_TIMEOUT);
             HttpConnectionParams.setSoTimeout(params, GlobalResources.REGISTRATION_TIMEOUT);
@@ -112,80 +108,55 @@ public class KohaILSDIHandler {
      *         successfully authenticated.
      */
     public static boolean authenticate(String username, String password, Handler handler, final Context context) {
-        final HttpResponse resp;
+        HttpResponse resp;
+
+        maybeCreateHttpClient();
 
     	// application preferences
     	SharedPreferences mPrefs = PreferenceManager.getDefaultSharedPreferences(context);
 		String aURI = mPrefs.getString(context.getResources().getString(R.string.pref_base_url_key).toString(),
 												context.getResources().getString(R.string.base_url).toString());
 		aURI = aURI + mPrefs.getString(context.getResources().getString(R.string.pref_login_url_key).toString(),
-												context.getResources().getString(R.string.login_url).toString());
-		if (aURI.indexOf("?") > 0)
-			aURI = aURI + "&";
-		else
-			aURI = aURI + "?";
-			
-		aURI = aURI + GlobalResources.PARAM_USERNAME + "=" + Uri.encode(username) 
-					+ "&" + GlobalResources.PARAM_PASSWORD + "=" + Uri.encode(password);
+				context.getResources().getString(R.string.login_url).toString());
 		
-		Log.d(TAG, "authenticate: using '" + aURI + "'");		
+		// Auth post is ... koha_login_context=opac&userid=member&password=member1
+		// We're trying to send the koha_login_context as part of the post URL. 
 
-        final HttpGet get = new HttpGet(aURI);
-        maybeCreateHttpClient();
-
+        final HttpPost post = new HttpPost(aURI);
+        //post.setHeader("Cookie", cgi_cookie);
+        // Add your data  
+        List<NameValuePair> nameValuePairs = new ArrayList<NameValuePair>(2);  
+        nameValuePairs.add(new BasicNameValuePair("koha_login_context", "opac"));  
+        nameValuePairs.add(new BasicNameValuePair(GlobalResources.PARAM_USERNAME, username));  
+        nameValuePairs.add(new BasicNameValuePair(GlobalResources.PARAM_PASSWORD, password));  
         try {
-            resp = mHttpClient.execute(get);
+			post.setEntity(new UrlEncodedFormEntity(nameValuePairs));
+		} catch (UnsupportedEncodingException e) {
+            Log.e(TAG, "Auth post encoding exception: " + e);
+	        sendResult(null, handler, context);
+	        return false;
+		}  
+        
+        try {
+            resp = getHttpClient().execute(post);
             if (resp.getStatusLine().getStatusCode() == HttpStatus.SC_OK) {
-            	// TODO here is where we deal with the XML response and get out the patron ID
             	/*
-            	    <?xml version="1.0" encoding="ISO-8859-1" ?>
-					<AuthenticatePatron>
-						<id>419</id>
-					</AuthenticatePatron>
+            	 * Cookie: SESSc46d291f9a3827d00a6c8c823f9d5590=822f42053c5f7a8d7d4940267f1be6e2; 
+            	 *          CGISESSID=eb4966cbdf869c27d72d9f8afcc3753c
             	 */
-    			HttpEntity resEntity = resp.getEntity();
-    			
-    		    if (resEntity == null) {
-                    Log.v(TAG, "Error authenticating" + resp.getStatusLine());
-                    sendResult(false, handler, context);
-                    return false;
-    		    }
-    		    
-				try {
-    		    	DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();
-    		    	DocumentBuilder db;
-					db = dbf.newDocumentBuilder();	
-    		    	Document doc;
-					doc = db.parse(resEntity.getContent());
-					for (int i=0; i < doc.getChildNodes().getLength(); i++) {
-						Node node = ((NodeList)doc.getChildNodes()).item(i);
-						Log.d(TAG, node.getNodeName() + ": " + node.getNodeValue());
-						if (node.getNodeName().toLowerCase().equals("authenticatepatron")) {
-							for (int j=0; j < node.getChildNodes().getLength(); j++) {
-								Node childNode = ((NodeList)node.getChildNodes()).item(j);
-								Log.d(TAG, childNode.getNodeName() + ": " + childNode.getNodeValue());
-								if (childNode.getNodeName().toLowerCase().equals("id")) {
-									String patronID = doc.getFirstChild().getNodeValue().toString();
-				    		    	if ( patronID.trim().length() > 0 ) { 
-					    				mPrefs.edit()
-					    					.putString("patron_id", patronID)
-					    					.commit()
-					    				;
-					                    
-					                    sendResult(true, handler, context);
-					                    return true;
-				    		    	}
-								}
-							}
-						}
-    		    	}
-				} catch (ParserConfigurationException e) {
-					// TODO Auto-generated catch block
-                    Log.v(TAG, "Error authenticating (ParserConfigurationException)");
-				} catch (SAXException e) {
-                    Log.v(TAG, "Error authenticating (SAXException)");
-				}
-            } else {
+
+            	String auth_token = getCookie(resp, "Set-Cookie", "CGISESSID");
+            	if ( auth_token != null ) {
+            		Log.v(TAG, "Got auth token: '" + auth_token + "' setting " + GlobalResources.AUTH_SESSION_KEY);
+    					
+    				mPrefs.edit()
+    					.putString(GlobalResources.AUTH_SESSION_KEY, auth_token)
+    					.commit()
+    				;
+                    sendResult(auth_token, handler, context);
+                    return true;
+                }
+           } else {
                 Log.v(TAG, "Error authenticating" + resp.getStatusLine());
             }
         } catch (final IOException e) {
@@ -193,26 +164,40 @@ public class KohaILSDIHandler {
         } finally {
             Log.v(TAG, "getAuthtoken completing");
         }
-        sendResult(false, handler, context);
+        sendResult(null, handler, context);
         return false;
     }
 
+    private static String getCookie (HttpResponse resp, String name, String filter) {
+        Header[] headers = resp.getAllHeaders();
+        Log.i(TAG, "Looking for header "+ name + " with value containing " + filter);
+        for (int i=0; i < headers.length; i++) {
+            Header h = headers[i];
+            Log.i(TAG, "Found header [" + h.getName() + ": " + h.getValue() + "]");
+            
+            if ( h.getName().equalsIgnoreCase(name) && h.getValue().startsWith(filter)) {
+                Log.i(TAG, "Matched header [" + h.getName() + ": " + h.getValue() + "]");
+            	return h.getValue();
+            }
+        }
+		return null;
+    }
     /**
      * Sends the authentication response from server back to the caller main UI
      * thread through its handler.
      * 
-     * @param result The boolean holding authentication result
+     * @param authToken The boolean holding authentication result
      * @param handler The main UI thread's handler instance.
      * @param context The caller Activity's context.
      */
-    private static void sendResult(final Boolean result, final Handler handler,
+    private static void sendResult(final String authToken, final Handler handler,
         final Context context) {
         if (handler == null || context == null) {
             return;
         }
         handler.post(new Runnable() {
             public void run() {
-                ((AuthenticatorActivity) context).onAuthenticationResult(result);
+                ((AuthenticatorActivity) context).onAuthenticationResult(authToken);
             }
         });
     }
@@ -234,6 +219,14 @@ public class KohaILSDIHandler {
             }
         };
         // run on background thread.
-        return KohaILSDIHandler.performOnBackgroundThread(runnable);
+        return KohaAuthHandler.performOnBackgroundThread(runnable);
     }
+
+	public static void setHttpClient(HttpClient mHttpClient) {
+		KohaAuthHandler.mHttpClient = mHttpClient;
+	}
+
+	public static HttpClient getHttpClient() {
+		return mHttpClient;
+	}
 }

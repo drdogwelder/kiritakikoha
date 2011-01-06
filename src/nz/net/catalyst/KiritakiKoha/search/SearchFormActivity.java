@@ -49,6 +49,7 @@ public class SearchFormActivity extends Activity implements OnClickListener  {
 			String[] av = getResources().getStringArray(R.array.search_options_arrayValues);
 			ArrayList<String> idxValues = new ArrayList<String>();
 			ArrayList<String> qValues = new ArrayList<String>();
+			String pub_date_range;
 			
 			// allow for 3 fields - maybe make the form dynamic (auto new one if entering in one)
 	        //TODO - maybe clean - improve the form element processing (bit cut-n-paste)
@@ -71,6 +72,11 @@ public class SearchFormActivity extends Activity implements OnClickListener  {
 				idxValues.add(av[pos]);
 				qValues.add(mText.getText().toString().trim());
 	        }
+	        mText = (EditText) this.findViewById(R.id.pub_date_range);
+        	pub_date_range = mText.getText().toString().trim();
+	        	
+	        //limit-yr=1999-2000
+	        
 			// Start the details dialog and pass in the intent containing item details.
 	        
         	if ( ! ( idxValues.size() > 0 && qValues.size() > 0 ) ) {
@@ -81,6 +87,7 @@ public class SearchFormActivity extends Activity implements OnClickListener  {
 		        Intent d = new Intent(this, SearchResultsActivity.class);
 				d.putStringArrayListExtra("idx", idxValues);
 				d.putStringArrayListExtra("q", qValues);
+				d.putExtra(GlobalResources.SEARCH_PUB_DATE_RANGE_PARAM, pub_date_range);
 				startActivity(d);
         	}
 		}

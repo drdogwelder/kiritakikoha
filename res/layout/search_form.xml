@@ -46,6 +46,22 @@
 							  android:layout_width="fill_parent"
 							  android:singleLine="false"
 							  android:layout_height="wrap_content" />
+  					<TextView android:text="@string/search_pub_date_range"
+							  android:layout_width="fill_parent"
+							  android:singleLine="false"
+							  android:layout_height="wrap_content" />
+  					<TextView android:text="@string/search_pub_date_range_desc"
+							  android:layout_width="fill_parent"
+							  android:singleLine="false"
+							  android:layout_height="wrap_content"
+							  style="@android:style/TextAppearance.Small" />
+					<EditText android:text=""
+							  android:id="@+id/pub_date_range"
+							  android:inputType="date"
+							  android:layout_width="fill_parent"
+							  android:singleLine="true"
+							  android:layout_height="wrap_content" />
+							  
 					
 				<Button android:text="@string/search_form_go"
 						android:id="@+id/btnSearchGo"
