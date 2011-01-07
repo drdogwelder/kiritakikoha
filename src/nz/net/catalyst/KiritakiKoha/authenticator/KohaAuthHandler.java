@@ -147,7 +147,7 @@ public class KohaAuthHandler {
 
             	String auth_token = getCookie(resp, "Set-Cookie", "CGISESSID");
             	if ( auth_token != null ) {
-            		Log.v(TAG, "Got auth token: '" + auth_token + "' setting " + GlobalResources.AUTH_SESSION_KEY);
+            		if ( DEBUG ) Log.d(TAG, "Got auth token: '" + auth_token + "' setting " + GlobalResources.AUTH_SESSION_KEY);
     					
     				mPrefs.edit()
     					.putString(GlobalResources.AUTH_SESSION_KEY, auth_token)
@@ -157,12 +157,12 @@ public class KohaAuthHandler {
                     return true;
                 }
            } else {
-                Log.v(TAG, "Error authenticating" + resp.getStatusLine());
+        	   if ( DEBUG ) Log.d(TAG, "Error authenticating" + resp.getStatusLine());
             }
         } catch (final IOException e) {
-            Log.v(TAG, "IOException when getting authtoken", e);
+            Log.e(TAG, "IOException when getting authtoken", e);
         } finally {
-            Log.v(TAG, "getAuthtoken completing");
+        	if ( DEBUG ) Log.d(TAG, "getAuthtoken completing");
         }
         sendResult(null, handler, context);
         return false;
@@ -170,13 +170,13 @@ public class KohaAuthHandler {
 
     private static String getCookie (HttpResponse resp, String name, String filter) {
         Header[] headers = resp.getAllHeaders();
-        Log.i(TAG, "Looking for header "+ name + " with value containing " + filter);
+        if ( DEBUG ) Log.d(TAG, "Looking for header "+ name + " with value containing " + filter);
         for (int i=0; i < headers.length; i++) {
             Header h = headers[i];
-            Log.i(TAG, "Found header [" + h.getName() + ": " + h.getValue() + "]");
+            if ( DEBUG ) Log.d(TAG, "Found header [" + h.getName() + ": " + h.getValue() + "]");
             
             if ( h.getName().equalsIgnoreCase(name) && h.getValue().startsWith(filter)) {
-                Log.i(TAG, "Matched header [" + h.getName() + ": " + h.getValue() + "]");
+            	if ( DEBUG ) Log.d(TAG, "Matched header [" + h.getName() + ": " + h.getValue() + "]");
             	return h.getValue();
             }
         }

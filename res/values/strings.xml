@@ -11,10 +11,11 @@
     <string name="menu_info">Info</string>
     <string name="menu_login">Login</string>
     <string name="menu_logout">Logout</string>
+    <string name="menu_reset">Reset</string>
+    <string name="menu_scan">Scan</string>
     
     <string name="prefcat_advanced">Advanced</string>
     <string name="prefcat_debug">Debugging</string>
-    <string name="pref_menu_reset">Reset</string>
 
     <string name="pref_base_url_key">base.url</string>
     <string name="pref_base_url_title">Base URL</string>
@@ -65,11 +66,6 @@
     <string name="pref_placehold_url_summary">Enter the place hold URL components (will be appended to base URL).</string>
     <string name="placehold_url">opac-reserve.pl</string>
 
-    <string name="pref_patron_id_key">patron.id</string>
-    <string name="pref_patron_id_title">Patron ID</string>
-    <string name="pref_patron_id_summary">Your patron ID.</string>
-    <string name="patron_id"></string>
-
     <string name="pref_hold_via_web_key">hold.web</string>
     <string name="pref_hold_via_web_title">Place Hold via Web</string>
     <string name="pref_hold_via_web_summary">Use a web browser to place a hold (i.e external to this app).</string>
@@ -96,8 +92,14 @@
     <string name="auth_result_no_connection">Server address or port number incorrect</string>
     <string name="auth_result_success">Authentication successful!</string>
     <string name="auth_result_fail">Authentication failed.</string>
-    
+  
     <string name="place_hold_not_logged_in">Sorry you cannot place a hold until you are logged in.</string>
     <string name="place_hold_on_nothing">Sorry there has been a problem with your request.</string>
+
+    <string name="load_config_download_error">Sorry there was an error downloading the configuration file.</string>
+    <string name="load_config_error">Sorry there was an error parsing the configuration file.</string>
+    <string name="load_config_success">Successfully loaded the configuration file.</string>
+    <string name="scan_not_available">Sorry you need to install ZXing Barcode Scanner for this.</string>
+    
     
 </resources>

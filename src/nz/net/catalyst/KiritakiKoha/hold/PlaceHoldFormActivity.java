@@ -112,14 +112,14 @@ public class PlaceHoldFormActivity extends Activity implements OnClickListener {
 		            	finish();
 						return;
 					} else {
-						Log.d(TAG, "Place fold failed - invalidating account from cache");
+						if ( DEBUG ) Log.d(TAG, "Place fold failed - invalidating account from cache");
 						String mAuthtoken = mAccountManager.peekAuthToken(a, GlobalResources.AUTHTOKEN_TYPE);
 						mAccountManager.invalidateAuthToken(GlobalResources.ACCOUNT_TYPE, mAuthtoken);
 					}
 				}
 			}
 			
-			Log.d(TAG, "Not logged in, can't place a hold");
+			if ( DEBUG ) Log.d(TAG, "Not logged in, can't place a hold");
 			startActivity(new Intent(this, AuthenticatorActivity.class));
 			return;
 		}
@@ -139,8 +139,8 @@ public class PlaceHoldFormActivity extends Activity implements OnClickListener {
 		
 		aURI = aURI + "?biblionumber=" + Uri.encode(bib.getID());
 		
-		Log.d(TAG, "Place fold URL: " + aURI);
-		Log.d(TAG, "Place fold Cookie: " + session_key);
+		if ( DEBUG ) Log.d(TAG, "Place fold URL: " + aURI);
+		if ( DEBUG ) Log.d(TAG, "Place fold Cookie: " + session_key);
 		
         final HttpPost post = new HttpPost(aURI);
         post.setHeader("Cookie", session_key);
@@ -173,12 +173,12 @@ public class PlaceHoldFormActivity extends Activity implements OnClickListener {
             if (resp.getStatusLine().getStatusCode() == HttpStatus.SC_OK) {
             	return true;
            } else {
-                Log.v(TAG, "Failed to place item on hold: " + resp.getStatusLine());
+        	   if ( VERBOSE ) Log.v(TAG, "Failed to place item on hold: " + resp.getStatusLine());
             }
         } catch (final IOException e) {
-            Log.v(TAG, "IOException when getting placing hold", e);
+        	if ( DEBUG ) Log.d(TAG, "IOException when getting placing hold", e);
         } finally {
-            Log.v(TAG, "place hold completing");
+        	if ( DEBUG ) Log.d(TAG, "place hold completing");
         }
         return false;
     }

@@ -2,7 +2,6 @@ package nz.net.catalyst.KiritakiKoha;
 
 import nz.net.catalyst.KiritakiKoha.EditPreferences;
 import nz.net.catalyst.KiritakiKoha.GlobalResources;
-import nz.net.catalyst.KiritakiKoha.authenticator.AuthenticatorActivity;
 import nz.net.catalyst.KiritakiKoha.log.LogConfig;
 import nz.net.catalyst.KiritakiKoha.search.SearchFormActivity;
 import nz.net.catalyst.KiritakiKoha.R;

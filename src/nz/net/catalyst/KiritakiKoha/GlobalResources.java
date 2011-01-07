@@ -6,7 +6,8 @@ public class GlobalResources {
 	public static final int SEARCH = 2;
 	public static final int INFO = 3;
 	public static final int LOGIN = 4;
-	public static final int LOGOUT = 5;
+	public static final int RESET = 5;
+	public static final int SCAN = 6;
 	
 	public static final String SEARCH_PUB_DATE_RANGE_PARAM = "limit-yr";
 	
@@ -20,4 +21,9 @@ public class GlobalResources {
     public static final String PARAM_CONFIRMCREDENTIALS = "confirmCredentials";
 	public static final String PARAM_AUTHTOKEN_TYPE = "authToken";
 	
+	public static final String CONFIG_SCAN_INTENT = "com.google.zxing.client.android.SCAN";
+	public static final String CONFIG_SCAN_MODE = "QR_CODE_MODE";
+	public static final String SEARCH_SCAN_MODE = "PRODUCT_MODE";
+	public static final String ISBN = "ISBN";
+
 }

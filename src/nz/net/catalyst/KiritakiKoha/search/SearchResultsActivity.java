@@ -105,7 +105,9 @@ public class SearchResultsActivity extends Activity implements OnChildClickListe
 			String idx = idxItr.next();
 			qStr = qStr + "&idx=" + idx + "&q=" + Uri.encode(q);
 		}
-		qStr = qStr + "&" + GlobalResources.SEARCH_PUB_DATE_RANGE_PARAM + "=" + Uri.encode(pub_date_range);
+		if ( pub_date_range.trim().length() > 0 )
+			qStr = qStr + "&" + GlobalResources.SEARCH_PUB_DATE_RANGE_PARAM + "=" 
+									+ Uri.encode(pub_date_range);
 
 			// Finally add the query string
         mURL = mURL + qStr;
@@ -145,18 +147,10 @@ public class SearchResultsActivity extends Activity implements OnChildClickListe
 			results = rh.getItems(context, new URL(u));
 		} catch (MalformedURLException e) {
 			Log.e(TAG, "Malfomed URL: " + e.getMessage());
-			Toast.makeText(context, context.getResources().getString(R.string.search_url_invalid), 
-										Toast.LENGTH_SHORT).show();
 		} catch (IOException e) {
 			Log.e(TAG, "Connection error: " + e.getMessage());
-			Toast.makeText(context, context.getResources().getString(R.string.search_connection_failure), Toast.LENGTH_SHORT).show();
 		}
 
-		if ( results.isEmpty()) {
-			Toast.makeText(context, context.getResources().getString(R.string.search_no_results), 
-					Toast.LENGTH_SHORT).show();
-        	return;
-		}
         sendResult(results, elv, handler, context);
 	}
     private static void sendResult(final ArrayList<Record> result, final ExpandableListView listview, final Handler handler, final Context context) {
@@ -177,6 +171,12 @@ public class SearchResultsActivity extends Activity implements OnChildClickListe
         // Initialize the adapter with blank groups and children
         // We will be adding children on a thread, and then update the ListView
 
+		if ( results.isEmpty() ) {
+			Toast.makeText(this, getResources().getString(R.string.search_no_results), 
+					Toast.LENGTH_SHORT).show();
+			finish();
+		}
+		
 		for (Iterator<Record> it = results.iterator(); it.hasNext(); ) { 
 				Record a = it.next();
 				adapter.addItem(a);
@@ -207,6 +207,8 @@ public class SearchResultsActivity extends Activity implements OnChildClickListe
 			case GlobalResources.PREFERENCES:
 				startActivity(new Intent(this, EditPreferences.class));
 				break;
+			default:
+				return super.onOptionsItemSelected(item);			
 		}
 		return true;
 	}

@@ -4,13 +4,10 @@ import java.util.ArrayList;
 
 import nz.net.catalyst.KiritakiKoha.EditPreferences;
 import nz.net.catalyst.KiritakiKoha.GlobalResources;
-import nz.net.catalyst.KiritakiKoha.InfoActivity;
 import nz.net.catalyst.KiritakiKoha.log.LogConfig;
 import nz.net.catalyst.KiritakiKoha.R;
 import android.app.Activity;
-import android.app.Dialog;
-import android.app.ProgressDialog;
-import android.content.DialogInterface;
+import android.content.ActivityNotFoundException;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
@@ -31,6 +28,16 @@ public class SearchFormActivity extends Activity implements OnClickListener  {
 	// whether VERBOSE level logging is enabled
 	static final boolean VERBOSE = LogConfig.VERBOSE;
 	
+	private void initiateScan (){
+		try {
+			Intent intent = new Intent("com.google.zxing.client.android.SCAN");
+			intent.putExtra("SCAN_MODE", GlobalResources.SEARCH_SCAN_MODE);
+			startActivityForResult(intent, 0);
+	    } catch (ActivityNotFoundException e) {
+        	Toast.makeText(this, getResources().getString(R.string.scan_not_available), Toast.LENGTH_SHORT).show();
+	    }
+	}
+
     /** Called when the activity is first created. */
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -94,6 +101,51 @@ public class SearchFormActivity extends Activity implements OnClickListener  {
 	}
 
 	public boolean onSearchRequested() {
+		initiateScan();
 		return true;
+	}
+	
+	@Override
+	public boolean onCreateOptionsMenu(Menu menu) {
+		boolean result = super.onCreateOptionsMenu(menu);
+
+		menu.add(Menu.NONE, GlobalResources.SCAN, 1, R.string.menu_scan).setIcon(R.drawable.ic_menu_scan);
+		menu.add(Menu.NONE, GlobalResources.PREFERENCES, 2, R.string.menu_preferences).setIcon(android.R.drawable.ic_menu_preferences);
+		return result;
+	}
+	
+	@Override
+	public boolean onOptionsItemSelected(MenuItem item) {
+		
+		switch (item.getItemId()) {
+			case GlobalResources.SCAN:
+				initiateScan();
+				break;				
+			case GlobalResources.PREFERENCES:
+				startActivity(new Intent(this, EditPreferences.class));
+				break;				
+			default:
+				return super.onOptionsItemSelected(item);
+		}
+		return true;
+	}
+	public void onActivityResult(int requestCode, int resultCode, Intent intent) { 
+		
+        if (resultCode == Activity.RESULT_OK) {
+        	String contents = intent.getStringExtra("SCAN_RESULT");
+        	String formatName = intent.getStringExtra("SCAN_RESULT_FORMAT");
+        	
+        	if ( DEBUG ) Log.d(TAG, "scanResult: " + contents + " (" + formatName + ")");
+        	
+        	EditText mText = (EditText) this.findViewById(R.id.searchTerms1);
+        	mText.setText(contents);
+        	
+        	Spinner mSpinner = (Spinner) this.findViewById(R.id.spinner1);
+			String[] ai = getResources().getStringArray(R.array.search_options_array);
+			for ( int i=0 ; i < ai.length; i++ ) {
+				if ( ai[i].equals(GlobalResources.ISBN) ) 
+		        	mSpinner.setSelection(i);
+			}
+		} 
 	}
 }

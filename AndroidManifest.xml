@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
       package="nz.net.catalyst.KiritakiKoha"
-      android:versionCode="3"
-      android:versionName="1.2"      >
-    <application android:icon="@drawable/icon" android:label="@string/label" android:debuggable="true">
+      android:versionCode="5"
+      android:versionName="1.4">
+    <application android:icon="@drawable/icon" android:label="@string/label" android:debuggable="false">
 	    <service android:name=".authenticator.AccountAuthenticatorService"
 	    		android:exported="true">
 	    	<intent-filter>
@@ -54,16 +54,6 @@
         
         <activity android:name=".EditPreferences"
 			android:label="@string/menu_preferences" />
-
-        <activity android:name=".LoadRemotePreferences"
-			android:label="@string/menu_preferences"> 
-            <intent-filter  android:priority="100">
-			    <action android:name="android.intent.action.VIEW" />
-			    <category android:name="android.intent.category.DEFAULT" />
-                <data android:mimeType="application/vnd.android.nz.net.catalyst.kiritakikoha-config"  
-                		android:scheme="http"/>
-            </intent-filter>
-		</activity>
 
     </application>
     <uses-sdk android:minSdkVersion="7" />

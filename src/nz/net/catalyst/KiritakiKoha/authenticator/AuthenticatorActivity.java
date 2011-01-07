@@ -85,7 +85,7 @@ public class AuthenticatorActivity extends AccountAuthenticatorActivity implemen
         mConfirmCredentials =
             intent.getBooleanExtra(GlobalResources.PARAM_CONFIRMCREDENTIALS, false);
 
-        Log.i(TAG, "    request new: " + mRequestNewAccount);
+        if ( DEBUG ) Log.d(TAG, "    request new: " + mRequestNewAccount);
         requestWindowFeature(Window.FEATURE_LEFT_ICON);
         setContentView(R.layout.login);
         getWindow().setFeatureDrawableResource(Window.FEATURE_LEFT_ICON,
@@ -112,7 +112,7 @@ public class AuthenticatorActivity extends AccountAuthenticatorActivity implemen
         dialog.setCancelable(true);
         dialog.setOnCancelListener(new DialogInterface.OnCancelListener() {
             public void onCancel(DialogInterface dialog) {
-                Log.i(TAG, "dialog cancel has been invoked");
+            	if ( DEBUG ) Log.d(TAG, "dialog cancel has been invoked");
                 if (mAuthThread != null) {
                     mAuthThread.interrupt();
                     finish();
@@ -154,7 +154,7 @@ public class AuthenticatorActivity extends AccountAuthenticatorActivity implemen
      * @param the confirmCredentials result.
      */
     protected void finishConfirmCredentials(boolean result) {
-        Log.i(TAG, "finishConfirmCredentials()");
+    	if ( DEBUG ) Log.d(TAG, "finishConfirmCredentials()");
         final Account account = new Account(mUsername, GlobalResources.ACCOUNT_TYPE);
         mAccountManager.setPassword(account, mPassword);
         final Intent intent = new Intent();
@@ -175,7 +175,7 @@ public class AuthenticatorActivity extends AccountAuthenticatorActivity implemen
      */
 
     protected void finishLogin() {
-        Log.i(TAG, "finishLogin()");
+    	if ( DEBUG ) Log.d(TAG, "finishLogin()");
         final Account account = new Account(mUsername, GlobalResources.ACCOUNT_TYPE);
 
         if (mRequestNewAccount) {
@@ -212,7 +212,7 @@ public class AuthenticatorActivity extends AccountAuthenticatorActivity implemen
      * Called when the authentication process completes (see attemptLogin()).
      */
     public void onAuthenticationResult(String authToken) {
-        Log.i(TAG, "onAuthenticationResult(" + authToken + ")");
+        if ( DEBUG ) Log.d(TAG, "onAuthenticationResult(" + authToken + ")");
         // Hide the progress dialog
         hideProgress();
         
