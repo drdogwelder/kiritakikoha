@@ -251,7 +251,11 @@ public class SearchResultsActivity extends Activity implements OnChildClickListe
      * Hides the progress UI for a lengthy operation.
      */
     protected void hideProgress() {
-        dismissDialog(0);
+    	try {
+    		dismissDialog(0);
+    	} catch ( IllegalArgumentException e ) {
+    		// do nothing .. must have gone by itself.
+    	}
     }
 
 	public class ExpandableListAdapter extends BaseExpandableListAdapter implements OnChildClickListener {

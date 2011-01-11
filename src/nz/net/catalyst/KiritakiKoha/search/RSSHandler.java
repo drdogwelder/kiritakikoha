@@ -157,11 +157,14 @@ public class RSSHandler extends DefaultHandler {
 				session_key = mAccountManager.getUserData(a, Constants.AUTH_SESSION_KEY);
 				if ( session_key.length() > 0 ) {
 				    conn.setRequestProperty("Cookie", session_key);
-				    is = new InputSource(conn.getInputStream());
-					xr.parse(is);
-					return Records;
+				    break;
 				}
 			}
+			
+		    is = new InputSource(conn.getInputStream());
+			xr.parse(is);
+			return Records;
+			
 		} catch (IOException e) {
 			Log.e(TAG, "getItems: IOException: " + e.toString());
 			throw new IOException("Connection failed.");
