@@ -8,9 +8,23 @@
 		android:title="@string/pref_base_url_title"
 		android:summary="@string/pref_base_url_summary"
 		android:defaultValue="@string/base_url" />	
+	<EditTextPreference
+		android:key="@string/pref_branch_key"
+		android:title="@string/pref_branch_title"
+		android:summary="@string/pref_branch_summary"
+		android:defaultValue="" />	
+	<CheckBoxPreference android:defaultValue="false" 
+		android:enabled="true"
+		android:key="@string/pref_limit_available_key" 
+		android:title="@string/pref_limit_available_title" 
+		android:summary="@string/pref_limit_available_summary"/>	
+	<CheckBoxPreference android:defaultValue="false" 
+		android:enabled="true"
+		android:key="@string/pref_hold_via_web_key" 
+		android:title="@string/pref_hold_via_web_title" 
+		android:summary="@string/pref_hold_via_web_summary"/>
 
-	<PreferenceCategory
-		android:title="@string/prefcat_advanced">
+	<PreferenceCategory android:title="@string/prefcat_advanced">
 
 		<EditTextPreference android:defaultValue="@string/search_url" 
 							android:key="@string/pref_search_url_key" 
@@ -27,16 +41,5 @@
 							android:title="@string/pref_placehold_url_title" 
 							android:summary="@string/pref_placehold_url_summary"/>
 	</PreferenceCategory>
-		<PreferenceCategory
-		android:title="@string/prefcat_debug">
-
-		<CheckBoxPreference android:defaultValue="true" 
-							android:enabled="true"
-							android:key="@string/pref_hold_via_web_key" 
-							android:title="@string/pref_hold_via_web_title" 
-							android:summary="@string/pref_hold_via_web_summary"/>
-
-	</PreferenceCategory>
-	
 			
 </PreferenceScreen>

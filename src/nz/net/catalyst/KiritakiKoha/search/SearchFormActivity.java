@@ -3,13 +3,15 @@ package nz.net.catalyst.KiritakiKoha.search;
 import java.util.ArrayList;
 
 import nz.net.catalyst.KiritakiKoha.EditPreferences;
-import nz.net.catalyst.KiritakiKoha.GlobalResources;
+import nz.net.catalyst.KiritakiKoha.Constants;
 import nz.net.catalyst.KiritakiKoha.log.LogConfig;
 import nz.net.catalyst.KiritakiKoha.R;
 import android.app.Activity;
 import android.content.ActivityNotFoundException;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -31,7 +33,7 @@ public class SearchFormActivity extends Activity implements OnClickListener  {
 	private void initiateScan (){
 		try {
 			Intent intent = new Intent("com.google.zxing.client.android.SCAN");
-			intent.putExtra("SCAN_MODE", GlobalResources.SEARCH_SCAN_MODE);
+			intent.putExtra("SCAN_MODE", Constants.SEARCH_SCAN_MODE);
 			startActivityForResult(intent, 0);
 	    } catch (ActivityNotFoundException e) {
         	Toast.makeText(this, getResources().getString(R.string.scan_not_available), Toast.LENGTH_SHORT).show();
@@ -52,6 +54,8 @@ public class SearchFormActivity extends Activity implements OnClickListener  {
 		if (v.getId() == R.id.btnSearchGo) {			
 	        EditText mText;
 			int pos;
+
+	    	SharedPreferences mPrefs = PreferenceManager.getDefaultSharedPreferences(this);
 
 			String[] av = getResources().getStringArray(R.array.search_options_arrayValues);
 			ArrayList<String> idxValues = new ArrayList<String>();
@@ -79,10 +83,9 @@ public class SearchFormActivity extends Activity implements OnClickListener  {
 				idxValues.add(av[pos]);
 				qValues.add(mText.getText().toString().trim());
 	        }
+	        //limit-yr=1999-2000
 	        mText = (EditText) this.findViewById(R.id.pub_date_range);
         	pub_date_range = mText.getText().toString().trim();
-	        	
-	        //limit-yr=1999-2000
 	        
 			// Start the details dialog and pass in the intent containing item details.
 	        
@@ -94,7 +97,10 @@ public class SearchFormActivity extends Activity implements OnClickListener  {
 		        Intent d = new Intent(this, SearchResultsActivity.class);
 				d.putStringArrayListExtra("idx", idxValues);
 				d.putStringArrayListExtra("q", qValues);
-				d.putExtra(GlobalResources.SEARCH_PUB_DATE_RANGE_PARAM, pub_date_range);
+				d.putExtra(Constants.SEARCH_PUB_DATE_RANGE_PARAM, pub_date_range);
+				
+				if ( mPrefs.getBoolean(getResources().getString(R.string.pref_limit_available_key).toString(), false) ) 
+					d.putExtra(Constants.LIMIT_AVAILABLE,	"something-non-empty");
 				startActivity(d);
         	}
 		}
@@ -109,8 +115,8 @@ public class SearchFormActivity extends Activity implements OnClickListener  {
 	public boolean onCreateOptionsMenu(Menu menu) {
 		boolean result = super.onCreateOptionsMenu(menu);
 
-		menu.add(Menu.NONE, GlobalResources.SCAN, 1, R.string.menu_scan).setIcon(R.drawable.ic_menu_scan);
-		menu.add(Menu.NONE, GlobalResources.PREFERENCES, 2, R.string.menu_preferences).setIcon(android.R.drawable.ic_menu_preferences);
+		menu.add(Menu.NONE, Constants.SCAN, 1, R.string.menu_scan).setIcon(R.drawable.ic_menu_scan);
+		menu.add(Menu.NONE, Constants.PREFERENCES, 2, R.string.menu_preferences).setIcon(android.R.drawable.ic_menu_preferences);
 		return result;
 	}
 	
@@ -118,10 +124,10 @@ public class SearchFormActivity extends Activity implements OnClickListener  {
 	public boolean onOptionsItemSelected(MenuItem item) {
 		
 		switch (item.getItemId()) {
-			case GlobalResources.SCAN:
+			case Constants.SCAN:
 				initiateScan();
 				break;				
-			case GlobalResources.PREFERENCES:
+			case Constants.PREFERENCES:
 				startActivity(new Intent(this, EditPreferences.class));
 				break;				
 			default:
@@ -143,7 +149,7 @@ public class SearchFormActivity extends Activity implements OnClickListener  {
         	Spinner mSpinner = (Spinner) this.findViewById(R.id.spinner1);
 			String[] ai = getResources().getStringArray(R.array.search_options_array);
 			for ( int i=0 ; i < ai.length; i++ ) {
-				if ( ai[i].equals(GlobalResources.ISBN) ) 
+				if ( ai[i].equals(Constants.ISBN) ) 
 		        	mSpinner.setSelection(i);
 			}
 		} 

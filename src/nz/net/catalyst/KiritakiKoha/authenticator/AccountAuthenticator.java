@@ -1,6 +1,6 @@
 package nz.net.catalyst.KiritakiKoha.authenticator;
 
-import nz.net.catalyst.KiritakiKoha.GlobalResources;
+import nz.net.catalyst.KiritakiKoha.Constants;
 import nz.net.catalyst.KiritakiKoha.R;
 import nz.net.catalyst.KiritakiKoha.log.LogConfig;
 import android.accounts.AbstractAccountAuthenticator;
@@ -34,7 +34,7 @@ public class AccountAuthenticator extends AbstractAccountAuthenticator {
 	        String accountType, String authTokenType, String[] requiredFeatures,
 	        Bundle options) {
 	        final Intent intent = new Intent(mContext, AuthenticatorActivity.class);
-	        intent.putExtra(GlobalResources.PARAM_AUTHTOKEN_TYPE,
+	        intent.putExtra(Constants.PARAM_AUTHTOKEN_TYPE,
 	            authTokenType);
 	        intent.putExtra(AccountManager.KEY_ACCOUNT_AUTHENTICATOR_RESPONSE,
 	            response);
@@ -60,8 +60,8 @@ public class AccountAuthenticator extends AbstractAccountAuthenticator {
 	        }
 	        // Launch AuthenticatorActivity to confirm credentials
 	        final Intent intent = new Intent(mContext, AuthenticatorActivity.class);
-	        intent.putExtra(GlobalResources.PARAM_USERNAME, account.name);
-	        intent.putExtra(GlobalResources.PARAM_CONFIRMCREDENTIALS, true);
+	        intent.putExtra(Constants.PARAM_USERNAME, account.name);
+	        intent.putExtra(Constants.PARAM_CONFIRMCREDENTIALS, true);
 	        intent.putExtra(AccountManager.KEY_ACCOUNT_AUTHENTICATOR_RESPONSE,
 	            response);
 	        final Bundle bundle = new Bundle();
@@ -84,7 +84,7 @@ public class AccountAuthenticator extends AbstractAccountAuthenticator {
 	    @Override
 	    public Bundle getAuthToken(AccountAuthenticatorResponse response,
 	        Account account, String authTokenType, Bundle loginOptions) {
-	        if (!authTokenType.equals(GlobalResources.AUTHTOKEN_TYPE)) {
+	        if (!authTokenType.equals(Constants.AUTHTOKEN_TYPE)) {
 	            final Bundle result = new Bundle();
 	            result.putString(AccountManager.KEY_ERROR_MESSAGE,
 	                "invalid authTokenType");
@@ -99,7 +99,7 @@ public class AccountAuthenticator extends AbstractAccountAuthenticator {
 	                final Bundle result = new Bundle();
 	                result.putString(AccountManager.KEY_ACCOUNT_NAME, account.name);
 	                result.putString(AccountManager.KEY_ACCOUNT_TYPE,
-	                    GlobalResources.ACCOUNT_TYPE);
+	                    Constants.ACCOUNT_TYPE);
 	                result.putString(AccountManager.KEY_AUTHTOKEN, password);
 	                return result;
 	            }
@@ -107,8 +107,8 @@ public class AccountAuthenticator extends AbstractAccountAuthenticator {
 	        // the password was missing or incorrect, return an Intent to an
 	        // Activity that will prompt the user for the password.
 	        final Intent intent = new Intent(mContext, AuthenticatorActivity.class);
-	        intent.putExtra(GlobalResources.PARAM_USERNAME, account.name);
-	        intent.putExtra(GlobalResources.PARAM_AUTHTOKEN_TYPE,
+	        intent.putExtra(Constants.PARAM_USERNAME, account.name);
+	        intent.putExtra(Constants.PARAM_AUTHTOKEN_TYPE,
 	            authTokenType);
 	        intent.putExtra(AccountManager.KEY_ACCOUNT_AUTHENTICATOR_RESPONSE,
 	            response);
@@ -122,7 +122,7 @@ public class AccountAuthenticator extends AbstractAccountAuthenticator {
 	     */
 	    @Override
 	    public String getAuthTokenLabel(String authTokenType) {
-	        if (authTokenType.equals(GlobalResources.AUTHTOKEN_TYPE)) {
+	        if (authTokenType.equals(Constants.AUTHTOKEN_TYPE)) {
 	            return mContext.getString(R.string.label);
 	        }
 	        return null;
@@ -155,10 +155,10 @@ public class AccountAuthenticator extends AbstractAccountAuthenticator {
 	    public Bundle updateCredentials(AccountAuthenticatorResponse response,
 	        Account account, String authTokenType, Bundle loginOptions) {
 	        final Intent intent = new Intent(mContext, AuthenticatorActivity.class);
-	        intent.putExtra(GlobalResources.PARAM_USERNAME, account.name);
-	        intent.putExtra(GlobalResources.PARAM_AUTHTOKEN_TYPE,
+	        intent.putExtra(Constants.PARAM_USERNAME, account.name);
+	        intent.putExtra(Constants.PARAM_AUTHTOKEN_TYPE,
 	            authTokenType);
-	        intent.putExtra(GlobalResources.PARAM_CONFIRMCREDENTIALS, false);
+	        intent.putExtra(Constants.PARAM_CONFIRMCREDENTIALS, false);
 	        final Bundle bundle = new Bundle();
 	        bundle.putParcelable(AccountManager.KEY_INTENT, intent);
 	        return bundle;

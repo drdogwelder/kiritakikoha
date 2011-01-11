@@ -18,6 +18,7 @@ import org.xml.sax.XMLReader;
 import org.xml.sax.helpers.DefaultHandler;
 
 import nz.net.catalyst.KiritakiKoha.log.LogConfig;
+import nz.net.catalyst.KiritakiKoha.search.SearchFormActivity;
 import nz.net.catalyst.KiritakiKoha.R;
 
 import android.app.Activity;
@@ -66,8 +67,8 @@ public class EditPreferences extends PreferenceActivity implements OnSharedPrefe
 	public boolean onCreateOptionsMenu(Menu menu) {
 		boolean result = super.onCreateOptionsMenu(menu);
 		
-		menu.add(Menu.NONE, GlobalResources.RESET, 1, R.string.menu_reset).setIcon(android.R.drawable.ic_menu_revert);
-		menu.add(Menu.NONE, GlobalResources.SCAN, 2, R.string.menu_scan).setIcon(R.drawable.ic_menu_scan);
+		menu.add(Menu.NONE, Constants.RESET, 1, R.string.menu_reset).setIcon(android.R.drawable.ic_menu_revert);
+		menu.add(Menu.NONE, Constants.SCAN, 2, R.string.menu_scan).setIcon(R.drawable.ic_menu_scan);
 
 		return result;
 	}
@@ -76,13 +77,13 @@ public class EditPreferences extends PreferenceActivity implements OnSharedPrefe
 	public boolean onOptionsItemSelected(MenuItem item) {
 		
 		switch (item.getItemId()) {
-			case GlobalResources.RESET:
+			case Constants.RESET:
 				resetToDefaults();
 				return true;
-			case GlobalResources.SCAN:
+			case Constants.SCAN:
 				try {
-					Intent intent = new Intent(GlobalResources.CONFIG_SCAN_INTENT);
-					intent.putExtra("SCAN_MODE", GlobalResources.CONFIG_SCAN_MODE);
+					Intent intent = new Intent(Constants.CONFIG_SCAN_INTENT);
+					intent.putExtra("SCAN_MODE", Constants.CONFIG_SCAN_MODE);
 					startActivityForResult(intent, 0);
 			    } catch (ActivityNotFoundException e) {
 		        	Toast.makeText(this, getResources().getString(R.string.scan_not_available), 
@@ -93,9 +94,16 @@ public class EditPreferences extends PreferenceActivity implements OnSharedPrefe
 		}
 	}
 	
+	public boolean onSearchRequested() {
+		startActivity(new Intent(this, SearchFormActivity.class));
+		finish();
+		return true;
+	}
+	
 	@Override
 	public void onSharedPreferenceChanged(SharedPreferences sharedPreferences, String key) {
 	}
+	
 	
 	private void resetToDefaults() {
 		
@@ -206,7 +214,7 @@ public class EditPreferences extends PreferenceActivity implements OnSharedPrefe
 
 		public void endElement(String uri, String name, String qName) {
 
-			if (name.trim().equals(curKey) && curKey.endsWith(".url")) {
+			if (name.trim().equals(curKey) && ( curKey.endsWith(".url") || curKey.endsWith(".branch") ) ) {
 				if (curValue.length() > 0) {
 					if ( DEBUG ) Log.d(TAG, curKey + ": " + curValue);
 					mPrefs.edit()

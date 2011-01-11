@@ -5,6 +5,7 @@ import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.apache.http.HttpEntity;
 import org.apache.http.HttpResponse;
 import org.apache.http.HttpStatus;
 import org.apache.http.NameValuePair;
@@ -27,7 +28,7 @@ import android.view.View.OnClickListener;
 import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
-import nz.net.catalyst.KiritakiKoha.GlobalResources;
+import nz.net.catalyst.KiritakiKoha.Constants;
 import nz.net.catalyst.KiritakiKoha.R;
 import nz.net.catalyst.KiritakiKoha.Record;
 import nz.net.catalyst.KiritakiKoha.log.LogConfig;
@@ -94,28 +95,45 @@ public class PlaceHoldFormActivity extends Activity implements OnClickListener {
 
 	@Override
 	public void onClick(View v) {
-		// TODO Auto-generated method stub
 		if (v.getId() == R.id.btnHoldGo) {
 
 			Log.d(TAG, "bib id = " + bib.getID());
 			
 			AccountManager mAccountManager = AccountManager.get(this);
-			Account[] mAccounts = mAccountManager.getAccountsByType(GlobalResources.ACCOUNT_TYPE);
+			Account[] mAccounts = mAccountManager.getAccountsByType(Constants.ACCOUNT_TYPE);
 			
 			String session_key;
 			for (int i=0; i < mAccounts.length; i++) {
 				Account a = mAccounts[i];
-				session_key = mAccountManager.getUserData(a, GlobalResources.AUTH_SESSION_KEY);
+				session_key = mAccountManager.getUserData(a, Constants.AUTH_SESSION_KEY);
 				if ( session_key.length() > 0 ) {
-					if ( placeHold(bib.getID(), session_key) ) {
-						Toast.makeText(this, "Place hold succeeded", Toast.LENGTH_SHORT).show();
+					
+					switch ( placeHold(bib.getID(), session_key) ) {
+					case Constants.RESP_SUCCESS:
+						Toast.makeText(this, "Place hold completed", Toast.LENGTH_SHORT).show();
 		            	finish();
-						return;
-					} else {
-						if ( DEBUG ) Log.d(TAG, "Place fold failed - invalidating account from cache");
-						String mAuthtoken = mAccountManager.peekAuthToken(a, GlobalResources.AUTHTOKEN_TYPE);
-						mAccountManager.invalidateAuthToken(GlobalResources.ACCOUNT_TYPE, mAuthtoken);
+		            	break;
+					case Constants.RESP_NO_ITEMS:
+		            	Toast.makeText(this, "Sorry, place hold failed - likely no available items", Toast.LENGTH_SHORT).show();
+		            	finish();
+						if ( DEBUG ) Log.d(TAG, "Place hold failed");
+						break;
+					case Constants.RESP_INVALID_SESSION:
+						Toast.makeText(this, "Session expired", Toast.LENGTH_SHORT).show();
+		            	finish();
+
+		            	String mAuthtoken = mAccountManager.peekAuthToken(a, Constants.AUTHTOKEN_TYPE);
+						mAccountManager.invalidateAuthToken(Constants.ACCOUNT_TYPE, mAuthtoken);
+		            	
+						if ( DEBUG ) Log.d(TAG, "Place fold failed - session expired");
+						break;
+					case Constants.RESP_FAILED:
+		            	Toast.makeText(this, "Sorry, place hold failed", Toast.LENGTH_SHORT).show();
+		            	finish();
+						if ( DEBUG ) Log.d(TAG, "Place hold failed");
+						break;
 					}
+					return;
 				}
 			}
 			
@@ -125,22 +143,22 @@ public class PlaceHoldFormActivity extends Activity implements OnClickListener {
 		}
 	}
 	
-	private Boolean placeHold (String id, String session_key) {
+	private int placeHold (String id, String session_key) {
         HttpResponse resp;
 
         KohaAuthHandler.maybeCreateHttpClient();
 
     	// application preferences
-    	SharedPreferences mPrefs = PreferenceManager.getDefaultSharedPreferences(this);
 		String aURI = mPrefs.getString(getResources().getString(R.string.pref_base_url_key).toString(),
 												getResources().getString(R.string.base_url).toString());
 		aURI = aURI + mPrefs.getString(getResources().getString(R.string.pref_placehold_url_key).toString(),
 				getResources().getString(R.string.placehold_url).toString());
+		String branch = mPrefs.getString(getResources().getString(R.string.pref_branch_key).toString(), "");
 		
 		aURI = aURI + "?biblionumber=" + Uri.encode(bib.getID());
 		
-		if ( DEBUG ) Log.d(TAG, "Place fold URL: " + aURI);
-		if ( DEBUG ) Log.d(TAG, "Place fold Cookie: " + session_key);
+		if ( DEBUG ) Log.d(TAG, "Place hold URL: " + aURI);
+		if ( DEBUG ) Log.d(TAG, "Place hold Cookie: " + session_key);
 		
         final HttpPost post = new HttpPost(aURI);
         post.setHeader("Cookie", session_key);
@@ -157,21 +175,31 @@ public class PlaceHoldFormActivity extends Activity implements OnClickListener {
         List<NameValuePair> nameValuePairs = new ArrayList<NameValuePair>(2);  
         nameValuePairs.add(new BasicNameValuePair("place_reserve", "1"));  
         nameValuePairs.add(new BasicNameValuePair("single_bib", bib.getID()));  
-        //nameValuePairs.add(new BasicNameValuePair("reserve_mode", "single"));  
-        //nameValuePairs.add(new BasicNameValuePair("reqtype", "Any"));  
-        //nameValuePairs.add(new BasicNameValuePair("branch", "Work"));  
+        nameValuePairs.add(new BasicNameValuePair("reserve_mode", "single"));  
+        nameValuePairs.add(new BasicNameValuePair("reqtype", "Any")); 
+        if ( branch.length() > 0 )
+        	nameValuePairs.add(new BasicNameValuePair("branch", branch));  
         try {
 			post.setEntity(new UrlEncodedFormEntity(nameValuePairs));
 		} catch (UnsupportedEncodingException e) {
             Log.e(TAG, "Place hold post encoding exception: " + e);
-            return false;
+            return Constants.RESP_FAILED;
 		}  
         
         try {
         	HttpClient mHttpClient = KohaAuthHandler.getHttpClient();
             resp = mHttpClient.execute(post);
             if (resp.getStatusLine().getStatusCode() == HttpStatus.SC_OK) {
-            	return true;
+            	
+            	HttpEntity resEntity = resp.getEntity();
+            	String content = KohaAuthHandler.convertStreamToString(resEntity.getContent());
+
+            	if ( ! session_key.startsWith(KohaAuthHandler.getCookie(resp, "Set-Cookie", "CGISESSID") ) ) 
+            		return Constants.RESP_INVALID_SESSION;
+            	else if ( content.contains("?biblionumber=" + bib.getID())) 
+	            	return Constants.RESP_SUCCESS;
+            	else 
+	            	return Constants.RESP_NO_ITEMS;
            } else {
         	   if ( VERBOSE ) Log.v(TAG, "Failed to place item on hold: " + resp.getStatusLine());
             }
@@ -180,6 +208,6 @@ public class PlaceHoldFormActivity extends Activity implements OnClickListener {
         } finally {
         	if ( DEBUG ) Log.d(TAG, "place hold completing");
         }
-        return false;
+        return Constants.RESP_FAILED;
     }
 }

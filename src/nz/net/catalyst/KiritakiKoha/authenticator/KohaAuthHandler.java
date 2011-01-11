@@ -23,11 +23,12 @@ Example Response
 </AuthenticatePatron>
 
  */
-import nz.net.catalyst.KiritakiKoha.GlobalResources;
+import nz.net.catalyst.KiritakiKoha.Constants;
 import nz.net.catalyst.KiritakiKoha.R;
 import nz.net.catalyst.KiritakiKoha.log.LogConfig;
 
 import org.apache.http.Header;
+import org.apache.http.HttpEntity;
 import org.apache.http.HttpResponse;
 import org.apache.http.HttpStatus;
 import org.apache.http.NameValuePair;
@@ -46,7 +47,10 @@ import android.os.Handler;
 import android.preference.PreferenceManager;
 import android.util.Log;
 
+import java.io.BufferedReader;
 import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
 import java.util.List;
@@ -69,9 +73,9 @@ public class KohaAuthHandler {
             setHttpClient(new DefaultHttpClient());
             final HttpParams params = getHttpClient().getParams();
             HttpConnectionParams.setConnectionTimeout(params,
-                GlobalResources.REGISTRATION_TIMEOUT);
-            HttpConnectionParams.setSoTimeout(params, GlobalResources.REGISTRATION_TIMEOUT);
-            ConnManagerParams.setTimeout(params, GlobalResources.REGISTRATION_TIMEOUT);
+                Constants.REGISTRATION_TIMEOUT);
+            HttpConnectionParams.setSoTimeout(params, Constants.REGISTRATION_TIMEOUT);
+            ConnManagerParams.setTimeout(params, Constants.REGISTRATION_TIMEOUT);
         }
     }
 
@@ -127,8 +131,8 @@ public class KohaAuthHandler {
         // Add your data  
         List<NameValuePair> nameValuePairs = new ArrayList<NameValuePair>(2);  
         nameValuePairs.add(new BasicNameValuePair("koha_login_context", "opac"));  
-        nameValuePairs.add(new BasicNameValuePair(GlobalResources.PARAM_USERNAME, username));  
-        nameValuePairs.add(new BasicNameValuePair(GlobalResources.PARAM_PASSWORD, password));  
+        nameValuePairs.add(new BasicNameValuePair(Constants.PARAM_USERNAME, username));  
+        nameValuePairs.add(new BasicNameValuePair(Constants.PARAM_PASSWORD, password));  
         try {
 			post.setEntity(new UrlEncodedFormEntity(nameValuePairs));
 		} catch (UnsupportedEncodingException e) {
@@ -144,13 +148,18 @@ public class KohaAuthHandler {
             	 * Cookie: SESSc46d291f9a3827d00a6c8c823f9d5590=822f42053c5f7a8d7d4940267f1be6e2; 
             	 *          CGISESSID=eb4966cbdf869c27d72d9f8afcc3753c
             	 */
-
+            	// TODO - need to also check the body of the response document for a token to denote 
+            	// the user is logged in :(
+            	
             	String auth_token = getCookie(resp, "Set-Cookie", "CGISESSID");
-            	if ( auth_token != null ) {
-            		if ( DEBUG ) Log.d(TAG, "Got auth token: '" + auth_token + "' setting " + GlobalResources.AUTH_SESSION_KEY);
+            	HttpEntity resEntity = resp.getEntity();
+            	String content = convertStreamToString(resEntity.getContent());
+
+            	if ( auth_token != null  && content.contains(Constants.LOGGED_IN)) {
+            		if ( DEBUG ) Log.d(TAG, "Got auth token: '" + auth_token + "' setting " + Constants.AUTH_SESSION_KEY);
     					
     				mPrefs.edit()
-    					.putString(GlobalResources.AUTH_SESSION_KEY, auth_token)
+    					.putString(Constants.AUTH_SESSION_KEY, auth_token)
     					.commit()
     				;
                     sendResult(auth_token, handler, context);
@@ -168,7 +177,35 @@ public class KohaAuthHandler {
         return false;
     }
 
-    private static String getCookie (HttpResponse resp, String name, String filter) {
+    public static String convertStreamToString(InputStream is) {
+		/*
+		 * To convert the InputStream to String we use the BufferedReader.readLine()
+		 * method. We iterate until the BufferedReader return null which means
+		 * there's no more data to read. Each line will appended to a StringBuilder
+		 * and returned as String.
+		 */
+		BufferedReader reader = new BufferedReader(new InputStreamReader(is));
+		StringBuilder sb = new StringBuilder();
+
+		String line = null;
+		try {
+			while ((line = reader.readLine()) != null) {
+				sb.append(line + "\n");
+			}
+		} catch (IOException e) {
+			e.printStackTrace();
+		} finally {
+			try {
+				is.close();
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
+		}
+
+		return sb.toString();
+	}
+    
+    public static String getCookie (HttpResponse resp, String name, String filter) {
         Header[] headers = resp.getAllHeaders();
         if ( DEBUG ) Log.d(TAG, "Looking for header "+ name + " with value containing " + filter);
         for (int i=0; i < headers.length; i++) {

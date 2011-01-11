@@ -3,12 +3,14 @@ package nz.net.catalyst.KiritakiKoha.search;
 import java.io.IOException;
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.net.URLConnection;
 import java.util.ArrayList;
 
 import javax.xml.parsers.ParserConfigurationException;
 import javax.xml.parsers.SAXParser;
 import javax.xml.parsers.SAXParserFactory;
 
+import nz.net.catalyst.KiritakiKoha.Constants;
 import nz.net.catalyst.KiritakiKoha.Record;
 import nz.net.catalyst.KiritakiKoha.log.LogConfig;
 
@@ -18,8 +20,11 @@ import org.xml.sax.SAXException;
 import org.xml.sax.XMLReader;
 import org.xml.sax.helpers.DefaultHandler;
 
+import android.accounts.Account;
+import android.accounts.AccountManager;
 import android.content.Context;
 import android.util.Log;
+import android.widget.Toast;
 
 public class RSSHandler extends DefaultHandler {
 	static final String TAG = LogConfig.getLogTag(RSSHandler.class);
@@ -139,8 +144,24 @@ public class RSSHandler extends DefaultHandler {
 			SAXParser sp = spf.newSAXParser();
 			XMLReader xr = sp.getXMLReader();
 			xr.setContentHandler(this);
-			xr.parse(new InputSource(url.openStream()));
 			
+		    URLConnection conn = url.openConnection();
+		    InputSource is;
+		    
+			AccountManager mAccountManager = AccountManager.get(ctx);
+			Account[] mAccounts = mAccountManager.getAccountsByType(Constants.ACCOUNT_TYPE);
+			
+			String session_key;
+			for (int i=0; i < mAccounts.length; i++) {
+				Account a = mAccounts[i];
+				session_key = mAccountManager.getUserData(a, Constants.AUTH_SESSION_KEY);
+				if ( session_key.length() > 0 ) {
+				    conn.setRequestProperty("Cookie", session_key);
+				    is = new InputSource(conn.getInputStream());
+					xr.parse(is);
+					return Records;
+				}
+			}
 		} catch (IOException e) {
 			Log.e(TAG, "getItems: IOException: " + e.toString());
 			throw new IOException("Connection failed.");

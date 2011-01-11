@@ -16,7 +16,7 @@
 
 package nz.net.catalyst.KiritakiKoha.authenticator;
 
-import nz.net.catalyst.KiritakiKoha.GlobalResources;
+import nz.net.catalyst.KiritakiKoha.Constants;
 import nz.net.catalyst.KiritakiKoha.R;
 import nz.net.catalyst.KiritakiKoha.log.LogConfig;
 import android.accounts.Account;
@@ -79,11 +79,11 @@ public class AuthenticatorActivity extends AccountAuthenticatorActivity implemen
         super.onCreate(icicle);
         mAccountManager = AccountManager.get(this);
         final Intent intent = getIntent();
-        mUsername = intent.getStringExtra(GlobalResources.PARAM_USERNAME);
-        mAuthtokenType = intent.getStringExtra(GlobalResources.PARAM_AUTHTOKEN_TYPE);
+        mUsername = intent.getStringExtra(Constants.PARAM_USERNAME);
+        mAuthtokenType = intent.getStringExtra(Constants.PARAM_AUTHTOKEN_TYPE);
         mRequestNewAccount = mUsername == null;
         mConfirmCredentials =
-            intent.getBooleanExtra(GlobalResources.PARAM_CONFIRMCREDENTIALS, false);
+            intent.getBooleanExtra(Constants.PARAM_CONFIRMCREDENTIALS, false);
 
         if ( DEBUG ) Log.d(TAG, "    request new: " + mRequestNewAccount);
         requestWindowFeature(Window.FEATURE_LEFT_ICON);
@@ -155,7 +155,7 @@ public class AuthenticatorActivity extends AccountAuthenticatorActivity implemen
      */
     protected void finishConfirmCredentials(boolean result) {
     	if ( DEBUG ) Log.d(TAG, "finishConfirmCredentials()");
-        final Account account = new Account(mUsername, GlobalResources.ACCOUNT_TYPE);
+        final Account account = new Account(mUsername, Constants.ACCOUNT_TYPE);
         mAccountManager.setPassword(account, mPassword);
         final Intent intent = new Intent();
         intent.putExtra(AccountManager.KEY_BOOLEAN_RESULT, result);
@@ -176,7 +176,7 @@ public class AuthenticatorActivity extends AccountAuthenticatorActivity implemen
 
     protected void finishLogin() {
     	if ( DEBUG ) Log.d(TAG, "finishLogin()");
-        final Account account = new Account(mUsername, GlobalResources.ACCOUNT_TYPE);
+        final Account account = new Account(mUsername, Constants.ACCOUNT_TYPE);
 
         if (mRequestNewAccount) {
             mAccountManager.addAccountExplicitly(account, mPassword, null);
@@ -185,15 +185,15 @@ public class AuthenticatorActivity extends AccountAuthenticatorActivity implemen
         } else {
             mAccountManager.setPassword(account, mPassword);
         }
-        mAccountManager.setUserData(account, GlobalResources.AUTH_SESSION_KEY, mAuthtoken);        
+        mAccountManager.setUserData(account, Constants.AUTH_SESSION_KEY, mAuthtoken);        
         
         final Intent intent = new Intent();
         mAuthtoken = mPassword;
         intent.putExtra(AccountManager.KEY_ACCOUNT_NAME, mUsername);
         intent
-            .putExtra(AccountManager.KEY_ACCOUNT_TYPE, GlobalResources.ACCOUNT_TYPE);
+            .putExtra(AccountManager.KEY_ACCOUNT_TYPE, Constants.ACCOUNT_TYPE);
         if (mAuthtokenType != null
-            && mAuthtokenType.equals(GlobalResources.AUTHTOKEN_TYPE)) {
+            && mAuthtokenType.equals(Constants.AUTHTOKEN_TYPE)) {
             intent.putExtra(AccountManager.KEY_AUTHTOKEN, mAuthtoken);
         }
         setAccountAuthenticatorResult(intent.getExtras());

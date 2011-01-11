@@ -69,6 +69,14 @@
     <string name="pref_hold_via_web_key">hold.web</string>
     <string name="pref_hold_via_web_title">Place Hold via Web</string>
     <string name="pref_hold_via_web_summary">Use a web browser to place a hold (i.e external to this app).</string>
+
+    <string name="pref_branch_key">koha.branch</string>
+    <string name="pref_branch_title">Library Branch</string>
+    <string name="pref_branch_summary">The library branch (leave blank if unknown).</string>
+    
+    <string name="pref_limit_available_key">limit.available</string>
+    <string name="pref_limit_available_title">Available items only</string>
+    <string name="pref_limit_available_summary">Limit the search to available items only.</string>
     
     <string name="login">Login</string>
     <string name="login_username">Login:</string>
