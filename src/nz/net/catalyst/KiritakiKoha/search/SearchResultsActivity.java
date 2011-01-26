@@ -235,7 +235,6 @@ public class SearchResultsActivity extends Activity implements OnChildClickListe
                 Log.i(TAG, "dialog cancel has been invoked");
                 if (mSearchThread != null) {
                     mSearchThread.interrupt();
-                    finish();
                 }
             }
         });
@@ -389,7 +388,6 @@ public class SearchResultsActivity extends Activity implements OnChildClickListe
 	public boolean onChildClick(ExpandableListView parent, View v,
 			int groupPosition, int childPosition, long id) {
 		adapter.onChildClick(parent, v, groupPosition, childPosition, id);
-		finish();
 		return false;
 	}
 }

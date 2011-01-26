@@ -87,6 +87,7 @@
     <string name="login_submit">Submit</string>
     <string name="login_message">Please login</string>
     <string name="login_authenticating">Authenticating...</string>
+    <string name="only_one_account">Currently you may only have at most one account at any one time.</string>
     
     <!--  Error strings -->
     <string name="search_bad_request">Sorry, bad request!</string>

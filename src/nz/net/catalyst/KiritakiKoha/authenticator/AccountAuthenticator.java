@@ -33,6 +33,17 @@ public class AccountAuthenticator extends AbstractAccountAuthenticator {
 	    public Bundle addAccount(AccountAuthenticatorResponse response,
 	        String accountType, String authTokenType, String[] requiredFeatures,
 	        Bundle options) {
+	    	
+			Bundle reply = new Bundle();
+
+			if(accountExists()){//only one account is allowed as of now
+				reply.putInt(AccountManager.KEY_ERROR_CODE, AccountManager.ERROR_CODE_BAD_REQUEST);
+				reply.putString(AccountManager.KEY_ERROR_MESSAGE, 
+							this.mContext.getResources().getString(R.string.only_one_account).toString());
+				response.onResult(reply);
+				return null;
+			}
+
 	        final Intent intent = new Intent(mContext, AuthenticatorActivity.class);
 	        intent.putExtra(Constants.PARAM_AUTHTOKEN_TYPE,
 	            authTokenType);
@@ -163,6 +174,11 @@ public class AccountAuthenticator extends AbstractAccountAuthenticator {
 	        bundle.putParcelable(AccountManager.KEY_INTENT, intent);
 	        return bundle;
 	    }
+		private boolean accountExists(){
+			AccountManager am = AccountManager.get(mContext);
+			Account[] acts = am.getAccountsByType(Constants.ACCOUNT_TYPE);
+			return acts.length > 0;
+		}
 
 	}
 
