@@ -54,6 +54,9 @@ public class RSSHandler extends DefaultHandler {
 	// A flag to know if looking for Records or Feed name
 	//private int targetFlag = 5;
 	
+	// Base URL (in case references are relative)
+	private String baseURL = "";
+	
 	public void unparsedEntityDecl (String name, String publicId, String systemId, String notationName) {
 		Log.d(TAG, "unparsedEntityDecl: " + name);
 	}	
@@ -107,8 +110,20 @@ public class RSSHandler extends DefaultHandler {
 		try {
 			// If not in item, then title/link refers to feed
 			if (inItem) {
-				if (inLink)
-					currentRecord.setURL(new URL(chars));
+				if (inLink) {
+					URL thisURL = null;
+					try {
+						thisURL = new URL(chars);
+					} catch (MalformedURLException e) {
+						try {
+							thisURL = new URL(baseURL + chars);
+						} catch (MalformedURLException e1) {
+							Log.e(TAG, "base URL is '" + baseURL + "', characters: " + e1.toString());
+						}
+					}
+					if (thisURL != null)
+						currentRecord.setURL(thisURL);
+				} 
 				else if (inTitle) {
 					if ( currentRecord.getTitle() == null ) 
 						currentRecord.setTitle(chars.trim());
@@ -131,10 +146,8 @@ public class RSSHandler extends DefaultHandler {
 				//	Log.d(TAG, "Unwanted chars: " + chars.trim());
 				
 			}
-		} catch (MalformedURLException e) {
-			Log.e(TAG, "characters" + e.toString());
 		} catch (StringIndexOutOfBoundsException e) {
-			Log.e(TAG, "characters" + e.toString());
+			Log.e(TAG, "characters: " + e.toString());
 		}
 	}
 
@@ -147,6 +160,11 @@ public class RSSHandler extends DefaultHandler {
 			
 		    URLConnection conn = url.openConnection();
 		    InputSource is;
+		    
+		    // Build the baseURL in-case we're given relative links in our RSS feed
+		    baseURL = url.getProtocol() + "://" + url.getHost();
+		    if ( url.getPort() > 0 )
+		    	baseURL += ":" + url.getPort();
 		    
 			AccountManager mAccountManager = AccountManager.get(ctx);
 			Account[] mAccounts = mAccountManager.getAccountsByType(Constants.ACCOUNT_TYPE);
