@@ -92,6 +92,7 @@ public class SearchFormActivity extends Activity implements OnClickListener  {
         	if ( ! ( idxValues.size() > 0 && qValues.size() > 0 ) ) {
     			Toast.makeText(this, getString(R.string.search_no_search_terms), Toast.LENGTH_SHORT).show();
         	} else {
+        		Toast.makeText(this, "toast", Toast.LENGTH_SHORT);
             	
         		// Load up the search results intent
 		        Intent d = new Intent(this, SearchResultsActivity.class);

@@ -34,11 +34,13 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseExpandableListAdapter;
 import android.widget.ExpandableListView;
+import android.widget.ExpandableListView.OnGroupExpandListener;
+import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 import android.widget.ExpandableListView.OnChildClickListener;
 
-public class SearchResultsActivity extends Activity implements OnChildClickListener {
+public class SearchResultsActivity extends Activity implements OnChildClickListener, OnGroupExpandListener {
 	static final String TAG = LogConfig.getLogTag(SearchResultsActivity.class);
 	// whether DEBUG level logging is enabled (whether globally, or explicitly
 	// for this log tag)
@@ -55,6 +57,7 @@ public class SearchResultsActivity extends Activity implements OnChildClickListe
 	private Thread mSearchThread;
     private final Handler mHandler = new Handler();
     
+    ExpandableListView listview;
 	ExpandableListAdapter adapter = new ExpandableListAdapter(this, new ArrayList<String>(), 
 			new ArrayList<ArrayList<Record>>());
 	
@@ -66,8 +69,9 @@ public class SearchResultsActivity extends Activity implements OnChildClickListe
         mPrefs = PreferenceManager.getDefaultSharedPreferences(this);
         
         setContentView(R.layout.search_results);
-        ExpandableListView listview = (ExpandableListView) findViewById(R.id.listView);
+        listview = (ExpandableListView) findViewById(R.id.listView);
         listview.setOnChildClickListener(this);
+        listview.setOnGroupExpandListener(this);
         
         m_extras = getIntent().getExtras();
         if (m_extras == null) {
@@ -373,9 +377,7 @@ public class SearchResultsActivity extends Activity implements OnChildClickListe
 		public boolean onChildClick(ExpandableListView parent, View v,
 				int groupPosition, int childPosition, long id) {
 			// TODO make this do the right thing
-
 			Record selectedRecord = (Record) getChild(groupPosition, childPosition);
-			
 			Intent intent = new Intent(this.context, PlaceHoldFormActivity.class);
 			intent.putExtra("bib", (Parcelable) selectedRecord);
 			startActivity(intent);
@@ -389,5 +391,11 @@ public class SearchResultsActivity extends Activity implements OnChildClickListe
 			int groupPosition, int childPosition, long id) {
 		adapter.onChildClick(parent, v, groupPosition, childPosition, id);
 		return false;
+	}
+	@Override
+	public void onGroupExpand(int groupPosition) {
+		for(int i = 0;i < listview.getCount();i++){
+			if (i != groupPosition)listview.collapseGroup(i);
+		}
 	}
 }
