@@ -12,6 +12,7 @@ import nz.net.catalyst.KiritakiKoha.Record;
 import nz.net.catalyst.KiritakiKoha.hold.PlaceHoldFormActivity;
 import nz.net.catalyst.KiritakiKoha.log.LogConfig;
 import nz.net.catalyst.KiritakiKoha.R;
+
 import android.app.Activity;
 import android.app.Dialog;
 import android.app.ProgressDialog;
@@ -19,19 +20,26 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
+
 import android.net.Uri;
+
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Parcelable;
+
 import android.preference.PreferenceManager;
+
 import android.text.Html;
 import android.text.method.LinkMovementMethod;
+
 import android.util.Log;
+
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+
 import android.widget.BaseExpandableListAdapter;
 import android.widget.ExpandableListView;
 import android.widget.TextView;
@@ -94,6 +102,13 @@ public class SearchResultsActivity extends Activity implements OnChildClickListe
 
 		String mURL = mPrefs.getString(getResources().getString(R.string.pref_base_url_key).toString(),
 										getResources().getString(R.string.base_url).toString());
+		//Log.v("mURL", mURL);
+		
+		//Checking for Malformed Base URL(Adds / if non exitant)
+		if(mURL.charAt(mURL.length()-1) != '/' || mURL.charAt(mURL.length()-1) != '\\'){
+			mURL += '/';
+		}
+		
 		mURL = mURL + mPrefs.getString(getResources().getString(R.string.pref_search_url_key).toString(),
 				getResources().getString(R.string.search_url).toString());
 
@@ -111,7 +126,7 @@ public class SearchResultsActivity extends Activity implements OnChildClickListe
 		if ( m_extras.containsKey(Constants.LIMIT_AVAILABLE) ) 
 			qStr = qStr + "&" + Constants.LIMIT_AVAILABLE;
 
-			// Finally add the query string
+		// Finally add the query string
         mURL = mURL + qStr;
         
         showProgress();
@@ -172,7 +187,15 @@ public class SearchResultsActivity extends Activity implements OnChildClickListe
 		hideProgress();
         // Initialize the adapter with blank groups and children
         // We will be adding children on a thread, and then update the ListView
-
+		
+		if(results == null)
+		{
+			Toast.makeText(this, getResources().getString(R.string.search_connection_failure), 
+					Toast.LENGTH_SHORT).show();
+			finish();
+			return;
+		}
+		
 		if ( results.isEmpty() ) {
 			Toast.makeText(this, getResources().getString(R.string.search_no_results), 
 					Toast.LENGTH_SHORT).show();
@@ -388,6 +411,7 @@ public class SearchResultsActivity extends Activity implements OnChildClickListe
 	public boolean onChildClick(ExpandableListView parent, View v,
 			int groupPosition, int childPosition, long id) {
 		adapter.onChildClick(parent, v, groupPosition, childPosition, id);
+		parent.expandGroup(childPosition);
 		return false;
 	}
 }

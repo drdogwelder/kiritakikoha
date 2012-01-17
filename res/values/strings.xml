@@ -109,6 +109,7 @@
     <string name="load_config_error">Sorry there was an error parsing the configuration file.</string>
     <string name="load_config_success">Successfully loaded the configuration file.</string>
     <string name="scan_not_available">Sorry you need to install ZXing Barcode Scanner for this.</string>
+    <string name="invalid_data_error">The data found was too short</string>
     
     
 </resources>
