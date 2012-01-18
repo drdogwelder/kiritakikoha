@@ -8,6 +8,7 @@ import nz.net.catalyst.KiritakiKoha.log.LogConfig;
 import nz.net.catalyst.KiritakiKoha.R;
 import android.app.Activity;
 import android.content.ActivityNotFoundException;
+import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
@@ -19,6 +20,7 @@ import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.LinearLayout;
 import android.widget.Spinner;
 import android.widget.Toast;
 
@@ -50,7 +52,58 @@ public class SearchFormActivity extends Activity implements OnClickListener  {
         // Set up click handlers for the text field and button
         ((Button) this.findViewById(R.id.btnSearchGo)).setOnClickListener(this);
     }
+    
+    public void addSearch(View v) {
+		LinearLayout first = (LinearLayout) this.findViewById(R.id.searchGroup2);
+		LinearLayout second = (LinearLayout) this.findViewById(R.id.searchGroup3);
+			if (first.getVisibility() == View.VISIBLE) {
+				second.setVisibility(View.VISIBLE);
+			}
+			if (first.getVisibility() == View.GONE) {
+				first.setVisibility(View.VISIBLE);
+			}
+		Context context = getApplicationContext();
+		CharSequence text = "Added Search Term";
+		int duration = Toast.LENGTH_SHORT;
+
+		Toast toast = Toast.makeText(context, text, duration);
+		toast.show();
+	}
+    
+    public void removeSearch(View v) {
+		LinearLayout first = (LinearLayout) this.findViewById(R.id.searchGroup2);
+		LinearLayout second = (LinearLayout) this.findViewById(R.id.searchGroup3);
+			if (first.getVisibility() == View.VISIBLE) {
+				first.setVisibility(View.GONE);
+			}
+			if (second.getVisibility() == View.VISIBLE) {
+			second.setVisibility(View.GONE);
+			}
+		Context context = getApplicationContext();
+		CharSequence text = "Reset Search Terms";
+		int duration = Toast.LENGTH_SHORT;
+		Toast toast = Toast.makeText(context, text, duration);
+		toast.show();
+		((Spinner) this.findViewById(R.id.spinner1)).setSelection(0);
+		((Spinner) this.findViewById(R.id.spinner2)).setSelection(0);
+		((Spinner) this.findViewById(R.id.spinner3)).setSelection(0);
+		((EditText) this.findViewById(R.id.searchTerms1)).setText("");
+		((EditText) this.findViewById(R.id.searchTerms2)).setText("");
+		((EditText) this.findViewById(R.id.searchTerms3)).setText("");
+    }
     public void onClick(View v) {
+    	//if (v.getId() == R.id.btnAddGroup) {
+    		//LinearLayout first = (LinearLayout) this.findViewById(R.id.searchGroup2);
+    		//if (first.getVisibility() == View.GONE) {
+    		//first.setVisibility(View.VISIBLE);
+    		//}
+    	//	Context context = getApplicationContext();
+    		//CharSequence text = "Hello toast!";
+    		//int duration = Toast.LENGTH_SHORT;
+
+    		//Toast toast = Toast.makeText(context, text, duration);
+    		//toast.show();
+    	//}
 		if (v.getId() == R.id.btnSearchGo) {			
 	        EditText mText;
 			int pos;
