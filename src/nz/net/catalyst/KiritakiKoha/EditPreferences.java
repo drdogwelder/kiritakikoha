@@ -5,6 +5,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.net.UnknownHostException;
 
 import javax.xml.parsers.ParserConfigurationException;
 import javax.xml.parsers.SAXParser;
@@ -167,53 +168,59 @@ public class EditPreferences extends PreferenceActivity implements OnSharedPrefe
 	//Reads QR Data
 	public void onActivityResult(int requestCode, int resultCode, Intent intent) { 
 
-		String result   = intent.getStringExtra("SCAN_RESULT_FORMAT");
-		if(resultCode == Activity.RESULT_OK && result.equals("QR_CODE"))
+		
+		if (resultCode == Activity.RESULT_OK) 
 		{
+			String formatName   = intent.getStringExtra("SCAN_RESULT_FORMAT");
 			String contents = intent.getStringExtra("SCAN_RESULT");
-			
-			//Refresh Screen
-			if(setConfig(contents))
-			{
-				finish();
-				startActivity(getIntent());
-			}
-			
-			return;
-		}
-		else if (resultCode == Activity.RESULT_OK) {
-        	String contents = intent.getStringExtra("SCAN_RESULT");
-        	String formatName = intent.getStringExtra("SCAN_RESULT_FORMAT");
-    
+			String[] resultArray = contents.split(",");
         	if ( DEBUG ) Log.d(TAG, "scanResult: " + contents + " (" + formatName + ")");
-        	
-        	ConfigXMLHandler cx = null;
-        	
-        	if ( contents.toLowerCase().startsWith("http://") ) {
-        		try {
-					cx = new ConfigXMLHandler(this, new URL(contents).openStream());
-				} catch (MalformedURLException e) {
-					Toast.makeText(this, getResources().getString(R.string.load_config_download_error), Toast.LENGTH_SHORT).show();		
-					e.printStackTrace();
-				} catch (IOException e) {
-					Toast.makeText(this, getResources().getString(R.string.load_config_download_error), Toast.LENGTH_SHORT).show();		
-					e.printStackTrace();
+			//Check for CSV Values
+			if(resultArray.length >= 5)
+			{
+				if(setConfig(contents))
+				{
+					finish();
+					startActivity(getIntent());
 				}
-        	} else { 
-    			cx = new ConfigXMLHandler(this, new ByteArrayInputStream( contents.getBytes() ) );
-        	}
-        	
-			if ( cx.parseConfig() ) {
-	        	Toast.makeText(this, getResources().getString(R.string.load_config_success), Toast.LENGTH_SHORT).show();
-	    		// refresh displayed values by restarting activity (a hack, but apparently there
-	    		// isn't a nicer way)
-	    		finish();
-	    		startActivity(getIntent());
-			} else {
-				Toast.makeText(this, getResources().getString(R.string.load_config_error), Toast.LENGTH_SHORT).show();		
+			}
+			//Or treat it as a URL to read from
+			else
+			{
+	        	ConfigXMLHandler cx = null;
+	        	
+	        	if ( contents.toLowerCase().startsWith("http://") ) {
+	        		try {
+						cx = new ConfigXMLHandler(this, new URL(contents).openStream());
+					} catch (MalformedURLException e) {
+						Toast.makeText(this, getResources().getString(R.string.load_config_download_error), Toast.LENGTH_SHORT).show();		
+						e.printStackTrace();
+					} catch(UnknownHostException e){
+						Toast.makeText(this, getResources().getString(R.string.load_config_download_error), Toast.LENGTH_SHORT).show();		
+						e.printStackTrace();
+	        		} catch (IOException e) {
+						Toast.makeText(this, getResources().getString(R.string.load_config_download_error), Toast.LENGTH_SHORT).show();		
+						e.printStackTrace();
+					} 
+	        	} else { 
+	    			cx = new ConfigXMLHandler(this, new ByteArrayInputStream( contents.getBytes() ) );
+	        	}
+	        	
+				if ( cx.parseConfig() ) {
+		        	Toast.makeText(this, getResources().getString(R.string.load_config_success), Toast.LENGTH_SHORT).show();
+		    		// refresh displayed values by restarting activity (a hack, but apparently there
+		    		// isn't a nicer way)
+		    		finish();
+		    		startActivity(getIntent());
+				} 
+				else 
+				{
+					Toast.makeText(this, getResources().getString(R.string.load_config_error), Toast.LENGTH_SHORT).show();		
+				}
 			}
 		}
 	}
+	
 	public static class ConfigXMLHandler extends DefaultHandler {
 
 		// Number of config items to process
