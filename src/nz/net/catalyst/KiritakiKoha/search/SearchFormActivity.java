@@ -56,18 +56,26 @@ public class SearchFormActivity extends Activity implements OnClickListener  {
     public void addSearch(View v) {
 		LinearLayout first = (LinearLayout) this.findViewById(R.id.searchGroup2);
 		LinearLayout second = (LinearLayout) this.findViewById(R.id.searchGroup3);
-			if (first.getVisibility() == View.VISIBLE) {
-				second.setVisibility(View.VISIBLE);
-			}
-			if (first.getVisibility() == View.GONE) {
-				first.setVisibility(View.VISIBLE);
-			}
-		Context context = getApplicationContext();
-		CharSequence text = "Added Search Term";
-		int duration = Toast.LENGTH_SHORT;
-
-		Toast toast = Toast.makeText(context, text, duration);
-		toast.show();
+		if (first.getVisibility() == View.VISIBLE) {
+			second.setVisibility(View.VISIBLE);
+		}
+		if (first.getVisibility() == View.GONE) {
+			first.setVisibility(View.VISIBLE);
+		}
+		if (first.getVisibility() == View.VISIBLE && second.getVisibility() == View.VISIBLE) {
+			Context context = getApplicationContext();
+			CharSequence text = "Maximum Search Terms Reached";
+			int duration = Toast.LENGTH_SHORT;
+			Toast toast = Toast.makeText(context, text, duration);
+			toast.show();
+		}
+		else {
+				Context context = getApplicationContext();
+				CharSequence text = "Added Search Term";
+				int duration = Toast.LENGTH_SHORT;
+				Toast toast = Toast.makeText(context, text, duration);
+				toast.show();
+		}
 	}
     
     public void removeSearch(View v) {
@@ -84,6 +92,8 @@ public class SearchFormActivity extends Activity implements OnClickListener  {
 		int duration = Toast.LENGTH_SHORT;
 		Toast toast = Toast.makeText(context, text, duration);
 		toast.show();
+		((Spinner) this.findViewById(R.id.andornot1)).setSelection(0);
+		((Spinner) this.findViewById(R.id.andornot2)).setSelection(0);
 		((Spinner) this.findViewById(R.id.spinner1)).setSelection(0);
 		((Spinner) this.findViewById(R.id.spinner2)).setSelection(0);
 		((Spinner) this.findViewById(R.id.spinner3)).setSelection(0);
@@ -113,6 +123,7 @@ public class SearchFormActivity extends Activity implements OnClickListener  {
 			String[] av = getResources().getStringArray(R.array.search_options_arrayValues);
 			ArrayList<String> idxValues = new ArrayList<String>();
 			ArrayList<String> qValues = new ArrayList<String>();
+			ArrayList<String> opValues = new ArrayList<String>();
 			String pub_date_range;
 			
 			// allow for 3 fields - maybe make the form dynamic (auto new one if entering in one)
@@ -128,12 +139,16 @@ public class SearchFormActivity extends Activity implements OnClickListener  {
 	        if ( mText.getText().toString().trim().length() > 0 ) {
 				pos = ((Spinner) this.findViewById(R.id.spinner2)).getSelectedItemPosition();
 				idxValues.add(av[pos]);
+				String op = (String)((Spinner) this.findViewById(R.id.andornot1)).getSelectedItem();
+				opValues.add(op);
 				qValues.add(mText.getText().toString().trim());
 	        }
 	        mText = (EditText) this.findViewById(R.id.searchTerms3);
 	        if ( mText.getText().toString().trim().length() > 0 ) {
 				pos = ((Spinner) this.findViewById(R.id.spinner3)).getSelectedItemPosition();
 				idxValues.add(av[pos]);
+				String op = (String)((Spinner) this.findViewById(R.id.andornot2)).getSelectedItem();
+				opValues.add(op);
 				qValues.add(mText.getText().toString().trim());
 	        }
 	        //limit-yr=1999-2000
@@ -149,6 +164,7 @@ public class SearchFormActivity extends Activity implements OnClickListener  {
         		// Load up the search results intent
 		        Intent d = new Intent(this, SearchResultsActivity.class);
 				d.putStringArrayListExtra("idx", idxValues);
+				d.putStringArrayListExtra("op", opValues);
 				d.putStringArrayListExtra("q", qValues);
 				d.putExtra(Constants.SEARCH_PUB_DATE_RANGE_PARAM, pub_date_range);
 				
