@@ -4,22 +4,20 @@ import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.MalformedURLException;
-import java.net.URI;
 import java.net.URL;
 
 import javax.xml.parsers.ParserConfigurationException;
 import javax.xml.parsers.SAXParser;
 import javax.xml.parsers.SAXParserFactory;
 
+import nz.net.catalyst.KiritakiKoha.log.LogConfig;
+import nz.net.catalyst.KiritakiKoha.search.SearchFormActivity;
+
 import org.xml.sax.Attributes;
 import org.xml.sax.InputSource;
 import org.xml.sax.SAXException;
 import org.xml.sax.XMLReader;
 import org.xml.sax.helpers.DefaultHandler;
-
-import nz.net.catalyst.KiritakiKoha.log.LogConfig;
-import nz.net.catalyst.KiritakiKoha.search.SearchFormActivity;
-import nz.net.catalyst.KiritakiKoha.R;
 
 import android.app.Activity;
 import android.content.ActivityNotFoundException;

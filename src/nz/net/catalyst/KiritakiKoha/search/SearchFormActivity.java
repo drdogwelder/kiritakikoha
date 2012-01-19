@@ -2,10 +2,10 @@ package nz.net.catalyst.KiritakiKoha.search;
 
 import java.util.ArrayList;
 
-import nz.net.catalyst.KiritakiKoha.EditPreferences;
 import nz.net.catalyst.KiritakiKoha.Constants;
-import nz.net.catalyst.KiritakiKoha.log.LogConfig;
+import nz.net.catalyst.KiritakiKoha.EditPreferences;
 import nz.net.catalyst.KiritakiKoha.R;
+import nz.net.catalyst.KiritakiKoha.log.LogConfig;
 import android.app.Activity;
 import android.content.ActivityNotFoundException;
 import android.content.Intent;

@@ -109,6 +109,13 @@
     <string name="load_config_error">Sorry there was an error parsing the configuration file.</string>
     <string name="load_config_success">Successfully loaded the configuration file.</string>
     <string name="scan_not_available">Sorry you need to install ZXing Barcode Scanner for this.</string>
+    <string name="cover_dec">cover</string>
+    <string name="pref_show_image_key">show.image</string>
+    <string name="pref_show_image_title">Show images in search</string>
+    <string name="pref_show_image_summary">Show images in search</string>
+    <string name="pref_limit_items_key">limit.items</string>
+    <string name="pref_limit_items_title">limit open items</string>
+    <string name="pref_limit_items_summary">open one item at a time in search</string>
     
     
 </resources>

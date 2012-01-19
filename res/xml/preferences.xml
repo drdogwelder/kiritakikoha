@@ -22,7 +22,7 @@
 		android:enabled="true"
 		android:key="@string/pref_hold_via_web_key" 
 		android:title="@string/pref_hold_via_web_title" 
-		android:summary="@string/pref_hold_via_web_summary"/>
+		android:summary="@string/pref_hold_via_web_summary"/><CheckBoxPreference android:summary="@string/pref_show_image_summary" android:defaultValue="true" android:title="@string/pref_show_image_title" android:key="@string/pref_show_image_key"/><CheckBoxPreference android:summary="@string/pref_limit_items_summary" android:defaultValue="true" android:title="@string/pref_limit_items_title" android:key="@string/pref_limit_items_key"/>
 
 	<PreferenceCategory android:title="@string/prefcat_advanced">
 
@@ -41,5 +41,7 @@
 							android:title="@string/pref_placehold_url_title" 
 							android:summary="@string/pref_placehold_url_summary"/>
 	</PreferenceCategory>
+	
+	
 			
 </PreferenceScreen>

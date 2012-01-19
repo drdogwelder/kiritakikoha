@@ -1,17 +1,18 @@
 package nz.net.catalyst.KiritakiKoha.search;
 
 import java.io.IOException;
+import java.io.InputStream;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.Iterator;
 
-import nz.net.catalyst.KiritakiKoha.EditPreferences;
 import nz.net.catalyst.KiritakiKoha.Constants;
+import nz.net.catalyst.KiritakiKoha.EditPreferences;
+import nz.net.catalyst.KiritakiKoha.R;
 import nz.net.catalyst.KiritakiKoha.Record;
 import nz.net.catalyst.KiritakiKoha.hold.PlaceHoldFormActivity;
 import nz.net.catalyst.KiritakiKoha.log.LogConfig;
-import nz.net.catalyst.KiritakiKoha.R;
 import android.app.Activity;
 import android.app.Dialog;
 import android.app.ProgressDialog;
@@ -19,6 +20,7 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
@@ -34,11 +36,11 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseExpandableListAdapter;
 import android.widget.ExpandableListView;
+import android.widget.ExpandableListView.OnChildClickListener;
 import android.widget.ExpandableListView.OnGroupExpandListener;
-import android.widget.ListView;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
-import android.widget.ExpandableListView.OnChildClickListener;
 
 public class SearchResultsActivity extends Activity implements OnChildClickListener, OnGroupExpandListener {
 	static final String TAG = LogConfig.getLogTag(SearchResultsActivity.class);
@@ -319,7 +321,18 @@ public class SearchResultsActivity extends Activity implements OnChildClickListe
 
 	        tv = (TextView) convertView.findViewById(R.id.description);
 	        tv.setText(Html.fromHtml(rec.getDescription()));
-
+	        Log.d(TAG, "Decription= "+rec.getDescription());
+	        
+	        boolean showImages = mPrefs.getBoolean("show.image", true);
+	        if(showImages){
+	        	ImageView iv = (ImageView) convertView.findViewById(R.id.isbn);
+	        	InputStream imageInput = BookThumbnailService.checkGoogle(rec.getISBN());
+		        if(imageInput == null){
+		        	imageInput = BookThumbnailService.getThumbnail(rec.getISBN());
+		        }
+		        iv.setImageBitmap(BitmapFactory.decodeStream(imageInput));
+	        }
+	        
 			Boolean useWeb = mPrefs.getBoolean(getResources().getString(R.string.pref_hold_via_web_key), false);
 			if ( useWeb ) {
 		        tv.setMovementMethod(LinkMovementMethod.getInstance());
@@ -394,6 +407,7 @@ public class SearchResultsActivity extends Activity implements OnChildClickListe
 	}
 	@Override
 	public void onGroupExpand(int groupPosition) {
+		if(!mPrefs.getBoolean("limit.items", true))return;
 		for(int i = 0;i < listview.getCount();i++){
 			if (i != groupPosition)listview.collapseGroup(i);
 		}

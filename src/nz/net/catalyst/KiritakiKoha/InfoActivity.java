@@ -1,10 +1,7 @@
 package nz.net.catalyst.KiritakiKoha;
 
-import nz.net.catalyst.KiritakiKoha.EditPreferences;
-import nz.net.catalyst.KiritakiKoha.Constants;
 import nz.net.catalyst.KiritakiKoha.log.LogConfig;
 import nz.net.catalyst.KiritakiKoha.search.SearchFormActivity;
-import nz.net.catalyst.KiritakiKoha.R;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;

@@ -5,6 +5,13 @@ import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
 import java.util.List;
 
+import nz.net.catalyst.KiritakiKoha.Constants;
+import nz.net.catalyst.KiritakiKoha.R;
+import nz.net.catalyst.KiritakiKoha.Record;
+import nz.net.catalyst.KiritakiKoha.authenticator.AuthenticatorActivity;
+import nz.net.catalyst.KiritakiKoha.authenticator.KohaAuthHandler;
+import nz.net.catalyst.KiritakiKoha.log.LogConfig;
+
 import org.apache.http.HttpEntity;
 import org.apache.http.HttpResponse;
 import org.apache.http.HttpStatus;
@@ -28,26 +35,6 @@ import android.view.View.OnClickListener;
 import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
-import nz.net.catalyst.KiritakiKoha.Constants;
-import nz.net.catalyst.KiritakiKoha.R;
-import nz.net.catalyst.KiritakiKoha.Record;
-import nz.net.catalyst.KiritakiKoha.log.LogConfig;
-import nz.net.catalyst.KiritakiKoha.authenticator.AuthenticatorActivity;
-import nz.net.catalyst.KiritakiKoha.authenticator.KohaAuthHandler;
-/*
- * HoldTitle
-	Creates, for a patron, a title-level hold request on a given bibliographic record in Koha.
-
-	Parameters
-		patron_id (Required) - the ILS identifier for the patron for whom the request is placed
-		bib_id (Required)    - the ILS identifier for the bibliographic record on which the request is placed
-		request_location (Required) - IP address where the end user request is being placed
-		pickup_location (Optional) - an identifier indicating the location to which to deliver the item for pickup
-		needed_before_date (Optional) - date after which hold request is no longer needed
-		pickup_expiry_date (Optional) - date after which item returned to shelf if item is not picked up
-
-
- */
 
 public class PlaceHoldFormActivity extends Activity implements OnClickListener {
 	static final String TAG = LogConfig.getLogTag(PlaceHoldFormActivity.class);
