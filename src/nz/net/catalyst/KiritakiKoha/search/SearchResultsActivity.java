@@ -148,8 +148,7 @@ public class SearchResultsActivity extends Activity implements OnChildClickListe
 			qStr = qStr + "&" + Constants.LIMIT_AVAILABLE;
 
 		// Finally add the query string
-		// Needs to have an interface for sorting by ""
-		// Currently is on A=Z by Default
+		// Make interface for "&sort_by" so that user can choose which
         mURL = mURL + qStr + "&sort_by=title_az";
         
         showProgress();
