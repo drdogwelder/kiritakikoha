@@ -118,6 +118,7 @@
     <string name="my_books">My Books</string>
     <string name="ils_disabled_error">Sorry, Your Koha does not allow that operation</string>
     <string name="book_list_load_error">Error Loading My Books</string>
+    <string name="menu_refresh">Refresh</string>
     
     
 </resources>

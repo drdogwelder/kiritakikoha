@@ -37,6 +37,8 @@ import android.preference.PreferenceManager;
 import android.text.Html;
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseExpandableListAdapter;
@@ -48,7 +50,7 @@ import android.widget.Toast;
 /*
  * Activity that handles displaying of currently issued books
  * Creates an Expandable display list etc
- * TODO Odd Bug where XML returns as invalid IP, dont know what causes this :P
+ * TODO Fix Odd Bug where XML returns as invalid IP, dont know what causes this :P
  */
 public class IssueListActivity extends Activity implements OnGroupExpandListener
 {
@@ -80,16 +82,16 @@ public class IssueListActivity extends Activity implements OnGroupExpandListener
 		setContentView(R.layout.loan_list_results);
 		prefs = PreferenceManager.getDefaultSharedPreferences(this);
 		
-		if(onloan == null || id == -1)
+		if(onloan == null)retrieveData();
+		
+		if(onloan == null)
 		{
-			retrieveData();
-	        finish();
-	        startActivity(new Intent(this, IssueListActivity.class));
+			finish();
+			return;
 		}
 		else
 		{
-			Log.d(TAG, "NUMBER OF TITLES: "+onloan.size());
-	        listview = (ExpandableListView) findViewById(R.id.listView);
+			listview = (ExpandableListView) findViewById(R.id.listView);
 	       	for(int i = 0;i < onloan.size();i ++)
 	       	{
 	       		adapter.addLoanItem(onloan.get(i));
@@ -99,11 +101,41 @@ public class IssueListActivity extends Activity implements OnGroupExpandListener
 		}
 	}
 	
+	@Override
+	public boolean onOptionsItemSelected(MenuItem item) {
+
+		switch (item.getItemId()) {
+			case Constants.REFRESH:
+				retrieveData();
+		        finish();
+		        startActivity(new Intent(this, IssueListActivity.class));
+				break;
+			case Constants.LOGOUT:
+				AccountManager accMana = AccountManager.get(this);
+				Account[] accs = accMana.getAccounts();
+				for(int i = 0;i < accs.length;i ++)
+				{
+					accMana.removeAccount(accs[i], null, null);
+				}
+				break;
+		}
+		return true;
+	}
+	
+	@Override
+	public boolean onCreateOptionsMenu(Menu menu) {
+		boolean result = super.onCreateOptionsMenu(menu);
+
+		menu.add(Menu.NONE, Constants.REFRESH, 1, R.string.menu_refresh).setIcon(android.R.drawable.arrow_up_float);
+		menu.add(Menu.NONE, Constants.LOGOUT, 2, R.string.menu_logout).setIcon(android.R.drawable.ic_delete);
+		return result;
+	}
+	
 	/*
 	 * Retrieves Data from the Specified Opac Server, and displays appropriate error messages
 	 */
 	
-	public void retrieveData()
+	public int retrieveData()
 	{
 		AccountManager accManager = AccountManager.get(this);
 		Account[] accounts        = accManager.getAccountsByType(Constants.ACCOUNT_TYPE);
@@ -118,31 +150,34 @@ public class IssueListActivity extends Activity implements OnGroupExpandListener
 			getID(accManager, acct, sessionKey);
 			if(sessionKey.length() > 0)
 			{
+				//TRY GET STUFF
 				switch(tryGetPatronData(sessionKey))
 				{
 				case Constants.RESP_FAILED:
 					Toast.makeText(this, "Error Retrieving User Data", Toast.LENGTH_SHORT).show();
-					break;
+					return Constants.RESP_FAILED;
 				case Constants.RESP_SUCCESS:
 					//If ILS-DI is Disabled
 					if(respString.toLowerCase().contains("ils-di is disabled"))
 					{
 						Toast.makeText(this, R.string.ils_disabled_error, Toast.LENGTH_SHORT).show();
 						finish();
-						return;
+						return Constants.RESP_SUCCESS;
 					}
 				}
-				return;
+				return Constants.RESP_FAILED;
 			}
 		}
 		//Prompts for login.
 		startActivity(new Intent(this, AuthenticatorActivity.class));
+		return 0;
 	}
-	
 	
 	/*
 	 * Connects to Opac Server and retrieves the User ID. 
 	 * TODO Move this to the Actual authentification code, to avoid messiness :P
+	 * Potentially store in AccountManager, for easy and secure access
+	 * Instead of 
 	 */
 	public int getID(AccountManager am, Account acct, String session)
 	{

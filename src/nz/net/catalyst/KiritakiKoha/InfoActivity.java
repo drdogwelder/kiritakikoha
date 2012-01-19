@@ -24,6 +24,7 @@ public class InfoActivity extends Activity {
         setContentView(R.layout.info);
     }
     
+    @Override
 	public boolean onCreateOptionsMenu(Menu menu) {
 		boolean result = super.onCreateOptionsMenu(menu);
 
