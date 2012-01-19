@@ -47,6 +47,7 @@ public class LogConfig {
 	 * @param logTag the log tag
 	 * @return whether the log tag should log at DEBUG level
 	 */
+	@SuppressWarnings("unused")
 	public static boolean isDebug(String logTag) {
 		
 		return DEBUG || Log.isLoggable(logTag, Log.DEBUG);
