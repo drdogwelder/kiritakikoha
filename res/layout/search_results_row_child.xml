@@ -17,5 +17,12 @@
 			android:textColor="#ccc"
 			android:padding="8dp"
     		android:gravity="left"
+			/>	
+		<ImageView android:id="@+id/isbn"
+			android:layout_width="fill_parent" 
+			android:layout_height="wrap_content"
+			android:contentDescription="@string/cover_dec" 
+			android:padding="8dp"
+    		android:gravity="left"
 			/>		
 </LinearLayout>

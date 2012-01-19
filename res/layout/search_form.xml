@@ -11,41 +11,132 @@
 			  android:orientation="vertical"
 		  >
 
-	  		      <Spinner    android:id="@+id/spinner1"
-	  		              	  android:layout_width="fill_parent"
-        					  android:layout_height="wrap_content"
-       						  android:prompt="@string/search_options_prompt"
-       						  android:entries="@array/search_options_array"
-       						  android:entryValues="@array/search_options_arrayValues"    				/>
-					<EditText android:text=""
-							  android:id="@+id/searchTerms1"
-							  android:layout_width="fill_parent"
-							  android:singleLine="false"
-							  android:layout_height="wrap_content" />
+			<LinearLayout
+			    android:layout_width="fill_parent"
+			    android:layout_height="wrap_content"
+			    android:orientation="horizontal" >
 
-	  		      <Spinner    android:id="@+id/spinner2"
-	  		              	  android:layout_width="fill_parent"
-        					  android:layout_height="wrap_content"
-       						  android:prompt="@string/search_options_prompt"
-       						  android:entries="@array/search_options_array"
-       						  android:entryValues="@array/search_options_arrayValues"    				/>
-					<EditText android:text=""
-							  android:id="@+id/searchTerms2"
-							  android:layout_width="fill_parent"
-							  android:singleLine="false"
-							  android:layout_height="wrap_content" />
-							  
-	  		      <Spinner    android:id="@+id/spinner3"
-	  		              	  android:layout_width="fill_parent"
-        					  android:layout_height="wrap_content"
-       						  android:prompt="@string/search_options_prompt"
-       						  android:entries="@array/search_options_array"
-       						  android:entryValues="@array/search_options_arrayValues"    				/>
-					<EditText android:text=""
-							  android:id="@+id/searchTerms3"
-							  android:layout_width="fill_parent"
-							  android:singleLine="false"
-							  android:layout_height="wrap_content" />
+			    <Spinner
+			        android:id="@+id/spinner1"
+			        android:layout_width="250dp"
+			        android:layout_height="wrap_content"
+			        android:entries="@array/search_options_array"
+			        android:entryValues="@array/search_options_arrayValues"
+			        android:prompt="@string/search_options_prompt" />
+
+			    <Button
+			        android:id="@+id/btnAddGroup"
+			        android:layout_width="fill_parent"
+			        android:layout_height="wrap_content"
+			        android:layout_weight="0.00"
+			        android:onClick="addSearch"
+			        android:text="Add"
+			        android:textColor="#006600" />
+
+			</LinearLayout>
+
+			<LinearLayout
+			    android:layout_width="fill_parent"
+			    android:layout_height="wrap_content" >
+
+				<EditText
+				    android:id="@+id/searchTerms1"
+				    android:layout_width="250dp"
+				    android:layout_height="wrap_content"
+				    android:singleLine="false" >
+
+				    <requestFocus />
+				</EditText>
+
+				<Button
+				    android:id="@+id/btnRemoveGroup"
+				    android:layout_width="wrap_content"
+				    android:layout_height="wrap_content"
+				    android:layout_weight="1"
+				    android:text="Reset"
+				    android:onClick="removeSearch"
+				    android:textColor="#FF3300" />
+
+			</LinearLayout>
+
+			<LinearLayout
+			  android:id="@+id/searchGroup2"
+			  android:layout_width="fill_parent"
+			  android:layout_height="fill_parent"
+			  android:orientation="vertical"
+			  android:visibility="gone" >
+
+				<LinearLayout
+				    android:id="@+id/linearLayout1"
+				    android:layout_width="fill_parent"
+				    android:layout_height="wrap_content" >
+
+					<Spinner
+					    android:id="@+id/andornot1"
+					    android:layout_width="fill_parent"
+					    android:layout_height="fill_parent"
+					    android:layout_weight="1"
+					    android:entries="@array/searchLogicOperators" />
+
+					<Spinner
+					    android:id="@+id/spinner2"
+					    android:layout_width="225dp"
+					    android:layout_height="wrap_content"
+					    android:entries="@array/search_options_array"
+					    android:entryValues="@array/search_options_arrayValues"
+					    android:prompt="@string/search_options_prompt" />
+
+				</LinearLayout>
+ >
+				
+				<EditText
+				    android:id="@+id/searchTerms2"
+				    android:layout_width="fill_parent"
+				    android:layout_height="wrap_content"
+				    android:singleLine="false"
+				    android:text="" />
+
+			</LinearLayout>
+							
+			<LinearLayout
+			  android:id="@+id/searchGroup3"
+			  android:layout_width="fill_parent"
+			  android:layout_height="fill_parent"
+			  android:orientation="vertical" 
+			  android:visibility="gone" >
+
+				<LinearLayout
+				    android:id="@+id/linearLayout2"
+				    android:layout_width="fill_parent"
+				    android:layout_height="wrap_content" >
+
+					<Spinner
+					    android:id="@+id/andornot2"
+					    android:layout_width="fill_parent"
+					    android:layout_height="fill_parent"
+					    android:layout_weight="1"
+					    android:entries="@array/searchLogicOperators" />
+
+					<Spinner
+					    android:id="@+id/spinner3"
+					    android:layout_width="225dp"
+					    android:layout_height="wrap_content"
+					    android:entries="@array/search_options_array"
+					    android:entryValues="@array/search_options_arrayValues"
+					    android:prompt="@string/search_options_prompt" />
+
+				</LinearLayout>
+>
+				
+					<EditText
+					    android:id="@+id/searchTerms3"
+					    android:layout_width="fill_parent"
+					    android:layout_height="wrap_content"
+					    android:singleLine="false"
+					    android:text="" />
+
+			</LinearLayout>
+					
   					<TextView android:text="@string/search_pub_date_range"
 							  android:layout_width="fill_parent"
 							  android:singleLine="false"

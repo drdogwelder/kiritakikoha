@@ -7,6 +7,13 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 
+import nz.net.catalyst.KiritakiKoha.Constants;
+import nz.net.catalyst.KiritakiKoha.R;
+import nz.net.catalyst.KiritakiKoha.Record;
+import nz.net.catalyst.KiritakiKoha.authenticator.AuthenticatorActivity;
+import nz.net.catalyst.KiritakiKoha.authenticator.KohaAuthHandler;
+import nz.net.catalyst.KiritakiKoha.log.LogConfig;
+
 import org.apache.http.HttpEntity;
 import org.apache.http.HttpResponse;
 import org.apache.http.HttpStatus;
@@ -27,6 +34,8 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.text.format.DateFormat;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.util.Log;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -35,6 +44,7 @@ import android.widget.CheckBox;
 import android.widget.DatePicker;
 import android.widget.TextView;
 import android.widget.Toast;
+
 import nz.net.catalyst.KiritakiKoha.Constants;
 import nz.net.catalyst.KiritakiKoha.R;
 import nz.net.catalyst.KiritakiKoha.Record;
@@ -230,7 +240,7 @@ public class PlaceHoldFormActivity extends Activity implements OnClickListener {
 		            	String mAuthtoken = mAccountManager.peekAuthToken(a, Constants.AUTHTOKEN_TYPE);
 						mAccountManager.invalidateAuthToken(Constants.ACCOUNT_TYPE, mAuthtoken);
 		            	
-						if ( DEBUG ) Log.d(TAG, "Place fold failed - session expired");
+						if ( DEBUG ) Log.d(TAG, "Place hold failed - session expired");
 						break;
 					case Constants.RESP_FAILED:
 		            	Toast.makeText(this, "Sorry, place hold failed", Toast.LENGTH_SHORT).show();

@@ -1,17 +1,20 @@
 package nz.net.catalyst.KiritakiKoha.search;
 
 import java.io.IOException;
+import java.io.InputStream;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.Iterator;
+import java.util.List;
 
-import nz.net.catalyst.KiritakiKoha.EditPreferences;
 import nz.net.catalyst.KiritakiKoha.Constants;
+import nz.net.catalyst.KiritakiKoha.EditPreferences;
+import nz.net.catalyst.KiritakiKoha.R;
 import nz.net.catalyst.KiritakiKoha.Record;
 import nz.net.catalyst.KiritakiKoha.hold.PlaceHoldFormActivity;
 import nz.net.catalyst.KiritakiKoha.log.LogConfig;
-import nz.net.catalyst.KiritakiKoha.R;
+
 import android.app.Activity;
 import android.app.Dialog;
 import android.app.ProgressDialog;
@@ -19,26 +22,39 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.graphics.BitmapFactory;
+import android.graphics.Color;
 import android.net.Uri;
+
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Parcelable;
+
 import android.preference.PreferenceManager;
+
 import android.text.Html;
+import android.text.SpannableString;
 import android.text.method.LinkMovementMethod;
+import android.text.style.BackgroundColorSpan;
+import android.text.style.ForegroundColorSpan;
+
 import android.util.Log;
+
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+
 import android.widget.BaseExpandableListAdapter;
 import android.widget.ExpandableListView;
+import android.widget.ExpandableListView.OnChildClickListener;
+import android.widget.ExpandableListView.OnGroupExpandListener;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
-import android.widget.ExpandableListView.OnChildClickListener;
 
-public class SearchResultsActivity extends Activity implements OnChildClickListener {
+public class SearchResultsActivity extends Activity implements OnChildClickListener, OnGroupExpandListener {
 	static final String TAG = LogConfig.getLogTag(SearchResultsActivity.class);
 	// whether DEBUG level logging is enabled (whether globally, or explicitly
 	// for this log tag)
@@ -51,10 +67,12 @@ public class SearchResultsActivity extends Activity implements OnChildClickListe
 
 	ArrayList<Record> items = new ArrayList<Record>();
 	private Bundle m_extras;
+	private List<String> searchTerms;
 
 	private Thread mSearchThread;
     private final Handler mHandler = new Handler();
     
+    ExpandableListView listview;
 	ExpandableListAdapter adapter = new ExpandableListAdapter(this, new ArrayList<String>(), 
 			new ArrayList<ArrayList<Record>>());
 	
@@ -66,8 +84,9 @@ public class SearchResultsActivity extends Activity implements OnChildClickListe
         mPrefs = PreferenceManager.getDefaultSharedPreferences(this);
         
         setContentView(R.layout.search_results);
-        ExpandableListView listview = (ExpandableListView) findViewById(R.id.listView);
+        listview = (ExpandableListView) findViewById(R.id.listView);
         listview.setOnChildClickListener(this);
+        listview.setOnGroupExpandListener(this);
         
         m_extras = getIntent().getExtras();
         if (m_extras == null) {
@@ -83,10 +102,14 @@ public class SearchResultsActivity extends Activity implements OnChildClickListe
     	}
 
 		ArrayList<String> idxValues = m_extras.getStringArrayList("idx");
+		ArrayList<String> opValues = m_extras.getStringArrayList("op");
 		ArrayList<String> qValues = m_extras.getStringArrayList("q");
 		String pub_date_range = m_extras.getString(Constants.SEARCH_PUB_DATE_RANGE_PARAM);
 		
-    	if ( ! ( idxValues.size() > 0 && qValues.size() > 0 ) ) {
+		//Save search terms for later use.
+		searchTerms = qValues; 
+    	
+		if ( ! ( idxValues.size() > 0 && qValues.size() > 0 ) ) {
 			Toast.makeText(this, getString(R.string.search_no_search_terms), Toast.LENGTH_SHORT).show();
         	finish();
         	return;
@@ -94,16 +117,29 @@ public class SearchResultsActivity extends Activity implements OnChildClickListe
 
 		String mURL = mPrefs.getString(getResources().getString(R.string.pref_base_url_key).toString(),
 										getResources().getString(R.string.base_url).toString());
+		//Log.v("mURL", mURL);
+		
+		//Checking for Malformed Base URL(Adds / if non exitant)
+		if(mURL.charAt(mURL.length()-1) != '/' || mURL.charAt(mURL.length()-1) != '\\'){
+			mURL += '/';
+		}
+		
 		mURL = mURL + mPrefs.getString(getResources().getString(R.string.pref_search_url_key).toString(),
 				getResources().getString(R.string.search_url).toString());
 
 		String qStr = "";
-		Iterator<String> idxItr = idxValues.iterator(); 
+		Iterator<String> idxItr = idxValues.iterator();
+		Iterator<String> opItr = opValues.iterator();
 		Iterator<String> qItr = qValues.iterator(); 
-		while ( idxItr.hasNext() && qItr.hasNext() ) { 
+		while ( idxItr.hasNext() && qItr.hasNext()) { 
 			String q = qItr.next();
+
 			String idx = idxItr.next();
 			qStr = qStr + "&idx=" + idx + "&q=" + Uri.encode(q);
+			if (opItr.hasNext()) {
+				String op = opItr.next();
+				qStr = qStr + "&op=" + op;
+			}
 		}
 		if ( pub_date_range.trim().length() > 0 )
 			qStr = qStr + "&" + Constants.SEARCH_PUB_DATE_RANGE_PARAM + "=" 
@@ -111,7 +147,7 @@ public class SearchResultsActivity extends Activity implements OnChildClickListe
 		if ( m_extras.containsKey(Constants.LIMIT_AVAILABLE) ) 
 			qStr = qStr + "&" + Constants.LIMIT_AVAILABLE;
 
-			// Finally add the query string
+		// Finally add the query string
         mURL = mURL + qStr;
         
         showProgress();
@@ -172,7 +208,15 @@ public class SearchResultsActivity extends Activity implements OnChildClickListe
 		hideProgress();
         // Initialize the adapter with blank groups and children
         // We will be adding children on a thread, and then update the ListView
-
+		
+		if(results == null)
+		{
+			Toast.makeText(this, getResources().getString(R.string.search_connection_failure), 
+					Toast.LENGTH_SHORT).show();
+			finish();
+			return;
+		}
+		
 		if ( results.isEmpty() ) {
 			Toast.makeText(this, getResources().getString(R.string.search_no_results), 
 					Toast.LENGTH_SHORT).show();
@@ -311,11 +355,24 @@ public class SearchResultsActivity extends Activity implements OnChildClickListe
 	        }
 	        TextView tv;
 	        tv = (TextView) convertView.findViewById(R.id.title);
-	        tv.setText(rec.getTitle());
-
+	        SpannableString text = new SpannableString(rec.getTitle());
+	        highlightSearchTerms(text);
+	        tv.setText(text);
+	        
 	        tv = (TextView) convertView.findViewById(R.id.description);
 	        tv.setText(Html.fromHtml(rec.getDescription()));
-
+	        Log.d(TAG, "Decription= "+rec.getDescription());
+	        
+	        boolean showImages = mPrefs.getBoolean("show.image", true);
+	        if(showImages){
+	        	ImageView iv = (ImageView) convertView.findViewById(R.id.isbn);
+	        	InputStream imageInput = BookThumbnailService.checkGoogle(rec.getISBN());
+		        if(imageInput == null){
+		        	imageInput = BookThumbnailService.getThumbnail(rec.getISBN());
+		        }
+		        iv.setImageBitmap(BitmapFactory.decodeStream(imageInput));
+	        }
+	        
 			Boolean useWeb = mPrefs.getBoolean(getResources().getString(R.string.pref_hold_via_web_key), false);
 			if ( useWeb ) {
 		        tv.setMovementMethod(LinkMovementMethod.getInstance());
@@ -355,9 +412,13 @@ public class SearchResultsActivity extends Activity implements OnChildClickListe
 	            convertView = infalInflater.inflate(R.layout.search_results_row, null);
 	        }
 	        TextView tv = (TextView) convertView.findViewById(R.id.title);
-	        tv.setText(group);
+	        SpannableString text = new SpannableString(group);
+	        highlightSearchTerms(text);
+	        tv.setText(text);
+
 	        return convertView;
 	    }
+	    
 
 	    @Override
 	    public boolean hasStableIds() {
@@ -373,14 +434,24 @@ public class SearchResultsActivity extends Activity implements OnChildClickListe
 		public boolean onChildClick(ExpandableListView parent, View v,
 				int groupPosition, int childPosition, long id) {
 			// TODO make this do the right thing
-
 			Record selectedRecord = (Record) getChild(groupPosition, childPosition);
-			
 			Intent intent = new Intent(this.context, PlaceHoldFormActivity.class);
 			intent.putExtra("bib", (Parcelable) selectedRecord);
 			startActivity(intent);
 			
 			return true;
+		}
+		
+		private void highlightSearchTerms(SpannableString text) {
+			
+			for (String term : searchTerms) {
+				int start = text.toString().toLowerCase().indexOf(term.toLowerCase());
+				if (start >= 0) {
+				   text.setSpan(new ForegroundColorSpan(Color.BLACK), start, start+term.length(), 0);
+				   text.setSpan(new BackgroundColorSpan(Color.WHITE), start, start+term.length(), 0);
+				}
+				
+			}
 		}
 	}
 
@@ -388,6 +459,14 @@ public class SearchResultsActivity extends Activity implements OnChildClickListe
 	public boolean onChildClick(ExpandableListView parent, View v,
 			int groupPosition, int childPosition, long id) {
 		adapter.onChildClick(parent, v, groupPosition, childPosition, id);
+		parent.expandGroup(childPosition);
 		return false;
+	}
+	@Override
+	public void onGroupExpand(int groupPosition) {
+		if(!mPrefs.getBoolean("limit.items", true))return;
+		for(int i = 0;i < listview.getCount();i++){
+			if (i != groupPosition)listview.collapseGroup(i);
+		}
 	}
 }

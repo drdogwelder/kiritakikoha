@@ -47,6 +47,11 @@
         <item>pl,wrdl</item>
         <item>nb</item>
     </string-array>
+    <string-array name="searchLogicOperators">
+        <item>and</item>
+        <item>or</item>
+        <item>not</item>
+    </string-array>
     <string name="search_pub_date_range">Publication Date Range</string>
     <string name="search_pub_date_range_desc">(e.g. "1999-2001" or "-1987" or "2008-" )</string>
     <string name="search_form_go">Run search</string>
@@ -112,6 +117,17 @@
     <string name="load_config_error">Sorry there was an error parsing the configuration file.</string>
     <string name="load_config_success">Successfully loaded the configuration file.</string>
     <string name="scan_not_available">Sorry you need to install ZXing Barcode Scanner for this.</string>
-    
+    <string name="cover_dec">cover</string>
+    <string name="pref_show_image_key">show.image</string>
+    <string name="pref_show_image_title">Show images in search</string>
+    <string name="pref_show_image_summary">Show images in search</string>
+    <string name="pref_limit_items_key">limit.items</string>
+    <string name="pref_limit_items_title">limit open items</string>
+    <string name="pref_limit_items_summary">open one item at a time in search</string>
+    <string name="invalid_data_error">The data found was too short</string>
+    <string name="my_books">My Books</string>
+    <string name="ils_disabled_error">Sorry, Your Koha does not allow that operation</string>
+    <string name="book_list_load_error">Error Loading My Books</string>
+    <string name="menu_refresh">Refresh</string>    
     
 </resources>
