@@ -36,6 +36,7 @@ import android.view.View.OnClickListener;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
+import android.widget.Toast;
 
 /**
  * Activity which displays login screen to the user.
@@ -226,6 +227,9 @@ public class AuthenticatorActivity extends AccountAuthenticatorActivity implemen
         } else {
             Log.e(TAG, "onAuthenticationResult: failed to authenticate");
             mMessage.setVisibility(View.VISIBLE);
+
+    		
+    		Toast.makeText(this, KohaAuthHandler.auri, Toast.LENGTH_LONG).show();
             if (mRequestNewAccount) {
                 // "Please enter a valid username/password.
                 mMessage

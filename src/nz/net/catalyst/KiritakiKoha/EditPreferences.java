@@ -4,12 +4,15 @@ import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.MalformedURLException;
-import java.net.URI;
 import java.net.URL;
+import java.net.UnknownHostException;
 
 import javax.xml.parsers.ParserConfigurationException;
 import javax.xml.parsers.SAXParser;
 import javax.xml.parsers.SAXParserFactory;
+
+import nz.net.catalyst.KiritakiKoha.log.LogConfig;
+import nz.net.catalyst.KiritakiKoha.search.SearchFormActivity;
 
 import org.xml.sax.Attributes;
 import org.xml.sax.InputSource;
@@ -17,12 +20,8 @@ import org.xml.sax.SAXException;
 import org.xml.sax.XMLReader;
 import org.xml.sax.helpers.DefaultHandler;
 
-import nz.net.catalyst.KiritakiKoha.log.LogConfig;
-import nz.net.catalyst.KiritakiKoha.search.SearchFormActivity;
-import nz.net.catalyst.KiritakiKoha.R;
-
 import android.app.Activity;
-import android.content.ActivityNotFoundException;
+import android.app.AlertDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -35,6 +34,8 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.Toast;
 
+import com.google.zxing.integration.android.IntentIntegrator;
+
 
 public class EditPreferences extends PreferenceActivity implements OnSharedPreferenceChangeListener {
 	static final String TAG = LogConfig.getLogTag(EditPreferences.class);
@@ -46,11 +47,9 @@ public class EditPreferences extends PreferenceActivity implements OnSharedPrefe
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-
 		addPreferencesFromResource(R.xml.preferences);
 		
 		SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
-
 		prefs.registerOnSharedPreferenceChangeListener(this);
 	}
 	
@@ -81,17 +80,20 @@ public class EditPreferences extends PreferenceActivity implements OnSharedPrefe
 				resetToDefaults();
 				return true;
 			case Constants.SCAN:
-				try {
+				/*try {
 					Intent intent = new Intent(Constants.CONFIG_SCAN_INTENT);
 					intent.putExtra("SCAN_MODE", Constants.CONFIG_SCAN_MODE);
 					startActivityForResult(intent, 0);
 			    } catch (ActivityNotFoundException e) {
 		        	Toast.makeText(this, getResources().getString(R.string.scan_not_available), 
 		        						Toast.LENGTH_SHORT).show();
-			    }
+			    }*/
+				startScan();
+				break;
 			default:
 				return super.onOptionsItemSelected(item);
 		}
+		return false;
 	}
 	
 	public boolean onSearchRequested() {
@@ -119,41 +121,106 @@ public class EditPreferences extends PreferenceActivity implements OnSharedPrefe
 		startActivity(getIntent());
 	}
 	
-	public void onActivityResult(int requestCode, int resultCode, Intent intent) { 
-		
-        if (resultCode == Activity.RESULT_OK) {
-        	String contents = intent.getStringExtra("SCAN_RESULT");
-        	String formatName = intent.getStringExtra("SCAN_RESULT_FORMAT");
-        	
-        	if ( DEBUG ) Log.d(TAG, "scanResult: " + contents + " (" + formatName + ")");
-        	
-        	ConfigXMLHandler cx = null;
-        	
-        	if ( contents.toLowerCase().startsWith("http://") ) {
-        		try {
-					cx = new ConfigXMLHandler(this, new URL(contents).openStream());
-				} catch (MalformedURLException e) {
-					Toast.makeText(this, getResources().getString(R.string.load_config_download_error), Toast.LENGTH_SHORT).show();		
-					e.printStackTrace();
-				} catch (IOException e) {
-					Toast.makeText(this, getResources().getString(R.string.load_config_download_error), Toast.LENGTH_SHORT).show();		
-					e.printStackTrace();
-				}
-        	} else { 
-    			cx = new ConfigXMLHandler(this, new ByteArrayInputStream( contents.getBytes() ) );
-        	}
-        	
-			if ( cx.parseConfig() ) {
-	        	Toast.makeText(this, getResources().getString(R.string.load_config_success), Toast.LENGTH_SHORT).show();
-	    		// refresh displayed values by restarting activity (a hack, but apparently there
-	    		// isn't a nicer way)
-	    		finish();
-	    		startActivity(getIntent());
-			} else {
-				Toast.makeText(this, getResources().getString(R.string.load_config_error), Toast.LENGTH_SHORT).show();		
-			}
-		} 
+	public void startScan()
+	{
+		if(DEBUG)Log.d(TAG, "Scan Starting");
+		IntentIntegrator integ = new IntentIntegrator(this);
+		AlertDialog dialog = integ.initiateScan();
+		if(dialog == null)
+		{
+			if(DEBUG)Log.d(TAG, "ZXing Installed :D");
+		}
+		else
+		{
+			if(DEBUG)Log.d(TAG, "ZXing Not Installed D:");
+			dialog.setCancelable(false);
+		}
 	}
+	
+	//Sets Preference Data From a Set of Comma Separated Values
+	//read in from a QR Code
+	public boolean setConfig(String returnVal)
+	{
+		Log.d(TAG, returnVal);
+		String[] data = returnVal.trim().split(",");
+		//Kill Setting if there is not enough Data 
+		if(data.length < 5)
+		{
+			Toast.makeText(this, R.string.invalid_data_error, Toast.LENGTH_SHORT);
+			return false;
+		}
+		
+		//Update Preference Settings
+		SharedPreferences share = PreferenceManager.getDefaultSharedPreferences(this);
+		SharedPreferences.Editor edit = share.edit();
+		
+		edit.putString("base.url",      data[0].trim());
+		edit.putString("koha.branch",   data[1].trim());
+		edit.putString("search.url",    data[2].trim());
+		edit.putString("login.url",     data[3].trim());
+		edit.putString("placehold.url", data[4].trim());
+		
+		edit.commit();
+		
+		return true;
+	}
+	
+	//Reads QR Data
+	public void onActivityResult(int requestCode, int resultCode, Intent intent) { 
+
+		
+		if (resultCode == Activity.RESULT_OK) 
+		{
+			String formatName   = intent.getStringExtra("SCAN_RESULT_FORMAT");
+			String contents = intent.getStringExtra("SCAN_RESULT");
+			String[] resultArray = contents.split(",");
+        	if ( DEBUG ) Log.d(TAG, "scanResult: " + contents + " (" + formatName + ")");
+			//Check for CSV Values
+			if(resultArray.length >= 5)
+			{
+				if(setConfig(contents))
+				{
+					finish();
+					startActivity(getIntent());
+				}
+			}
+			//Or treat it as a URL to read from
+			else
+			{
+	        	ConfigXMLHandler cx = null;
+	        	
+	        	if ( contents.toLowerCase().startsWith("http://") ) {
+	        		try {
+						cx = new ConfigXMLHandler(this, new URL(contents).openStream());
+					} catch (MalformedURLException e) {
+						Toast.makeText(this, getResources().getString(R.string.load_config_download_error), Toast.LENGTH_SHORT).show();		
+						e.printStackTrace();
+					} catch(UnknownHostException e){
+						Toast.makeText(this, getResources().getString(R.string.load_config_download_error), Toast.LENGTH_SHORT).show();		
+						e.printStackTrace();
+	        		} catch (IOException e) {
+						Toast.makeText(this, getResources().getString(R.string.load_config_download_error), Toast.LENGTH_SHORT).show();		
+						e.printStackTrace();
+					} 
+	        	} else { 
+	    			cx = new ConfigXMLHandler(this, new ByteArrayInputStream( contents.getBytes() ) );
+	        	}
+	        	
+				if ( cx.parseConfig() ) {
+		        	Toast.makeText(this, getResources().getString(R.string.load_config_success), Toast.LENGTH_SHORT).show();
+		    		// refresh displayed values by restarting activity (a hack, but apparently there
+		    		// isn't a nicer way)
+		    		finish();
+		    		startActivity(getIntent());
+				} 
+				else 
+				{
+					Toast.makeText(this, getResources().getString(R.string.load_config_error), Toast.LENGTH_SHORT).show();		
+				}
+			}
+		}
+	}
+	
 	public static class ConfigXMLHandler extends DefaultHandler {
 
 		// Number of config items to process
