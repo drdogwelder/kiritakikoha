@@ -36,8 +36,8 @@ public class BookThumbnailService {
 	public static InputStream checkGoogle(String isbn){
 		Log.d(TAG, "Google: "+isbn);
 		if(isbn == null)return null;
-		Log.d(TAG, "Searching GOOGLE");
 		isbn = cleanseISBN(isbn);
+
 		String aURI = "http://books.google.com/books?bibkeys=ISBN:" + isbn + "&jscmd=viewapi";
 		try{
 			URL inputURL = new URL(aURI);
@@ -64,7 +64,17 @@ public class BookThumbnailService {
 		String newString = "";
 		s = s.toLowerCase();
 		char[] allowed = new char[]{'0', '1', '2', '3', '4', '5', '6', '7', '8', '9', 'x'};
-		for(int i = 0;i < s.length();i++){
+		int start = 0;
+		for(start = 0;start < s.length();start ++)
+		{
+			try
+			{
+				Integer.parseInt(""+s.charAt(start));
+				break;
+			}
+			catch(Exception e){}
+		}
+		for(int i = start;i < s.length();i++){
 			boolean val = false;
 			for(int j = 0;j < allowed.length;j ++){
 				if(s.charAt(i) == allowed[j]){
@@ -73,7 +83,7 @@ public class BookThumbnailService {
 					break;
 				}
 			}
-			if(i == 12 || !val){
+			if(i == 12+start || !val){
 				return newString;
 			}
 		}

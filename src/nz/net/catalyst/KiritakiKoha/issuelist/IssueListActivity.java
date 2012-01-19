@@ -240,6 +240,8 @@ public class IssueListActivity extends Activity implements OnGroupExpandListener
 				{
 					Toast.makeText(this, "Error establishing link with irldl.pl", Toast.LENGTH_SHORT).show();
 					finish();
+					onloan = null;
+					id = -1;
 					return Constants.RESP_INVALID_SESSION;
 				}
 			}

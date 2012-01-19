@@ -70,7 +70,7 @@ public class RSSHandler extends DefaultHandler {
 			inItem = true;
 		else if (name.trim().equals("description"))
 			inDescription = true;
-		else if (name.trim().equals("isbn"))
+		else if (name.trim().equals("isbn") || name.trim().equals("identifier"))
 			inISBN = true;
 		else if (name.trim().equals("guid"))
 			inLink = true;
@@ -85,7 +85,7 @@ public class RSSHandler extends DefaultHandler {
 			inItem = false;
 		else if (name.trim().equals("description"))
 			inDescription = false;
-		else if (name.trim().equals("isbn"))
+		else if (name.trim().equals("isbn") || name.trim().equals("identifier"))
 			inISBN = false;
 		else if (name.trim().equals("guid"))
 			inLink = false;
