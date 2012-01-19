@@ -91,6 +91,7 @@ public class SearchResultsActivity extends Activity implements OnChildClickListe
     	}
 
 		ArrayList<String> idxValues = m_extras.getStringArrayList("idx");
+		ArrayList<String> opValues = m_extras.getStringArrayList("op");
 		ArrayList<String> qValues = m_extras.getStringArrayList("q");
 		String pub_date_range = m_extras.getString(Constants.SEARCH_PUB_DATE_RANGE_PARAM);
 		
@@ -113,12 +114,18 @@ public class SearchResultsActivity extends Activity implements OnChildClickListe
 				getResources().getString(R.string.search_url).toString());
 
 		String qStr = "";
-		Iterator<String> idxItr = idxValues.iterator(); 
+		Iterator<String> idxItr = idxValues.iterator();
+		Iterator<String> opItr = opValues.iterator();
 		Iterator<String> qItr = qValues.iterator(); 
-		while ( idxItr.hasNext() && qItr.hasNext() ) { 
+		while ( idxItr.hasNext() && qItr.hasNext()) { 
 			String q = qItr.next();
+
 			String idx = idxItr.next();
 			qStr = qStr + "&idx=" + idx + "&q=" + Uri.encode(q);
+			if (opItr.hasNext()) {
+				String op = opItr.next();
+				qStr = qStr + "&op=" + op;
+			}
 		}
 		if ( pub_date_range.trim().length() > 0 )
 			qStr = qStr + "&" + Constants.SEARCH_PUB_DATE_RANGE_PARAM + "=" 
