@@ -149,7 +149,7 @@ public class SearchResultsActivity extends Activity implements OnChildClickListe
 
 		// Finally add the query string
 		// Make interface for "&sort_by" so that user can choose which
-        mURL = mURL + qStr + "&sort_by=title_az";
+        mURL = mURL + qStr;
         
         showProgress();
         // Start search
