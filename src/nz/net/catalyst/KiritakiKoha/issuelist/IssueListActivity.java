@@ -86,6 +86,7 @@ public class IssueListActivity extends Activity implements OnGroupExpandListener
 		
 		if(onloan == null)
 		{
+			Toast.makeText(this, "Error Loading irsdl.pl", Toast.LENGTH_LONG);
 			finish();
 			return;
 		}
@@ -113,10 +114,14 @@ public class IssueListActivity extends Activity implements OnGroupExpandListener
 			case Constants.LOGOUT:
 				AccountManager accMana = AccountManager.get(this);
 				Account[] accs = accMana.getAccounts();
+				Log.d(TAG, "ACCS: "+accs.length);
 				for(int i = 0;i < accs.length;i ++)
 				{
 					accMana.removeAccount(accs[i], null, null);
 				}
+				onloan = null;
+				id = -1;
+				finish();
 				break;
 		}
 		return true;
@@ -215,19 +220,28 @@ public class IssueListActivity extends Activity implements OnGroupExpandListener
 			HttpResponse resp = httpClient.execute(post);
 			if(resp.getStatusLine().getStatusCode() == HttpStatus.SC_OK)
 			{
-				HttpEntity respEntity = resp.getEntity();
-				String cont = KohaAuthHandler.convertStreamToString(respEntity.getContent());
-				
-				int start = cont.indexOf("<id>");
-				int end   = cont.indexOf("</id>");
-				
-				String idStr = cont.substring(start + 4, end);
-				
-				id = Integer.parseInt(idStr);
-				
-				Log.d(TAG, "Retrieved Login Id: " + id);
-				
-				return Constants.RESP_SUCCESS;
+				try
+				{
+					HttpEntity respEntity = resp.getEntity();
+					String cont = KohaAuthHandler.convertStreamToString(respEntity.getContent());
+					
+					int start = cont.indexOf("<id>");
+					int end   = cont.indexOf("</id>");
+					
+					String idStr = cont.substring(start + 4, end);
+					
+					id = Integer.parseInt(idStr);
+					
+					Log.d(TAG, "Retrieved Login Id: " + id);
+					
+					return Constants.RESP_SUCCESS;
+				}
+				catch(Exception e)
+				{
+					Toast.makeText(this, "Error establishing link with irldl.pl", Toast.LENGTH_SHORT).show();
+					finish();
+					return Constants.RESP_INVALID_SESSION;
+				}
 			}
 		} 
 		catch (IOException e) 

@@ -365,7 +365,7 @@ public class SearchResultsActivity extends Activity implements OnChildClickListe
 	        
 	        boolean showImages = mPrefs.getBoolean("show.image", true);
 	        if(showImages){
-	        	ImageView iv = (ImageView) convertView.findViewById(R.id.isbn);
+	        	ImageView iv = (ImageView) convertView.findViewById(R.id.thumbnail);
 	        	InputStream imageInput = BookThumbnailService.checkGoogle(rec.getISBN());
 		        if(imageInput == null){
 		        	imageInput = BookThumbnailService.getThumbnail(rec.getISBN());
