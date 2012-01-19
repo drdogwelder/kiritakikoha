@@ -86,6 +86,7 @@ public class IssueListActivity extends Activity implements OnGroupExpandListener
 		
 		if(onloan == null)
 		{
+			Toast.makeText(this, "Error Loading irsdl.pl", Toast.LENGTH_LONG);
 			finish();
 			return;
 		}
@@ -113,10 +114,14 @@ public class IssueListActivity extends Activity implements OnGroupExpandListener
 			case Constants.LOGOUT:
 				AccountManager accMana = AccountManager.get(this);
 				Account[] accs = accMana.getAccounts();
+				Log.d(TAG, "ACCS: "+accs.length);
 				for(int i = 0;i < accs.length;i ++)
 				{
 					accMana.removeAccount(accs[i], null, null);
 				}
+				onloan = null;
+				id = -1;
+				finish();
 				break;
 		}
 		return true;
