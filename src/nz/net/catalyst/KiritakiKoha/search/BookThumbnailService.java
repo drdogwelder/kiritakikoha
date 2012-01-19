@@ -15,7 +15,9 @@ import com.google.gson.JsonParser;
 public class BookThumbnailService {
 	static final String TAG = LogConfig.getLogTag(BookThumbnailService.class);
 	public static InputStream getThumbnail(String isbn){
+		Log.d(TAG, "Open libary: "+isbn);
 		if(isbn == null)return null;
+		Log.d(TAG, "Searching OPEN LIBARY");
 		isbn = cleanseISBN(isbn);
 		String aURI = "http://covers.openlibrary.org/b/ISBN/" + isbn + "-S.jpg";
 		try{
@@ -32,7 +34,9 @@ public class BookThumbnailService {
 	}
 	
 	public static InputStream checkGoogle(String isbn){
+		Log.d(TAG, "Google: "+isbn);
 		if(isbn == null)return null;
+		Log.d(TAG, "Searching GOOGLE");
 		isbn = cleanseISBN(isbn);
 		String aURI = "http://books.google.com/books?bibkeys=ISBN:" + isbn + "&jscmd=viewapi";
 		try{
@@ -46,6 +50,7 @@ public class BookThumbnailService {
 			j = j.get("ISBN:" + isbn).getAsJsonObject();
 			if(j.get("thumbnail_url") == null) return null;
 			inputURL = new URL(j.get("thumbnail_url").getAsString());
+			Log.d(TAG, "inputURL: "+inputURL);
 			return inputURL.openConnection().getInputStream();
 		}
 		catch (IOException e){
@@ -53,7 +58,6 @@ public class BookThumbnailService {
 			Log.e(TAG, aURI);
 		}
 		return null;
-		
 	}
 	
 	private static String cleanseISBN(String s){

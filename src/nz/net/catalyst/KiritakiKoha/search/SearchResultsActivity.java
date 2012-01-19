@@ -370,6 +370,7 @@ public class SearchResultsActivity extends Activity implements OnChildClickListe
 		        if(imageInput == null){
 		        	imageInput = BookThumbnailService.getThumbnail(rec.getISBN());
 		        }
+		        Log.d(TAG, "imageInput: "+imageInput);
 		        iv.setImageBitmap(BitmapFactory.decodeStream(imageInput));
 	        }
 	        
