@@ -9,6 +9,8 @@ public class Constants {
 	public static final int RESET = 5;
 	public static final int SCAN = 6;
 	public static final int MY_BOOKS = 7;
+	public static final int REFRESH = 8;
+	public static final int LOGOUT = 9;
 	
 	public static final String SEARCH_PUB_DATE_RANGE_PARAM = "limit-yr";
 	public static final String LIMIT_AVAILABLE = "limit=available";
