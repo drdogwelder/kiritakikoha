@@ -46,7 +46,6 @@ public class BookThumbnailService {
 			j = j.get("ISBN:" + isbn).getAsJsonObject();
 			if(j.get("thumbnail_url") == null) return null;
 			inputURL = new URL(j.get("thumbnail_url").getAsString());
-			Log.d(TAG, "SOMTHING" + j.get("thumbnail_url").getAsString());
 			return inputURL.openConnection().getInputStream();
 		}
 		catch (IOException e){
