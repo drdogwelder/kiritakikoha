@@ -54,6 +54,7 @@
         
         <activity android:name=".EditPreferences"
 			android:label="@string/menu_preferences" />
+        <activity android:name=".issuelist.IssueListActivity" android:label="@string/my_books"></activity>
 
     </application>
     <uses-sdk android:minSdkVersion="7" />

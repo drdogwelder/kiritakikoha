@@ -8,6 +8,7 @@ import nz.net.catalyst.KiritakiKoha.R;
 import nz.net.catalyst.KiritakiKoha.log.LogConfig;
 import android.app.Activity;
 import android.content.ActivityNotFoundException;
+import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
@@ -19,6 +20,7 @@ import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.LinearLayout;
 import android.widget.Spinner;
 import android.widget.Toast;
 
@@ -50,7 +52,68 @@ public class SearchFormActivity extends Activity implements OnClickListener  {
         // Set up click handlers for the text field and button
         ((Button) this.findViewById(R.id.btnSearchGo)).setOnClickListener(this);
     }
+    
+    public void addSearch(View v) {
+		LinearLayout first = (LinearLayout) this.findViewById(R.id.searchGroup2);
+		LinearLayout second = (LinearLayout) this.findViewById(R.id.searchGroup3);
+		if (first.getVisibility() == View.VISIBLE) {
+			second.setVisibility(View.VISIBLE);
+		}
+		if (first.getVisibility() == View.GONE) {
+			first.setVisibility(View.VISIBLE);
+		}
+		if (first.getVisibility() == View.VISIBLE && second.getVisibility() == View.VISIBLE) {
+			Context context = getApplicationContext();
+			CharSequence text = "Maximum Search Terms Reached";
+			int duration = Toast.LENGTH_SHORT;
+			Toast toast = Toast.makeText(context, text, duration);
+			toast.show();
+		}
+		else {
+				Context context = getApplicationContext();
+				CharSequence text = "Added Search Term";
+				int duration = Toast.LENGTH_SHORT;
+				Toast toast = Toast.makeText(context, text, duration);
+				toast.show();
+		}
+	}
+    
+    public void removeSearch(View v) {
+		LinearLayout first = (LinearLayout) this.findViewById(R.id.searchGroup2);
+		LinearLayout second = (LinearLayout) this.findViewById(R.id.searchGroup3);
+			if (first.getVisibility() == View.VISIBLE) {
+				first.setVisibility(View.GONE);
+			}
+			if (second.getVisibility() == View.VISIBLE) {
+			second.setVisibility(View.GONE);
+			}
+		Context context = getApplicationContext();
+		CharSequence text = "Reset Search Terms";
+		int duration = Toast.LENGTH_SHORT;
+		Toast toast = Toast.makeText(context, text, duration);
+		toast.show();
+		((Spinner) this.findViewById(R.id.andornot1)).setSelection(0);
+		((Spinner) this.findViewById(R.id.andornot2)).setSelection(0);
+		((Spinner) this.findViewById(R.id.spinner1)).setSelection(0);
+		((Spinner) this.findViewById(R.id.spinner2)).setSelection(0);
+		((Spinner) this.findViewById(R.id.spinner3)).setSelection(0);
+		((EditText) this.findViewById(R.id.searchTerms1)).setText("");
+		((EditText) this.findViewById(R.id.searchTerms2)).setText("");
+		((EditText) this.findViewById(R.id.searchTerms3)).setText("");
+    }
     public void onClick(View v) {
+    	//if (v.getId() == R.id.btnAddGroup) {
+    		//LinearLayout first = (LinearLayout) this.findViewById(R.id.searchGroup2);
+    		//if (first.getVisibility() == View.GONE) {
+    		//first.setVisibility(View.VISIBLE);
+    		//}
+    	//	Context context = getApplicationContext();
+    		//CharSequence text = "Hello toast!";
+    		//int duration = Toast.LENGTH_SHORT;
+
+    		//Toast toast = Toast.makeText(context, text, duration);
+    		//toast.show();
+    	//}
 		if (v.getId() == R.id.btnSearchGo) {			
 	        EditText mText;
 			int pos;
@@ -60,6 +123,7 @@ public class SearchFormActivity extends Activity implements OnClickListener  {
 			String[] av = getResources().getStringArray(R.array.search_options_arrayValues);
 			ArrayList<String> idxValues = new ArrayList<String>();
 			ArrayList<String> qValues = new ArrayList<String>();
+			ArrayList<String> opValues = new ArrayList<String>();
 			String pub_date_range;
 			
 			// allow for 3 fields - maybe make the form dynamic (auto new one if entering in one)
@@ -75,12 +139,16 @@ public class SearchFormActivity extends Activity implements OnClickListener  {
 	        if ( mText.getText().toString().trim().length() > 0 ) {
 				pos = ((Spinner) this.findViewById(R.id.spinner2)).getSelectedItemPosition();
 				idxValues.add(av[pos]);
+				String op = (String)((Spinner) this.findViewById(R.id.andornot1)).getSelectedItem();
+				opValues.add(op);
 				qValues.add(mText.getText().toString().trim());
 	        }
 	        mText = (EditText) this.findViewById(R.id.searchTerms3);
 	        if ( mText.getText().toString().trim().length() > 0 ) {
 				pos = ((Spinner) this.findViewById(R.id.spinner3)).getSelectedItemPosition();
 				idxValues.add(av[pos]);
+				String op = (String)((Spinner) this.findViewById(R.id.andornot2)).getSelectedItem();
+				opValues.add(op);
 				qValues.add(mText.getText().toString().trim());
 	        }
 	        //limit-yr=1999-2000
@@ -97,6 +165,7 @@ public class SearchFormActivity extends Activity implements OnClickListener  {
         		// Load up the search results intent
 		        Intent d = new Intent(this, SearchResultsActivity.class);
 				d.putStringArrayListExtra("idx", idxValues);
+				d.putStringArrayListExtra("op", opValues);
 				d.putStringArrayListExtra("q", qValues);
 				d.putExtra(Constants.SEARCH_PUB_DATE_RANGE_PARAM, pub_date_range);
 				

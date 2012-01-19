@@ -41,7 +41,5 @@
 							android:title="@string/pref_placehold_url_title" 
 							android:summary="@string/pref_placehold_url_summary"/>
 	</PreferenceCategory>
-	
-	
 			
 </PreferenceScreen>

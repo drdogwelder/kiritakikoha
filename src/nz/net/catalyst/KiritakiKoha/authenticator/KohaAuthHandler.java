@@ -62,6 +62,8 @@ public class KohaAuthHandler {
 	static final boolean DEBUG = LogConfig.isDebug(TAG);
 	// whether VERBOSE level logging is enabled
 	static final boolean VERBOSE = LogConfig.VERBOSE;
+	
+	static String auri = "";
 
     private static HttpClient mHttpClient;
 	
@@ -122,6 +124,8 @@ public class KohaAuthHandler {
 												context.getResources().getString(R.string.base_url).toString());
 		aURI = aURI + mPrefs.getString(context.getResources().getString(R.string.pref_login_url_key).toString(),
 				context.getResources().getString(R.string.login_url).toString());
+		
+		auri = aURI;
 		
 		// Auth post is ... koha_login_context=opac&userid=member&password=member1
 		// We're trying to send the koha_login_context as part of the post URL. 

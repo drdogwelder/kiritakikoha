@@ -1,5 +1,6 @@
 package nz.net.catalyst.KiritakiKoha;
 
+import nz.net.catalyst.KiritakiKoha.issuelist.IssueListActivity;
 import nz.net.catalyst.KiritakiKoha.log.LogConfig;
 import nz.net.catalyst.KiritakiKoha.search.SearchFormActivity;
 import android.app.Activity;
@@ -23,11 +24,13 @@ public class InfoActivity extends Activity {
         setContentView(R.layout.info);
     }
     
+    @Override
 	public boolean onCreateOptionsMenu(Menu menu) {
 		boolean result = super.onCreateOptionsMenu(menu);
 
 		menu.add(Menu.NONE, Constants.SEARCH, 1, R.string.menu_search).setIcon(android.R.drawable.ic_menu_search);
 		menu.add(Menu.NONE, Constants.PREFERENCES, 2, R.string.menu_preferences).setIcon(android.R.drawable.ic_menu_preferences);
+		menu.add(Menu.NONE, Constants.MY_BOOKS, 3, R.string.my_books).setIcon(android.R.drawable.ic_input_get);
 		return result;
 	}
 	public boolean onSearchRequested() {
@@ -43,6 +46,9 @@ public class InfoActivity extends Activity {
 				break;
 			case Constants.PREFERENCES:
 				startActivity(new Intent(this, EditPreferences.class));
+				break;
+			case Constants.MY_BOOKS:
+				startActivity(new Intent(this, IssueListActivity.class));
 				break;
 		}
 		return true;
