@@ -3,6 +3,8 @@ package nz.net.catalyst.KiritakiKoha.hold;
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
 
 import nz.net.catalyst.KiritakiKoha.Constants;
@@ -24,32 +26,106 @@ import org.apache.http.message.BasicNameValuePair;
 import android.accounts.Account;
 import android.accounts.AccountManager;
 import android.app.Activity;
+import android.app.DatePickerDialog;
+import android.app.Dialog;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.net.Uri;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
+import android.text.format.DateFormat;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Log;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
+import android.widget.CheckBox;
+import android.widget.DatePicker;
+import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
-public class PlaceHoldFormActivity extends Activity implements OnClickListener, TextWatcher {
+import nz.net.catalyst.KiritakiKoha.Constants;
+import nz.net.catalyst.KiritakiKoha.R;
+import nz.net.catalyst.KiritakiKoha.Record;
+import nz.net.catalyst.KiritakiKoha.log.LogConfig;
+import nz.net.catalyst.KiritakiKoha.authenticator.AuthenticatorActivity;
+import nz.net.catalyst.KiritakiKoha.authenticator.KohaAuthHandler;
+/*
+ * HoldTitle
+	Creates, for a patron, a title-level hold request on a given bibliographic record in Koha.
+
+	Parameters
+		patron_id (Required) - the ILS identifier for the patron for whom the request is placed
+		bib_id (Required)    - the ILS identifier for the bibliographic record on which the request is placed
+		request_location (Required) - IP address where the end user request is being placed
+		pickup_location (Required) - an identifier indicating the location to which to deliver the item for pickup
+		needed_before_date (Optional) - date after which hold request is no longer needed
+		pickup_expiry_date (Optional) - date after which item returned to shelf if item is not picked up
+
+
+ */
+
+public class PlaceHoldFormActivity extends Activity implements OnClickListener {
 	static final String TAG = LogConfig.getLogTag(PlaceHoldFormActivity.class);
 	// whether DEBUG level logging is enabled (whether globally, or explicitly for this log tag)
 	static final boolean DEBUG = LogConfig.isDebug(TAG);
 	// whether VERBOSE level logging is enabled
 	static final boolean VERBOSE = LogConfig.VERBOSE;
 	
+	private static final int BEFORE_DATE_DIALOG_ID=1;
+	private static final int EXPIRY_DATE_DIALOG_ID=2;
+	
 	// application preferences
 	private SharedPreferences mPrefs;
 	
 	private Record bib;
 	private Bundle m_extras;
+	
+    private int mBeforeYear;
+    private int mBeforeMonth;
+    private int mBeforeDay;
+    private int mExpiryYear;
+    private int mExpiryMonth;
+    private int mExpiryDay;
+	
+    // the callback received when the user "sets" the date in the dialog
+    private DatePickerDialog.OnDateSetListener mBeforeDateSetListener =
+            new DatePickerDialog.OnDateSetListener() {
+
+                public void onDateSet(DatePicker view, int year, 
+                                      int monthOfYear, int dayOfMonth) {
+
+                	mBeforeYear=year;
+                	mBeforeMonth=monthOfYear;
+                	mBeforeDay=dayOfMonth;
+                	
+                	//initialise the before date to today
+                    Calendar c = Calendar.getInstance();
+                    c.set(year, monthOfYear, dayOfMonth);
+                    
+                	updateBeforeDisplay(c.getTime());
+                }
+            };
+            
+            private DatePickerDialog.OnDateSetListener mExpiryDateSetListener =
+                    new DatePickerDialog.OnDateSetListener() {
+
+                        public void onDateSet(DatePicker view, int year, 
+                                              int monthOfYear, int dayOfMonth) {
+
+                        	mExpiryYear=year;
+                        	mExpiryMonth=monthOfYear;
+                        	mExpiryDay=dayOfMonth;
+                        	
+                        	//initialise the before date to today
+                            Calendar c = Calendar.getInstance();
+                            c.set(year, monthOfYear, dayOfMonth);
+                        	
+                            updateExpiryDisplay(c.getTime());
+                        }
+                    };
 	
     /** Called when the activity is first created. */
     @Override
@@ -72,10 +148,63 @@ public class PlaceHoldFormActivity extends Activity implements OnClickListener, 
         	return;
     	}
     	bib = m_extras.getParcelable("bib");
-
+    	        
+    	//initialise the before date to today
+        Calendar c = Calendar.getInstance();        
+        mBeforeYear = c.get(Calendar.YEAR);
+        mBeforeMonth = c.get(Calendar.MONTH);
+        mBeforeDay = c.get(Calendar.DAY_OF_MONTH);
+        
+        c.set(mBeforeYear, mBeforeMonth, mBeforeDay);    	
+        updateBeforeDisplay(c.getTime());
+        
+        //initialise the expiry date to today
+        mExpiryYear = c.get(Calendar.YEAR);
+        mExpiryMonth = c.get(Calendar.MONTH);
+        mExpiryDay = c.get(Calendar.DAY_OF_MONTH);
+        
+        c.set(mExpiryYear, mExpiryMonth, mExpiryDay);    	
+        updateExpiryDisplay(c.getTime());
+              
+        
         ((Button) this.findViewById(R.id.btnHoldGo)).setOnClickListener(this);
         ((TextView) this.findViewById(R.id.title)).setText(bib.getTitle());
-        ((TextView) this.findViewById(R.id.pickup_location)).addTextChangedListener(this);
+        
+        
+        final Button pickBeforeDate = (Button) this.findViewById(R.id.pickBeforeDate);
+        pickBeforeDate.setOnClickListener(this);     
+        final Button pickExpiryDate = (Button) this.findViewById(R.id.pickExpiryDate);
+        pickExpiryDate.setOnClickListener(this);
+        
+        
+    	final CheckBox beforeCheckbox = (CheckBox) findViewById(R.id.beforeCheckbox);
+    	beforeCheckbox.setOnClickListener(new OnClickListener() {
+    	    public void onClick(View v) {
+    	        // Perform action on clicks, depending on whether it's now checked
+    	        if (((CheckBox) v).isChecked()) {
+    	            pickBeforeDate.setEnabled(true);
+    	        } else {
+    	        	pickBeforeDate.setEnabled(false);
+    	        }
+    	    }
+    	   
+    	});
+    	
+    	final CheckBox expiryCheckbox = (CheckBox) findViewById(R.id.expiryCheckbox);
+    	expiryCheckbox.setOnClickListener(new OnClickListener() {
+    	    public void onClick(View v) {
+    	        // Perform action on clicks, depending on whether it's now checked
+    	        if (((CheckBox) v).isChecked()) {
+    	            pickExpiryDate.setEnabled(true);
+    	        } else {
+    	        	pickExpiryDate.setEnabled(false);
+    	        }
+    	    }
+    	});
+     
+    	EditText pickupLocation = (EditText) findViewById(R.id.pickupLocation);
+    	pickupLocation.setText(getBranch());
+    	
     }
     
 	public boolean onSearchRequested() {
@@ -130,7 +259,31 @@ public class PlaceHoldFormActivity extends Activity implements OnClickListener, 
 			if ( DEBUG ) Log.d(TAG, "Not logged in, can't place a hold");
 			startActivity(new Intent(this, AuthenticatorActivity.class));
 			return;
+			
+		}else if (v.getId() == R.id.pickBeforeDate){
+			showDialog(BEFORE_DATE_DIALOG_ID);
 		}
+		
+		else if (v.getId() == R.id.pickExpiryDate){
+			showDialog(EXPIRY_DATE_DIALOG_ID);
+		}
+	}
+	
+	@Override
+	protected Dialog onCreateDialog(int id) {
+	    switch (id) {
+	    case BEFORE_DATE_DIALOG_ID:
+	        return new DatePickerDialog(this,
+	                    mBeforeDateSetListener,
+	                    mBeforeYear, mBeforeMonth, mBeforeDay);
+	 	
+	    case EXPIRY_DATE_DIALOG_ID:
+	        return new DatePickerDialog(this,
+	                    mExpiryDateSetListener,
+	                    mExpiryYear, mExpiryMonth, mExpiryDay);
+	        
+	    }    
+	    return null;
 	}
 	
 	private int placeHold (String id, String session_key) {
@@ -143,7 +296,7 @@ public class PlaceHoldFormActivity extends Activity implements OnClickListener, 
 												getResources().getString(R.string.base_url).toString());
 		aURI = aURI + mPrefs.getString(getResources().getString(R.string.pref_placehold_url_key).toString(),
 				getResources().getString(R.string.placehold_url).toString());
-		String branch = mPrefs.getString(getResources().getString(R.string.pref_branch_key).toString(), "");
+		String branch = getBranch();
 		
 		aURI = aURI + "?biblionumber=" + Uri.encode(bib.getID());
 		
@@ -161,14 +314,33 @@ public class PlaceHoldFormActivity extends Activity implements OnClickListener, 
 		&reqtype_6=Any
 		&branch=WORK
 		*/
-		
+        
+        String reserveDate = ""+mBeforeDay +"/"+mBeforeMonth+"/"+mBeforeYear;
+        String expiryDate = ""+mExpiryDay+"/"+mExpiryMonth+"/"+mExpiryYear;
+        
+        boolean submitBefore = ((CheckBox)findViewById(R.id.beforeCheckbox)).isChecked();
+        boolean submitExpiry = ((CheckBox)findViewById(R.id.expiryCheckbox)).isChecked();
+        
         List<NameValuePair> nameValuePairs = new ArrayList<NameValuePair>(2);  
         nameValuePairs.add(new BasicNameValuePair("place_reserve", "1"));  
         nameValuePairs.add(new BasicNameValuePair("single_bib", bib.getID()));  
         nameValuePairs.add(new BasicNameValuePair("reserve_mode", "single"));  
         nameValuePairs.add(new BasicNameValuePair("reqtype", "Any")); 
+       
+        if (submitBefore) {
+        	nameValuePairs.add(new BasicNameValuePair("reserve_date_" + bib.getID(), reserveDate)); 
+        }
+        
+        if (submitExpiry) {
+        	nameValuePairs.add(new BasicNameValuePair("expiration_date_" + bib.getID(), expiryDate));
+        }
+        
+        
         if ( branch.length() > 0 )
-        	nameValuePairs.add(new BasicNameValuePair("branch", branch));  
+        	nameValuePairs.add(new BasicNameValuePair("branch", branch));
+        
+        if (DEBUG) Log.d(TAG, "Paremeters: " + nameValuePairs);
+        
         try {
 			post.setEntity(new UrlEncodedFormEntity(nameValuePairs));
 		} catch (UnsupportedEncodingException e) {
@@ -201,25 +373,30 @@ public class PlaceHoldFormActivity extends Activity implements OnClickListener, 
         return Constants.RESP_FAILED;
     }
 
-	@Override
-	public void afterTextChanged(Editable s) {
-		Button holdButton = (Button) this.findViewById(R.id.btnHoldGo);
-		if (s.length()>0) { 
-			holdButton.setEnabled(true); 
-		} else { 
-			holdButton.setEnabled(false);
+	private String getBranch() {
+		return mPrefs.getString(getResources().getString(R.string.pref_branch_key).toString(), "");
 			
-		}
+	}
+	
+	private void updateBeforeDisplay(Date dateToFormat){		
+		((Button) findViewById(R.id.pickBeforeDate)).setText(
+            new StringBuilder()
+                    // Month is 0 based so add 1
+                    .append(DateFormat.format("EE", dateToFormat)).append(", ")
+                    .append(mBeforeDay).append("/")
+                    .append(mBeforeMonth + 1).append("/")
+                    .append(mBeforeYear).append(" "));
+	}	
+	
+	private void updateExpiryDisplay(Date dateToFormat){		
+		((Button) findViewById(R.id.pickExpiryDate)).setText(
+            new StringBuilder()
+                    // Month is 0 based so add 1
+            		.append(DateFormat.format("EE", dateToFormat)).append(", ")
+                    .append(mExpiryDay).append("/")
+                    .append(mExpiryMonth + 1).append("/")
+                    .append(mExpiryYear).append(" "));
 	}
 
-	@Override
-	public void beforeTextChanged(CharSequence s, int start, int count,
-			int after) {
-	}
+} 
 
-	@Override
-	public void onTextChanged(CharSequence s, int start, int before, int count) {
-		// TODO Auto-generated method stub
-		
-	}
-}

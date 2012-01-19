@@ -60,11 +60,10 @@
     <string name="pref_search_url_summary">Enter the search URL components (will be appended to base URL).</string>
     <string name="search_url">opac-search.pl?format=rss2</string>
     <string name="search_inprogress">Searching ...</string>
-
     <string name="placeholdform">Place Hold</string>
-    <string name="pickup_location">Pickup location</string>
-    <string name="needed_before_date">Needed before date (optional)</string>
-    <string name="pickup_expiry_date">Pickup expiry date (optional)</string>
+    <string name="pickup_location">Pickup location:</string>
+    <string name="needed_before_date">Hold Starts on Date (optional):</string>
+    <string name="pickup_expiry_date">Hold Not Needed After (optional):</string>
     <string name="hold_form_go">Place hold</string>
     <string name="pref_placehold_url_key">placehold.url</string>
     <string name="pref_placehold_url_title">Place Hold URL</string>

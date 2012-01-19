@@ -7,7 +7,7 @@
 		<LinearLayout
 			  xmlns:android="http://schemas.android.com/apk/res/android"
 			  android:layout_width="fill_parent"
-			  android:layout_height="fill_parent"
+			  android:layout_height="wrap_content"
 			  android:orientation="vertical">
 
 					<TextView android:id="@+id/title"
@@ -22,44 +22,76 @@
 							  android:layout_width="fill_parent"
 							  android:singleLine="false"
 							  android:layout_height="wrap_content" />
-					<EditText android:text=""
-							  android:id="@+id/pickup_location"
-							  android:layout_width="fill_parent"
-							  android:singleLine="true"
-							  android:layout_height="wrap_content" />
+					
+					<EditText android:id="@+id/pickupLocation"
+					    	  android:inputType="text"
+					    	  android:enabled="false"
+	  		              	  android:layout_width="fill_parent"
+        					  android:layout_height="wrap_content" />
 							  
-					<TextView android:text="@string/needed_before_date"
-							  android:layout_width="fill_parent"
-							  android:singleLine="false"
-							  android:layout_height="wrap_content" />		
-					<EditText android:text=""
-							  android:id="@+id/needed_before_date"
-							  android:layout_width="fill_parent"
-							  android:singleLine="true"
-							  android:layout_height="wrap_content" 
-							  android:inputType="date"
-							  />
+					<TextView
+					    android:layout_width="fill_parent"
+					    android:layout_height="wrap_content"
+					    android:layout_marginTop="10dp"
+					    android:singleLine="false"
+					    android:text="@string/needed_before_date" />
 
-					<TextView android:text="@string/pickup_expiry_date"
-							  android:layout_width="fill_parent"
-							  android:singleLine="false"
-							  android:layout_height="wrap_content" />
-					<EditText android:text=""
-							  android:id="@+id/pickup_expiry_date"
-							  android:layout_width="fill_parent"
-							  android:singleLine="true"
-							  android:layout_height="wrap_content" 
-							  android:inputType="date"
-							  />
+		<LinearLayout
+		    xmlns:android="http://schemas.android.com/apk/res/android"
+		    android:layout_width="fill_parent"
+		    android:layout_height="wrap_content"
+		    android:orientation="horizontal" >
 
-				<Button
-				    android:id="@+id/btnHoldGo"
-				    android:layout_width="fill_parent"
-				    android:layout_height="wrap_content"
-				    android:layout_marginTop="10dp"
-				    android:layout_weight="1"
-				    android:enabled="False"
-				    android:text="@string/hold_form_go" />
+		    <Button
+		        android:id="@+id/pickBeforeDate"
+		        android:layout_width="wrap_content"
+		        android:layout_height="wrap_content"
+		        android:layout_weight="0.15"
+		        android:enabled="false" />
+
+		    <CheckBox
+		        android:id="@+id/beforeCheckbox"
+		        android:layout_width="wrap_content"
+		        android:layout_height="wrap_content"
+		        android:layout_marginTop="3dp" />
+
+		</LinearLayout>
+  		
+  					<TextView
+  					    android:layout_width="fill_parent"
+  					    android:layout_height="wrap_content"
+  					    android:layout_marginTop="20dp"
+  					    android:singleLine="false"
+  					    android:text="@string/pickup_expiry_date" />
+  		
+  		<LinearLayout
+  		    xmlns:android="http://schemas.android.com/apk/res/android"
+  		    android:layout_width="fill_parent"
+  		    android:layout_height="wrap_content"
+  		    android:orientation="horizontal" >
+
+  		    <Button
+  		        android:id="@+id/pickExpiryDate"
+  		        android:layout_width="wrap_content"
+  		        android:layout_height="wrap_content"
+  		        android:layout_weight="0.15"
+  		    	android:enabled="false" />
+
+  		    <CheckBox
+  		        android:id="@+id/expiryCheckbox"
+  		        android:layout_width="wrap_content"
+  		        android:layout_height="wrap_content"
+  		        android:layout_marginTop="3dp" />
+
+  		</LinearLayout>
+					
+				<Button android:text="@string/hold_form_go"
+						android:id="@+id/btnHoldGo"
+						android:layout_marginTop="20dp"
+						android:layout_weight="1"
+						android:layout_width="fill_parent"
+						android:layout_height="wrap_content"
+						/>
 								
 			</LinearLayout>
 </ScrollView>
