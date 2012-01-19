@@ -42,6 +42,7 @@ import android.view.View.OnClickListener;
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.DatePicker;
+import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -200,7 +201,10 @@ public class PlaceHoldFormActivity extends Activity implements OnClickListener {
     	        }
     	    }
     	});
-        
+     
+    	EditText pickupLocation = (EditText) findViewById(R.id.pickupLocation);
+    	pickupLocation.setText(getBranch());
+    	
     }
     
 	public boolean onSearchRequested() {
@@ -292,7 +296,7 @@ public class PlaceHoldFormActivity extends Activity implements OnClickListener {
 												getResources().getString(R.string.base_url).toString());
 		aURI = aURI + mPrefs.getString(getResources().getString(R.string.pref_placehold_url_key).toString(),
 				getResources().getString(R.string.placehold_url).toString());
-		String branch = mPrefs.getString(getResources().getString(R.string.pref_branch_key).toString(), "");
+		String branch = getBranch();
 		
 		aURI = aURI + "?biblionumber=" + Uri.encode(bib.getID());
 		
@@ -312,21 +316,30 @@ public class PlaceHoldFormActivity extends Activity implements OnClickListener {
 		*/
         
         String reserveDate = ""+mBeforeDay +"/"+mBeforeMonth+"/"+mBeforeYear;
-        String expiryDate = ""+mExpiryDay+"/"+mExpiryMonth+"/"+mExpiryYear;        
-      
-		
+        String expiryDate = ""+mExpiryDay+"/"+mExpiryMonth+"/"+mExpiryYear;
+        
+        boolean submitBefore = ((CheckBox)findViewById(R.id.beforeCheckbox)).isChecked();
+        boolean submitExpiry = ((CheckBox)findViewById(R.id.expiryCheckbox)).isChecked();
+        
         List<NameValuePair> nameValuePairs = new ArrayList<NameValuePair>(2);  
         nameValuePairs.add(new BasicNameValuePair("place_reserve", "1"));  
         nameValuePairs.add(new BasicNameValuePair("single_bib", bib.getID()));  
         nameValuePairs.add(new BasicNameValuePair("reserve_mode", "single"));  
         nameValuePairs.add(new BasicNameValuePair("reqtype", "Any")); 
-        nameValuePairs.add(new BasicNameValuePair("reserve_date"+bib.getID(), reserveDate)); 
-        nameValuePairs.add(new BasicNameValuePair("expiration_date"+bib.getID(), expiryDate)); 
+       
+        if (submitBefore) {
+        	nameValuePairs.add(new BasicNameValuePair("reserve_date_" + bib.getID(), reserveDate)); 
+        }
+        
+        if (submitExpiry) {
+        	nameValuePairs.add(new BasicNameValuePair("expiration_date_" + bib.getID(), expiryDate));
+        }
+        
+        
         if ( branch.length() > 0 )
         	nameValuePairs.add(new BasicNameValuePair("branch", branch));
         
-        Log.d(TAG, "Placing Hold, URL: " + aURI);
-        Log.d(TAG, "Paremeters: " + nameValuePairs);
+        if (DEBUG) Log.d(TAG, "Paremeters: " + nameValuePairs);
         
         try {
 			post.setEntity(new UrlEncodedFormEntity(nameValuePairs));
@@ -360,8 +373,13 @@ public class PlaceHoldFormActivity extends Activity implements OnClickListener {
         return Constants.RESP_FAILED;
     }
 
+	private String getBranch() {
+		return mPrefs.getString(getResources().getString(R.string.pref_branch_key).toString(), "");
+			
+	}
+	
 	private void updateBeforeDisplay(Date dateToFormat){		
-	((Button) findViewById(R.id.pickBeforeDate)).setText(
+		((Button) findViewById(R.id.pickBeforeDate)).setText(
             new StringBuilder()
                     // Month is 0 based so add 1
                     .append(DateFormat.format("EE", dateToFormat)).append(", ")
@@ -371,33 +389,14 @@ public class PlaceHoldFormActivity extends Activity implements OnClickListener {
 	}	
 	
 	private void updateExpiryDisplay(Date dateToFormat){		
-	((Button) findViewById(R.id.pickExpiryDate)).setText(
+		((Button) findViewById(R.id.pickExpiryDate)).setText(
             new StringBuilder()
                     // Month is 0 based so add 1
             		.append(DateFormat.format("EE", dateToFormat)).append(", ")
                     .append(mExpiryDay).append("/")
                     .append(mExpiryMonth + 1).append("/")
                     .append(mExpiryYear).append(" "));
-}
+	}
 
-	
-	//this sets the default date text on the date button
-//	private void updateDatesDisplay(Date dateToFormat){		
-//		((Button) findViewById(R.id.pickBeforeDate)).setText(
-//	            new StringBuilder()
-//	                    // Month is 0 based so add 1
-//	                    .append(DateFormat.format("EE", dateToFormat)).append(", ")
-//	                    .append(mBeforeDay).append("/")
-//	                    .append(mBeforeMonth + 1).append("/")
-//	                    .append(mBeforeYear).append(" "));
-//		
-//		((Button) findViewById(R.id.pickExpiryDate)).setText(
-//	            new StringBuilder()
-//	                    // Month is 0 based so add 1
-//	            		.append(DateFormat.format("EE", dateToFormat)).append(", ")
-//	                    .append(mExpiryDay).append("/")
-//	                    .append(mExpiryMonth + 1).append("/")
-//	                    .append(mExpiryYear).append(" "));
-//	}
 } 
 
