@@ -52,13 +52,14 @@
 							  android:inputType="date"
 							  />
 
-				<Button android:text="@string/hold_form_go"
-						android:id="@+id/btnHoldGo"
-						android:layout_marginTop="10dp"
-						android:layout_weight="1"
-						android:layout_width="fill_parent"
-						android:layout_height="wrap_content"
-						/>
+				<Button
+				    android:id="@+id/btnHoldGo"
+				    android:layout_width="fill_parent"
+				    android:layout_height="wrap_content"
+				    android:layout_marginTop="10dp"
+				    android:layout_weight="1"
+				    android:enabled="False"
+				    android:text="@string/hold_form_go" />
 								
 			</LinearLayout>
 </ScrollView>

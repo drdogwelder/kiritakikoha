@@ -6,6 +6,7 @@ import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.Iterator;
+import java.util.List;
 
 import nz.net.catalyst.KiritakiKoha.Constants;
 import nz.net.catalyst.KiritakiKoha.EditPreferences;
@@ -22,6 +23,7 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.BitmapFactory;
+import android.graphics.Color;
 import android.net.Uri;
 
 import android.os.Bundle;
@@ -31,7 +33,10 @@ import android.os.Parcelable;
 import android.preference.PreferenceManager;
 
 import android.text.Html;
+import android.text.SpannableString;
 import android.text.method.LinkMovementMethod;
+import android.text.style.BackgroundColorSpan;
+import android.text.style.ForegroundColorSpan;
 
 import android.util.Log;
 
@@ -62,6 +67,7 @@ public class SearchResultsActivity extends Activity implements OnChildClickListe
 
 	ArrayList<Record> items = new ArrayList<Record>();
 	private Bundle m_extras;
+	private List<String> searchTerms;
 
 	private Thread mSearchThread;
     private final Handler mHandler = new Handler();
@@ -100,7 +106,10 @@ public class SearchResultsActivity extends Activity implements OnChildClickListe
 		ArrayList<String> qValues = m_extras.getStringArrayList("q");
 		String pub_date_range = m_extras.getString(Constants.SEARCH_PUB_DATE_RANGE_PARAM);
 		
-    	if ( ! ( idxValues.size() > 0 && qValues.size() > 0 ) ) {
+		//Save search terms for later use.
+		searchTerms = qValues; 
+    	
+		if ( ! ( idxValues.size() > 0 && qValues.size() > 0 ) ) {
 			Toast.makeText(this, getString(R.string.search_no_search_terms), Toast.LENGTH_SHORT).show();
         	finish();
         	return;
@@ -346,8 +355,10 @@ public class SearchResultsActivity extends Activity implements OnChildClickListe
 	        }
 	        TextView tv;
 	        tv = (TextView) convertView.findViewById(R.id.title);
-	        tv.setText(rec.getTitle());
-
+	        SpannableString text = new SpannableString(rec.getTitle());
+	        highlightSearchTerms(text);
+	        tv.setText(text);
+	        
 	        tv = (TextView) convertView.findViewById(R.id.description);
 	        tv.setText(Html.fromHtml(rec.getDescription()));
 	        Log.d(TAG, "Decription= "+rec.getDescription());
@@ -401,9 +412,13 @@ public class SearchResultsActivity extends Activity implements OnChildClickListe
 	            convertView = infalInflater.inflate(R.layout.search_results_row, null);
 	        }
 	        TextView tv = (TextView) convertView.findViewById(R.id.title);
-	        tv.setText(group);
+	        SpannableString text = new SpannableString(group);
+	        highlightSearchTerms(text);
+	        tv.setText(text);
+
 	        return convertView;
 	    }
+	    
 
 	    @Override
 	    public boolean hasStableIds() {
@@ -425,6 +440,18 @@ public class SearchResultsActivity extends Activity implements OnChildClickListe
 			startActivity(intent);
 			
 			return true;
+		}
+		
+		private void highlightSearchTerms(SpannableString text) {
+			
+			for (String term : searchTerms) {
+				int start = text.toString().toLowerCase().indexOf(term.toLowerCase());
+				if (start >= 0) {
+				   text.setSpan(new ForegroundColorSpan(Color.BLACK), start, start+term.length(), 0);
+				   text.setSpan(new BackgroundColorSpan(Color.WHITE), start, start+term.length(), 0);
+				}
+				
+			}
 		}
 	}
 

@@ -29,6 +29,8 @@ import android.content.SharedPreferences;
 import android.net.Uri;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.util.Log;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -36,7 +38,7 @@ import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 
-public class PlaceHoldFormActivity extends Activity implements OnClickListener {
+public class PlaceHoldFormActivity extends Activity implements OnClickListener, TextWatcher {
 	static final String TAG = LogConfig.getLogTag(PlaceHoldFormActivity.class);
 	// whether DEBUG level logging is enabled (whether globally, or explicitly for this log tag)
 	static final boolean DEBUG = LogConfig.isDebug(TAG);
@@ -73,6 +75,7 @@ public class PlaceHoldFormActivity extends Activity implements OnClickListener {
 
         ((Button) this.findViewById(R.id.btnHoldGo)).setOnClickListener(this);
         ((TextView) this.findViewById(R.id.title)).setText(bib.getTitle());
+        ((TextView) this.findViewById(R.id.pickup_location)).addTextChangedListener(this);
     }
     
 	public boolean onSearchRequested() {
@@ -112,7 +115,7 @@ public class PlaceHoldFormActivity extends Activity implements OnClickListener {
 		            	String mAuthtoken = mAccountManager.peekAuthToken(a, Constants.AUTHTOKEN_TYPE);
 						mAccountManager.invalidateAuthToken(Constants.ACCOUNT_TYPE, mAuthtoken);
 		            	
-						if ( DEBUG ) Log.d(TAG, "Place fold failed - session expired");
+						if ( DEBUG ) Log.d(TAG, "Place hold failed - session expired");
 						break;
 					case Constants.RESP_FAILED:
 		            	Toast.makeText(this, "Sorry, place hold failed", Toast.LENGTH_SHORT).show();
@@ -197,4 +200,26 @@ public class PlaceHoldFormActivity extends Activity implements OnClickListener {
         }
         return Constants.RESP_FAILED;
     }
+
+	@Override
+	public void afterTextChanged(Editable s) {
+		Button holdButton = (Button) this.findViewById(R.id.btnHoldGo);
+		if (s.length()>0) { 
+			holdButton.setEnabled(true); 
+		} else { 
+			holdButton.setEnabled(false);
+			
+		}
+	}
+
+	@Override
+	public void beforeTextChanged(CharSequence s, int start, int count,
+			int after) {
+	}
+
+	@Override
+	public void onTextChanged(CharSequence s, int start, int before, int count) {
+		// TODO Auto-generated method stub
+		
+	}
 }
