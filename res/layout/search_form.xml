@@ -30,7 +30,7 @@
 			        android:layout_height="wrap_content"
 			        android:layout_weight="0.00"
 			        android:onClick="addSearch"
-			        android:text="Add"
+			        android:text="@string/add_button"
 			        android:textColor="#006600" />
 
 			</LinearLayout>
@@ -53,8 +53,8 @@
 				    android:layout_width="wrap_content"
 				    android:layout_height="wrap_content"
 				    android:layout_weight="1"
-				    android:text="Reset"
 				    android:onClick="removeSearch"
+				    android:text="@string/reset_button"
 				    android:textColor="#FF3300" />
 
 			</LinearLayout>
