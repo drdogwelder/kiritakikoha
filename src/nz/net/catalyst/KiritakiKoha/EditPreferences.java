@@ -146,7 +146,7 @@ public class EditPreferences extends PreferenceActivity implements OnSharedPrefe
 		//Kill Setting if there is not enough Data 
 		if(data.length < 5)
 		{
-			Toast.makeText(this, R.string.invalid_data_error, Toast.LENGTH_SHORT);
+			Toast.makeText(this, R.string.invalid_data_error, Toast.LENGTH_SHORT).show();
 			return false;
 		}
 		
