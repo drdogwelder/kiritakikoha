@@ -34,8 +34,6 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.text.format.DateFormat;
-import android.text.Editable;
-import android.text.TextWatcher;
 import android.util.Log;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -46,12 +44,6 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import nz.net.catalyst.KiritakiKoha.Constants;
-import nz.net.catalyst.KiritakiKoha.R;
-import nz.net.catalyst.KiritakiKoha.Record;
-import nz.net.catalyst.KiritakiKoha.log.LogConfig;
-import nz.net.catalyst.KiritakiKoha.authenticator.AuthenticatorActivity;
-import nz.net.catalyst.KiritakiKoha.authenticator.KohaAuthHandler;
 /*
  * HoldTitle
 	Creates, for a patron, a title-level hold request on a given bibliographic record in Koha.
