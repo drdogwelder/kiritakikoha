@@ -20,6 +20,7 @@ import org.xml.sax.SAXException;
 import org.xml.sax.XMLReader;
 import org.xml.sax.helpers.DefaultHandler;
 
+import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.Context;
@@ -146,7 +147,7 @@ public class EditPreferences extends PreferenceActivity implements OnSharedPrefe
 		//Kill Setting if there is not enough Data 
 		if(data.length < 5)
 		{
-			Toast.makeText(this, R.string.invalid_data_error, Toast.LENGTH_SHORT);
+			Toast.makeText(this, R.string.invalid_data_error, Toast.LENGTH_SHORT).show();
 			return false;
 		}
 		
@@ -165,7 +166,7 @@ public class EditPreferences extends PreferenceActivity implements OnSharedPrefe
 		return true;
 	}
 	
-	//Reads QR Data
+	//Reads QR Data	
 	public void onActivityResult(int requestCode, int resultCode, Intent intent) { 
 
 		
