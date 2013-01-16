@@ -1,8 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
-	    android:orientation="vertical"
-	    android:layout_width="fill_parent"
-		android:layout_height="fill_parent">
+    android:id="@string/username"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    android:orientation="vertical" >
 		
 		<LinearLayout
 			  xmlns:android="http://schemas.android.com/apk/res/android"
@@ -17,6 +18,12 @@
 							  android:layout_marginBottom="10dp"
 							  style="@android:style/TextAppearance.Medium"
 							  />
+
+					<Button
+					    android:id="@+id/buttonmoredetails"
+					    android:layout_width="match_parent"
+					    android:layout_height="wrap_content"
+					    android:text="View More Details" />
 
 					<TextView android:text="@string/pickup_location"
 							  android:layout_width="fill_parent"
@@ -42,12 +49,12 @@
 		    android:layout_height="wrap_content"
 		    android:orientation="horizontal" >
 
-		    <Button
-		        android:id="@+id/pickBeforeDate"
-		        android:layout_width="wrap_content"
-		        android:layout_height="wrap_content"
-		        android:layout_weight="0.15"
-		        android:enabled="false" />
+			<Button
+			    android:id="@+id/pickBeforeDate"
+			    android:layout_width="wrap_content"
+			    android:layout_height="wrap_content"
+			    android:layout_weight="0.15"
+			    android:enabled="false" />
 
 		    <CheckBox
 		        android:id="@+id/beforeCheckbox"
