@@ -46,16 +46,7 @@
 	</LinearLayout>
 	
 	    		
-    <TextView 
-    		android:id="@+id/lUsername"   
-			android:layout_width="wrap_content" 
-			android:singleLine="true" 
-			android:layout_height="wrap_content" 
-			android:textStyle="italic" 
-			android:layout_margin="2dp"
-			style="@android:style/TextAppearance.Large"
-			/>
-			  
+
 	<TextView
 	    android:layout_width="fill_parent"
 	    android:layout_height="wrap_content"
@@ -89,6 +80,16 @@
 	    android:layout_margin="5dp"
 	    android:singleLine="false"
 	    android:text="@string/koha_paragraph" />
+	
+	<Button
+		android:id="@+id/login_button"
+		android:text="Log-in"
+		android:layout_width="fill_parent"
+		android:layout_height="wrap_content"
+		android:layout_weight="1"
+		android:onClick="login"
+		>
+	</Button>
 
 </LinearLayout>
 </ScrollView>

@@ -8,6 +8,8 @@ import nz.net.catalyst.KiritakiKoha.InfoActivity;
 import nz.net.catalyst.KiritakiKoha.R;
 import nz.net.catalyst.KiritakiKoha.authenticator.AuthenticatorActivity;
 import nz.net.catalyst.KiritakiKoha.log.LogConfig;
+import android.accounts.Account;
+import android.accounts.AccountManager;
 import android.app.Activity;
 import android.content.ActivityNotFoundException;
 import android.content.Context;
@@ -44,6 +46,7 @@ public class SearchFormActivity extends Activity implements OnClickListener  {
         	Toast.makeText(this, getResources().getString(R.string.scan_not_available), Toast.LENGTH_SHORT).show();
 	    }
 	}
+	
 
     /** Called when the activity is first created. */
     @Override
@@ -72,6 +75,8 @@ public class SearchFormActivity extends Activity implements OnClickListener  {
 
     
     }
+    
+
     
     public void addSearch(View v) {
 		LinearLayout first = (LinearLayout) this.findViewById(R.id.searchGroup2);
@@ -192,8 +197,8 @@ public class SearchFormActivity extends Activity implements OnClickListener  {
 				if ( mPrefs.getBoolean(getResources().getString(R.string.pref_limit_available_key).toString(), false) ) 
 					d.putExtra(Constants.LIMIT_AVAILABLE,	"something-non-empty");
 				startActivity(d);
-        	}
-		}
+        	}}
+        	
 	}
 
 	public boolean onSearchRequested() {

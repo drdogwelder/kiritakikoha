@@ -9,6 +9,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
 import android.widget.EditText;
 import android.widget.TextView;
 
@@ -25,25 +26,17 @@ public class InfoActivity extends Activity {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.info);
-        setUserString();
+       
 
     }
     
-    public void setUserString() {
-    	
-    	String user = AuthenticatorActivity.getUserName();
-    	TextView UserID = (TextView) findViewById(R.id.lUsername);
-    	
-    	if (user==null){
-    		UserID.setText("You are not logged in");
-    	}
-    	else {
-        
-        UserID.setText("You are logged in as " + user);
-    	}
-
-    
+    /** Called when the user clicks the login button */
+    public void login(View view) {
+    	Intent intent = new Intent(this, AuthenticatorActivity.class);
+    	startActivity(intent);
     }
+    
+
     
     		
     

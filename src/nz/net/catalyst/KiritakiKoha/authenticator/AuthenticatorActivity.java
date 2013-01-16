@@ -104,7 +104,13 @@ public class AuthenticatorActivity extends AccountAuthenticatorActivity implemen
         mMessage.setText(getMessage());
         
         ((Button) this.findViewById(R.id.btnLoginGo)).setOnClickListener(this);
+        
+
     }
+    
+
+    
+    
 
     /*
      * {@inheritDoc}
@@ -225,6 +231,7 @@ public class AuthenticatorActivity extends AccountAuthenticatorActivity implemen
         if (authToken != null) {
             if (!mConfirmCredentials) {
                 finishLogin();
+            	Toast.makeText(this, "Logged in", Toast.LENGTH_LONG).show();
             } else {
                 finishConfirmCredentials(true);
             }
@@ -267,7 +274,7 @@ public class AuthenticatorActivity extends AccountAuthenticatorActivity implemen
         return null;
     }
     
-    public void isAuthenctiated() {
+    public void isAuthenticated() {
     	
     }
 
