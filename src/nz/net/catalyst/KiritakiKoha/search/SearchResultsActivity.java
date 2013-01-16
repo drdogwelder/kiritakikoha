@@ -47,6 +47,7 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import android.widget.BaseExpandableListAdapter;
+import android.widget.EditText;
 import android.widget.ExpandableListView;
 import android.widget.ExpandableListView.OnChildClickListener;
 import android.widget.ExpandableListView.OnGroupExpandListener;
@@ -83,6 +84,8 @@ public class SearchResultsActivity extends Activity implements OnChildClickListe
         
         mPrefs = PreferenceManager.getDefaultSharedPreferences(this);
         
+
+
         setContentView(R.layout.search_results);
         listview = (ExpandableListView) findViewById(R.id.listView);
         listview.setOnChildClickListener(this);
@@ -154,6 +157,10 @@ public class SearchResultsActivity extends Activity implements OnChildClickListe
         showProgress();
         // Start search
         mSearchThread =	runSearch(mURL, listview, mHandler, this);
+        
+        String branchname = mPrefs.getString(getResources().getString(R.string.pref_branch_key).toString(), "");
+        ((TextView) findViewById(R.id.resultdefaultlibrary)).setText(branchname);
+
 	}
     public static Thread performOnBackgroundThread(final Runnable runnable) {
         final Thread t = new Thread() {
@@ -201,6 +208,7 @@ public class SearchResultsActivity extends Activity implements OnChildClickListe
                 ((SearchResultsActivity) context).onSearchResult(result, listview);
             }
         });
+   
     }
     /*
      * {@inheritDoc}

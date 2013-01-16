@@ -11,18 +11,28 @@
 			  android:orientation="vertical"
 		  >
 
+			<TextView
+			    android:id="@+id/defaultlibrary"
+			    android:layout_width="match_parent"
+			    android:layout_height="wrap_content"
+			    android:text="Default library" 
+			    android:textColor="#000000"
+			    android:background="#D1D1D1"
+			    
+			    />
+
 			<LinearLayout
 			    android:layout_width="fill_parent"
 			    android:layout_height="wrap_content"
 			    android:orientation="horizontal" >
 
-			    <Spinner
-			        android:id="@+id/spinner1"
-			        android:layout_width="250dp"
-			        android:layout_height="wrap_content"
-			        android:entries="@array/search_options_array"
-			        android:entryValues="@array/search_options_arrayValues"
-			        android:prompt="@string/search_options_prompt" />
+				<Spinner
+				    android:id="@+id/spinner1"
+				    android:layout_width="250dp"
+				    android:layout_height="wrap_content"
+				    android:entries="@array/search_options_array"
+				    android:entryValues="@array/search_options_arrayValues"
+				    android:prompt="@string/search_options_prompt" />
 
 			    <Button
 			        android:id="@+id/btnAddGroup"
@@ -153,14 +163,13 @@
 							  android:singleLine="true"
 							  android:layout_height="wrap_content" />
 							  
-					
-				<Button android:text="@string/search_form_go"
-						android:id="@+id/btnSearchGo"
-						android:layout_weight="1"
-						android:layout_width="fill_parent"
-						android:layout_height="wrap_content"
-						android:layout_marginTop="10dp"
-						>
+				<Button
+				    android:id="@+id/btnSearchGo"
+				    android:layout_width="match_parent"
+				    android:layout_height="wrap_content"
+				    android:layout_marginTop="10dp"
+				    android:text="@string/search_form_go" >
+
 				</Button>
 								
 			</LinearLayout>

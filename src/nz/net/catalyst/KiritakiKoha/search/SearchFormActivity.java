@@ -22,6 +22,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.Spinner;
+import android.widget.TextView;
 import android.widget.Toast;
 
 public class SearchFormActivity extends Activity implements OnClickListener  {
@@ -41,6 +42,7 @@ public class SearchFormActivity extends Activity implements OnClickListener  {
         	Toast.makeText(this, getResources().getString(R.string.scan_not_available), Toast.LENGTH_SHORT).show();
 	    }
 	}
+	
 
     /** Called when the activity is first created. */
     @Override
@@ -51,6 +53,12 @@ public class SearchFormActivity extends Activity implements OnClickListener  {
         
         // Set up click handlers for the text field and button
         ((Button) this.findViewById(R.id.btnSearchGo)).setOnClickListener(this);
+        
+        SharedPreferences mPrefs = PreferenceManager.getDefaultSharedPreferences(this);
+
+        
+        String branchname = mPrefs.getString(getResources().getString(R.string.pref_branch_key).toString(), "");
+        ((TextView) findViewById(R.id.defaultlibrary)).setText(branchname);
     }
     
     public void addSearch(View v) {
@@ -180,6 +188,7 @@ public class SearchFormActivity extends Activity implements OnClickListener  {
 		initiateScan();
 		return true;
 	}
+	
 	
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
