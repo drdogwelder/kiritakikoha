@@ -3,7 +3,9 @@
       package="nz.net.catalyst.KiritakiKoha"
       android:versionCode="8"
       android:versionName="1.7">
-    <application android:icon="@drawable/icon" android:label="@string/label" android:debuggable="true">
+    <application android:icon="@drawable/icon" 
+        		 android:label="@string/label" 
+        		 android:allowBackup="true">
 	    <service android:name=".authenticator.AccountAuthenticatorService"
 	    		android:exported="true">
 	    	<intent-filter>

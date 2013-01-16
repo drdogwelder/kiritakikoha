@@ -10,8 +10,8 @@ import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.EditText;
-import android.widget.TextView;
+import android.view.View.OnClickListener;
+import android.widget.Button;
 
 public class InfoActivity extends Activity {
 	static final String TAG = LogConfig.getLogTag(InfoActivity.class);
@@ -22,24 +22,29 @@ public class InfoActivity extends Activity {
 	static final boolean VERBOSE = LogConfig.VERBOSE;
 	
     /** Called when the activity is first created. */
-    @Override
-    public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.info);
-       
+	@Override
+	public void onCreate(Bundle savedInstanceState) {
+		super.onCreate(savedInstanceState);
+		setContentView(R.layout.info);
 
-    }
-    
+		Button searchbutton =(Button) findViewById(R.id.searchbutton);
+		searchbutton.setOnClickListener(new OnClickListener() 
+		{
+			@Override
+			public void onClick(View v) {
+				Intent intent = new Intent(InfoActivity.this, SearchFormActivity.class);
+				InfoActivity.this.startActivity(intent);
+
+			}
+		})   ;    
+	}
+
     /** Called when the user clicks the login button */
     public void login(View view) {
     	Intent intent = new Intent(this, AuthenticatorActivity.class);
     	startActivity(intent);
     }
-    
-
-    
-    		
-    
+   
     @Override
 	public boolean onCreateOptionsMenu(Menu menu) {
 		boolean result = super.onCreateOptionsMenu(menu);
