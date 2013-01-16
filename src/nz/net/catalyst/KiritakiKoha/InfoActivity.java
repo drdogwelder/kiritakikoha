@@ -20,13 +20,15 @@ public class InfoActivity extends Activity {
 	static final boolean DEBUG = LogConfig.isDebug(TAG);
 	// whether VERBOSE level logging is enabled
 	static final boolean VERBOSE = LogConfig.VERBOSE;
+
 	
-    /** Called when the activity is first created. */
+	/** Called when the activity is first created. */
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.info);
 
+		/** Search button**/
 		Button searchbutton =(Button) findViewById(R.id.searchbutton);
 		searchbutton.setOnClickListener(new OnClickListener() 
 		{
@@ -34,18 +36,27 @@ public class InfoActivity extends Activity {
 			public void onClick(View v) {
 				Intent intent = new Intent(InfoActivity.this, SearchFormActivity.class);
 				InfoActivity.this.startActivity(intent);
-
 			}
-		})   ;    
+		})   ; 
+		/** My Books button**/
+		Button mybooksbutton =(Button) findViewById(R.id.mybooksbutton);
+		mybooksbutton.setOnClickListener(new OnClickListener() 
+		{
+
+			@Override
+			public void onClick(View v) {
+				Intent intent = new Intent(InfoActivity.this, IssueListActivity.class);
+				InfoActivity.this.startActivity(intent);
+			}
+		}) ;}
+
+	/** Called when the user clicks the login button */
+	public void login(View view) {
+		Intent intent = new Intent(this, AuthenticatorActivity.class);
+		startActivity(intent);
 	}
 
-    /** Called when the user clicks the login button */
-    public void login(View view) {
-    	Intent intent = new Intent(this, AuthenticatorActivity.class);
-    	startActivity(intent);
-    }
-   
-    @Override
+	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
 		boolean result = super.onCreateOptionsMenu(menu);
 
@@ -62,15 +73,15 @@ public class InfoActivity extends Activity {
 	public boolean onOptionsItemSelected(MenuItem item) {
 
 		switch (item.getItemId()) {
-			case Constants.SEARCH:
-				startActivity(new Intent(this, SearchFormActivity.class));
-				break;
-			case Constants.PREFERENCES:
-				startActivity(new Intent(this, EditPreferences.class));
-				break;
-			case Constants.MY_BOOKS:
-				startActivity(new Intent(this, IssueListActivity.class));
-				break;
+		case Constants.SEARCH:
+			startActivity(new Intent(this, SearchFormActivity.class));
+			break;
+		case Constants.PREFERENCES:
+			startActivity(new Intent(this, EditPreferences.class));
+			break;
+		case Constants.MY_BOOKS:
+			startActivity(new Intent(this, IssueListActivity.class));
+			break;
 		}
 		return true;
 	}
