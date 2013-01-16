@@ -1,5 +1,6 @@
 package nz.net.catalyst.KiritakiKoha;
 
+import nz.net.catalyst.KiritakiKoha.authenticator.AuthenticatorActivity;
 import nz.net.catalyst.KiritakiKoha.issuelist.IssueListActivity;
 import nz.net.catalyst.KiritakiKoha.log.LogConfig;
 import nz.net.catalyst.KiritakiKoha.search.SearchFormActivity;
@@ -8,6 +9,8 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.EditText;
+import android.widget.TextView;
 
 public class InfoActivity extends Activity {
 	static final String TAG = LogConfig.getLogTag(InfoActivity.class);
@@ -22,7 +25,27 @@ public class InfoActivity extends Activity {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.info);
+        setUserString();
+
     }
+    
+    public void setUserString() {
+    	
+    	String user = AuthenticatorActivity.getUserName();
+    	TextView UserID = (TextView) findViewById(R.id.lUsername);
+    	
+    	if (user==null){
+    		UserID.setText("You are not logged in");
+    	}
+    	else {
+        
+        UserID.setText("You are logged in as " + user);
+    	}
+
+    
+    }
+    
+    		
     
     @Override
 	public boolean onCreateOptionsMenu(Menu menu) {

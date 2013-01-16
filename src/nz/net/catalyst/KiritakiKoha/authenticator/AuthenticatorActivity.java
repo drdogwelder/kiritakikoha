@@ -69,9 +69,13 @@ public class AuthenticatorActivity extends AccountAuthenticatorActivity implemen
     /** Was the original caller asking for an entirely new account? */
     protected boolean mRequestNewAccount = false;
 
-    private String mUsername;
+    private static String mUsername;
     private EditText mUsernameEdit;
 
+    public static String getUserName(){
+    	return (mUsername);
+    }
+    
     /**
      * {@inheritDoc}
      */

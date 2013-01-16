@@ -9,6 +9,9 @@
     android:layout_height="wrap_content"
     android:padding="2dip"
     >			
+    
+    
+   
 
 	<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
 	    android:orientation="horizontal"
@@ -17,7 +20,8 @@
 	    android:gravity="center_vertical"
 	    android:padding="2dip"
 	    >			
-    
+
+	    
     	<ImageView
 			android:id="@+id/icon"
 			android:layout_width="wrap_content"
@@ -25,16 +29,32 @@
 			android:layout_margin="5dp"
 			android:src="@drawable/icon"
 		/>
-    
-	<TextView android:text="Kiritaki Koha"
-			  android:layout_width="wrap_content" 
-			  android:singleLine="false" 
-			  android:layout_height="wrap_content" 
-			  android:textStyle="bold" 
-				android:layout_margin="5dp"
-				style="@android:style/TextAppearance.Large"
-			  />
+    		
+
+    	
+
+
+	<TextView 
+	    	android:text="Kiritaki Koha"
+			android:layout_width="wrap_content" 
+			android:singleLine="false" 
+			android:layout_height="wrap_content" 
+			android:textStyle="bold" 
+			android:layout_margin="5dp"
+			style="@android:style/TextAppearance.Large"
+		/>
 	</LinearLayout>
+	
+	    		
+    <TextView 
+    		android:id="@+id/lUsername"   
+			android:layout_width="wrap_content" 
+			android:singleLine="true" 
+			android:layout_height="wrap_content" 
+			android:textStyle="italic" 
+			android:layout_margin="2dp"
+			style="@android:style/TextAppearance.Large"
+			/>
 			  
 	<TextView android:text="kiritaki - (noun) client, customer, consumer."
 			  android:layout_width="fill_parent" 
