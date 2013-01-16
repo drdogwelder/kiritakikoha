@@ -11,6 +11,9 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.EditText;
 import android.widget.TextView;
+import android.view.View;
+import android.view.View.OnClickListener;
+import android.widget.Button;
 
 public class InfoActivity extends Activity {
 	static final String TAG = LogConfig.getLogTag(InfoActivity.class);
@@ -26,9 +29,18 @@ public class InfoActivity extends Activity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.info);
         setUserString();
+    Button searchbutton =(Button) findViewById(R.id.searchbutton);
+    searchbutton.setOnClickListener(new OnClickListener() 
+    {
 
-    }
-    
+		@Override
+		public void onClick(View v) {
+			Intent intent = new Intent(InfoActivity.this, SearchFormActivity.class);
+			InfoActivity.this.startActivity(intent);
+
+		}
+	})   ; }
+
     public void setUserString() {
     	
     	String user = AuthenticatorActivity.getUserName();
@@ -44,6 +56,7 @@ public class InfoActivity extends Activity {
 
     
     }
+
     
     		
     
