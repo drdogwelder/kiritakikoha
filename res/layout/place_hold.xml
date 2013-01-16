@@ -51,18 +51,16 @@
 		    android:layout_height="wrap_content"
 		    android:orientation="horizontal" >
 
-		    <Button
-		        android:id="@+id/pickBeforeDate"
-		        android:layout_width="wrap_content"
-		        android:layout_height="wrap_content"
-		        android:layout_weight="0.15"
-		        android:enabled="false" />
+			<DatePicker
+			    android:id="@+id/pickBeforeDate"
+			    android:layout_width="wrap_content"
+			    android:layout_height="wrap_content" />
 
-		    <CheckBox
-		        android:id="@+id/beforeCheckbox"
-		        android:layout_width="wrap_content"
-		        android:layout_height="wrap_content"
-		        android:layout_marginTop="3dp" />
+			<CheckBox
+			    android:id="@+id/beforeCheckbox"
+			    android:layout_width="wrap_content"
+			    android:layout_height="match_parent"
+			    android:layout_marginTop="3dp" />
 
 		</LinearLayout>
   		
@@ -79,28 +77,26 @@
   		    android:layout_height="wrap_content"
   		    android:orientation="horizontal" >
 
-  		    <Button
-  		        android:id="@+id/pickExpiryDate"
-  		        android:layout_width="wrap_content"
-  		        android:layout_height="wrap_content"
-  		        android:layout_weight="0.15"
-  		    	android:enabled="false" />
+  			<DatePicker
+  			    android:id="@+id/pickExpiryDate"
+  			    android:layout_width="wrap_content"
+  			    android:layout_height="wrap_content" />
 
   		    <CheckBox
   		        android:id="@+id/expiryCheckbox"
   		        android:layout_width="wrap_content"
-  		        android:layout_height="wrap_content"
+  		        android:layout_height="match_parent"
   		        android:layout_marginTop="3dp" />
 
   		</LinearLayout>
 					
-				<Button android:text="@string/hold_form_go"
-						android:id="@+id/btnHoldGo"
-						android:layout_marginTop="20dp"
-						android:layout_weight="1"
-						android:layout_width="fill_parent"
-						android:layout_height="wrap_content"
-						/>
+				<Button
+				    android:id="@+id/btnHoldGo"
+				    android:layout_width="315dp"
+				    android:layout_height="0dp"
+				    android:layout_marginTop="20dp"
+				    android:layout_weight="1.62"
+				    android:text="@string/hold_form_go" />
 								
 			</LinearLayout>
 </ScrollView>

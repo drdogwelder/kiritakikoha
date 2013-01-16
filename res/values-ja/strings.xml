@@ -1,0 +1,111 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="intro_line1">Kiritaki-(名詞)　顧客、消費者</string>
+    <string name="intro_line2">Koha-(名詞)　ギフト、寄付</string>
+    <string name="koha_paragraph">Kohaは一番最初のオープンソース図書館の自動化ソフトウエアです。このディベロプメントは世界中のいろいろなタイプやサイズの図書館、ボランティアそしてサポート会社によって支援されています。</string>
+    
+    <string name="searchresults">検索結果</string>
+    <string name="itemdetails">細目</string>
+    
+    <string name="menu_preferences">設定</string>
+    <string name="menu_search">検索</string>
+    <string name="menu_info">情報</string>
+    <string name="menu_login">ログイン</string>
+    <string name="menu_logout">ログアウト</string>
+    <string name="menu_reset">リセット</string>
+    <string name="menu_scan">スキャン</string>
+    
+    <string name="prefcat_advanced">上級設定</string>
+    <string name="prefcat_debug">デバッギング</string>
+    
+    <string name="pref_base_url_title">基礎URL</string>
+    <string name="pref_base_url_summary"></string>
+
+    <string name="pref_login_url_title">ログインURL</string>
+    <string name="pref_login_url_summary"></string>
+    
+    <string name="add_button">加える</string>
+    <string name="reset_button">リセット</string>
+    <string name="searchform">図書館検索</string>
+    <string name="search_options_prompt">検索によって</string>
+    <string-array name="search_options_array">
+        <item>キーワード</item>
+        <item>主題</item>
+        <item>タイトル</item>
+        <item>作者</item>
+        <item>出版社</item>
+        <item>出版社住所</item>
+        <item>ISBN</item>
+    </string-array>
+    
+    <string-array name="searchLogicOperators">
+        <item>と</item>
+        <item>又は</item>
+        <item>しない</item>
+    </string-array>
+    
+    <string name="search_pub_date_range">出版日</string>
+    <string name="pref_search_url_title">検索URL</string>
+    <string name="pref_search_url_summary"></string>
+    <string name="search_inprogress">検索</string>
+    <string name="search_form_go">検索</string>
+    <string name="placeholdform">予約</string>
+    <string name="pickup_location">受け取り場所:</string>
+    <string name="needed_before_date">予約開始日　(選択):</string>
+    <string name="pickup_expiry_date">予約破棄日　(選択):</string>
+    <string name="hold_form_go">予約</string>
+    <string name="pref_placehold_url_title">予約 URL</string>
+    <string name="pref_placehold_url_summary"></string>
+    
+    <string name="pref_hold_via_web_title">ウェブページから予約</string>
+    <string name="pref_hold_via_web_summary"></string>
+    
+    <string name="pref_branch_title">図書館支店</string>
+    <string name="pref_branch_summary"></string>
+    
+    <string name="pref_limit_available_title">入手可能なアイテムのみ</string>
+    <string name="pref_limit_available_summary"></string>
+    
+    <string name="login">ログイン</string>
+    <string name="login_username">ログイン:</string>
+    <string name="username"></string>
+    
+    <string name="login_password">パスワード:</string>
+    <string name="login_submit">提出する</string>
+    <string name="login_message">ログインしてください</string>
+    <string name="login_authenticating">認証</string>
+    <string name="only_one_account">現在のところ唯一の任意の一時点で、最大で1つのアカウントを持っているかもしれません。</string>
+    
+    <!--  Error strings -->
+    <string name="search_bad_request">申し訳ありませんが、不正な要求！</string>
+    <string name="search_url_invalid">入力したURLが無効です。</string>
+    <string name="search_connection_failure">申し訳ありませんが、検索は、接続の問題が原因で失敗しました</string>
+    <string name="search_no_results">申し訳ありませんが検索は結果はありません</string>
+    <string name="search_no_search_terms">申し訳ありませんが、検索語が入力されていません</string>
+        
+    <string name="login_no_name">ログインしてください</string>
+    <string name="login_no_password">パスワードを入力してください</string>
+    <string name="auth_result_no_connection">サーバーのアドレスまたはポート数が間違っ</string>
+    <string name="auth_result_success">認証が成功!</string>
+    <string name="auth_result_fail">認証に失敗しました。</string>
+  
+    <string name="place_hold_not_logged_in">あなたがログインするまで書き込みは保留することはできません</string>
+    <string name="place_hold_on_nothing">申し訳ありませんがご要望に問題があった</string>
+
+    <string name="load_config_download_error">申し訳ありませんが、コンフィギュレーション·ファイルのダウンロードエラーが発生しました</string>
+    <string name="load_config_error">申し訳ありませんがコンフィギュレーション·ファイルの解析エラーが発生しました。</string>
+    <string name="load_config_success">成功裏にコンフィギュレーションファイルをロードしました。</string>
+    <string name="scan_not_available">申し訳ありませんが、このためにバーコードスキャナをZXingインストールする必要があります。</string>
+    <string name="cover_dec">カバー</string>
+    <string name="pref_show_image_title">イメージ検索</string>
+    <string name="pref_show_image_summary"></string>
+    <string name="pref_limit_items_title">オープンアイテムを制限する</string>
+    <string name="pref_limit_items_summary"></string>
+    <string name="invalid_data_error">見つかったデータは短すぎた</string>
+    <string name="my_books">私の本</string>
+    <string name="ils_disabled_error">申し訳ありませんが、あなたのコハ、その操作を許可しない</string>
+    <string name="book_list_load_error">私の本のロード中にエラー</string>
+    <string name="menu_refresh">リフレッシュ</string>    
+    
+    
+</resources>
