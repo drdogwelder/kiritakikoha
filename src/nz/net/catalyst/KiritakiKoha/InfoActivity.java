@@ -22,6 +22,7 @@ public class InfoActivity extends Activity {
 	static final boolean DEBUG = LogConfig.isDebug(TAG);
 	// whether VERBOSE level logging is enabled
 	static final boolean VERBOSE = LogConfig.VERBOSE;
+
 	
     /** Called when the activity is first created. */
     @Override
@@ -29,6 +30,8 @@ public class InfoActivity extends Activity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.info);
         setUserString();
+    
+    /** Search button**/
     Button searchbutton =(Button) findViewById(R.id.searchbutton);
     searchbutton.setOnClickListener(new OnClickListener() 
     {
@@ -39,7 +42,18 @@ public class InfoActivity extends Activity {
 			InfoActivity.this.startActivity(intent);
 
 		}
-	})   ; }
+	})   ; 
+    /** My Books button**/
+    Button mybooksbutton =(Button) findViewById(R.id.mybooksbutton);
+    mybooksbutton.setOnClickListener(new OnClickListener() 
+    {
+
+		@Override
+		public void onClick(View v) {
+			Intent intent = new Intent(InfoActivity.this, IssueListActivity.class);
+			InfoActivity.this.startActivity(intent);
+    }
+    }) ;}
 
     public void setUserString() {
     	
