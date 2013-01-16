@@ -4,7 +4,6 @@ import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
 import java.util.Calendar;
-import java.util.Date;
 import java.util.List;
 
 import nz.net.catalyst.KiritakiKoha.Constants;
@@ -26,16 +25,11 @@ import org.apache.http.message.BasicNameValuePair;
 import android.accounts.Account;
 import android.accounts.AccountManager;
 import android.app.Activity;
-import android.app.DatePickerDialog;
-import android.app.Dialog;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.net.Uri;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
-import android.text.format.DateFormat;
-import android.text.Editable;
-import android.text.TextWatcher;
 import android.util.Log;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -46,12 +40,6 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import nz.net.catalyst.KiritakiKoha.Constants;
-import nz.net.catalyst.KiritakiKoha.R;
-import nz.net.catalyst.KiritakiKoha.Record;
-import nz.net.catalyst.KiritakiKoha.log.LogConfig;
-import nz.net.catalyst.KiritakiKoha.authenticator.AuthenticatorActivity;
-import nz.net.catalyst.KiritakiKoha.authenticator.KohaAuthHandler;
 /*
  * HoldTitle
 	Creates, for a patron, a title-level hold request on a given bibliographic record in Koha.
@@ -83,50 +71,6 @@ public class PlaceHoldFormActivity extends Activity implements OnClickListener {
 	private Record bib;
 	private Bundle m_extras;
 	
-    private int mBeforeYear;
-    private int mBeforeMonth;
-    private int mBeforeDay;
-    private int mExpiryYear;
-    private int mExpiryMonth;
-    private int mExpiryDay;
-	
-    // the callback received when the user "sets" the date in the dialog
-    private DatePickerDialog.OnDateSetListener mBeforeDateSetListener =
-            new DatePickerDialog.OnDateSetListener() {
-
-                public void onDateSet(DatePicker view, int year, 
-                                      int monthOfYear, int dayOfMonth) {
-
-                	mBeforeYear=year;
-                	mBeforeMonth=monthOfYear;
-                	mBeforeDay=dayOfMonth;
-                	
-                	//initialise the before date to today
-                    Calendar c = Calendar.getInstance();
-                    c.set(year, monthOfYear, dayOfMonth);
-                    
-                	updateBeforeDisplay(c.getTime());
-                }
-            };
-            
-            private DatePickerDialog.OnDateSetListener mExpiryDateSetListener =
-                    new DatePickerDialog.OnDateSetListener() {
-
-                        public void onDateSet(DatePicker view, int year, 
-                                              int monthOfYear, int dayOfMonth) {
-
-                        	mExpiryYear=year;
-                        	mExpiryMonth=monthOfYear;
-                        	mExpiryDay=dayOfMonth;
-                        	
-                        	//initialise the before date to today
-                            Calendar c = Calendar.getInstance();
-                            c.set(year, monthOfYear, dayOfMonth);
-                        	
-                            updateExpiryDisplay(c.getTime());
-                        }
-                    };
-	
     /** Called when the activity is first created. */
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -149,32 +93,12 @@ public class PlaceHoldFormActivity extends Activity implements OnClickListener {
     	}
     	bib = m_extras.getParcelable("bib");
     	        
-    	//initialise the before date to today
-        Calendar c = Calendar.getInstance();        
-        mBeforeYear = c.get(Calendar.YEAR);
-        mBeforeMonth = c.get(Calendar.MONTH);
-        mBeforeDay = c.get(Calendar.DAY_OF_MONTH);
-        
-        c.set(mBeforeYear, mBeforeMonth, mBeforeDay);    	
-        updateBeforeDisplay(c.getTime());
-        
-        //initialise the expiry date to today
-        mExpiryYear = c.get(Calendar.YEAR);
-        mExpiryMonth = c.get(Calendar.MONTH);
-        mExpiryDay = c.get(Calendar.DAY_OF_MONTH);
-        
-        c.set(mExpiryYear, mExpiryMonth, mExpiryDay);    	
-        updateExpiryDisplay(c.getTime());
-              
-        
         ((Button) this.findViewById(R.id.btnHoldGo)).setOnClickListener(this);
         ((TextView) this.findViewById(R.id.title)).setText(bib.getTitle());
         
         
         final DatePicker pickBeforeDate = (DatePicker) this.findViewById(R.id.pickBeforeDate);
-        pickBeforeDate.setOnClickListener(this);     
         final DatePicker pickExpiryDate = (DatePicker) this.findViewById(R.id.pickExpiryDate);
-        pickExpiryDate.setOnClickListener(this);
         Calendar calendar = Calendar.getInstance();
         calendar.add(Calendar.DAY_OF_MONTH, 1);
         pickExpiryDate.updateDate(
@@ -273,24 +197,7 @@ public class PlaceHoldFormActivity extends Activity implements OnClickListener {
 			showDialog(EXPIRY_DATE_DIALOG_ID);
 		}
 	}
-	
-	@Override
-	protected Dialog onCreateDialog(int id) {
-	    switch (id) {
-	    case BEFORE_DATE_DIALOG_ID:
-	        return new DatePickerDialog(this,
-	                    mBeforeDateSetListener,
-	                    mBeforeYear, mBeforeMonth, mBeforeDay);
-	 	
-	    case EXPIRY_DATE_DIALOG_ID:
-	        return new DatePickerDialog(this,
-	                    mExpiryDateSetListener,
-	                    mExpiryYear, mExpiryMonth, mExpiryDay);
-	        
-	    }    
-	    return null;
-	}
-	
+		
 	private int placeHold (String id, String session_key) {
         HttpResponse resp;
 
@@ -320,8 +227,11 @@ public class PlaceHoldFormActivity extends Activity implements OnClickListener {
 		&branch=WORK
 		*/
         
-        String reserveDate = ""+mBeforeDay +"/"+mBeforeMonth+"/"+mBeforeYear;
-        String expiryDate = ""+mExpiryDay+"/"+mExpiryMonth+"/"+mExpiryYear;
+        final DatePicker pickBeforeDate = (DatePicker) this.findViewById(R.id.pickBeforeDate);
+        final DatePicker pickExpiryDate = (DatePicker) this.findViewById(R.id.pickExpiryDate);
+        
+        String reserveDate = pickBeforeDate.getDayOfMonth() + "/" + pickBeforeDate.getMonth() + "/" + pickBeforeDate.getYear();        
+        String expiryDate = pickExpiryDate.getDayOfMonth() + "/" + pickExpiryDate.getMonth() + "/" + pickExpiryDate.getYear();
         
         boolean submitBefore = ((CheckBox)findViewById(R.id.beforeCheckbox)).isChecked();
         boolean submitExpiry = ((CheckBox)findViewById(R.id.expiryCheckbox)).isChecked();
@@ -379,28 +289,7 @@ public class PlaceHoldFormActivity extends Activity implements OnClickListener {
     }
 
 	private String getBranch() {
-		return mPrefs.getString(getResources().getString(R.string.pref_branch_key).toString(), "");
-			
-	}
-	
-	private void updateBeforeDisplay(Date dateToFormat){		
-//		((DatePicker) findViewById(R.id.pickBeforeDate)).setText(
-//            new StringBuilder()
-//                    // Month is 0 based so add 1
-//                    .append(DateFormat.format("EE", dateToFormat)).append(", ")
-//                    .append(mBeforeDay).append("/")
-//                    .append(mBeforeMonth + 1).append("/")
-//                    .append(mBeforeYear).append(" "));
-	}	
-	
-	private void updateExpiryDisplay(Date dateToFormat){		
-//		((DatePicker) findViewById(R.id.pickExpiryDate)).setText(
-//            new StringBuilder()
-//                    // Month is 0 based so add 1
-//            		.append(DateFormat.format("EE", dateToFormat)).append(", ")
-//                    .append(mExpiryDay).append("/")
-//                    .append(mExpiryMonth + 1).append("/")
-//                    .append(mExpiryYear).append(" "));
+		return mPrefs.getString(getResources().getString(R.string.pref_branch_key).toString(), "");			
 	}
 
 } 
