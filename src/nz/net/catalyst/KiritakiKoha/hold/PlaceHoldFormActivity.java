@@ -78,7 +78,7 @@ public class PlaceHoldFormActivity extends Activity implements OnClickListener {
         setContentView(R.layout.place_hold);
         
         mPrefs = PreferenceManager.getDefaultSharedPreferences(this);
-        
+        setUserString();
         m_extras = getIntent().getExtras();
         if (m_extras == null) {
 			Toast.makeText(this, getString(R.string.place_hold_on_nothing), Toast.LENGTH_SHORT).show();
@@ -134,6 +134,20 @@ public class PlaceHoldFormActivity extends Activity implements OnClickListener {
     	EditText pickupLocation = (EditText) findViewById(R.id.pickupLocation);
     	pickupLocation.setText(getBranch());
     	
+    }
+    
+    public void setUserString() {
+    	
+    	String user = AuthenticatorActivity.getUserName();
+    	TextView userID = (TextView) this.findViewById(R.id.holdUsername);
+    	
+    	if (user==null){
+    		userID.setText("You are not logged in");
+    	}
+    	else {
+        
+        userID.setText("You are logged in as " + user);
+    	}
     }
     
 	public boolean onSearchRequested() {

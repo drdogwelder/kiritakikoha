@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import nz.net.catalyst.KiritakiKoha.Constants;
 import nz.net.catalyst.KiritakiKoha.EditPreferences;
 import nz.net.catalyst.KiritakiKoha.R;
+import nz.net.catalyst.KiritakiKoha.authenticator.AuthenticatorActivity;
 import nz.net.catalyst.KiritakiKoha.log.LogConfig;
 import android.accounts.Account;
 import android.accounts.AccountManager;
@@ -24,6 +25,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.Spinner;
+import android.widget.TextView;
 import android.widget.Toast;
 
 public class SearchFormActivity extends Activity implements OnClickListener  {
@@ -51,9 +53,23 @@ public class SearchFormActivity extends Activity implements OnClickListener  {
         super.onCreate(savedInstanceState);
         
         setContentView(R.layout.search_form);
-        
+        setUserString();
         // Set up click handlers for the text field and button
         ((Button) this.findViewById(R.id.btnSearchGo)).setOnClickListener(this);
+    }
+    
+    public void setUserString() {
+    	
+    	String user = AuthenticatorActivity.getUserName();
+    	TextView userID = (TextView) this.findViewById(R.id.searchUsername);
+    	
+    	if (user==null){
+    		userID.setText("You are not logged in");
+    	}
+    	else {
+        
+        userID.setText("You are logged in as " + user);
+    	}
     }
     
 
