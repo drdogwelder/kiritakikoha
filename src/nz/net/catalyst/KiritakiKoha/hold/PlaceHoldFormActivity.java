@@ -170,6 +170,18 @@ public class PlaceHoldFormActivity extends Activity implements OnClickListener {
         ((Button) this.findViewById(R.id.btnHoldGo)).setOnClickListener(this);
         ((TextView) this.findViewById(R.id.title)).setText(bib.getTitle());
         
+        ((Button) this.findViewById(R.id.button_share)).
+        	setOnClickListener(new OnClickListener() {
+				
+				@Override
+				public void onClick(View v) {Intent i = new Intent(Intent.ACTION_VIEW);
+				i.setType("application/facebook");
+				i.putExtra(Intent.EXTRA_SUBJECT, "Share URL");
+				i.putExtra(Intent.EXTRA_TEXT, bib.getURL());
+				startActivity(Intent.createChooser(i, "Share URL"));
+					
+				}
+			});
         
         final Button pickBeforeDate = (Button) this.findViewById(R.id.pickBeforeDate);
         pickBeforeDate.setOnClickListener(this);     
