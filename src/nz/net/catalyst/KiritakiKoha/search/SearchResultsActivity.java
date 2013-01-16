@@ -12,6 +12,7 @@ import nz.net.catalyst.KiritakiKoha.Constants;
 import nz.net.catalyst.KiritakiKoha.EditPreferences;
 import nz.net.catalyst.KiritakiKoha.R;
 import nz.net.catalyst.KiritakiKoha.Record;
+import nz.net.catalyst.KiritakiKoha.authenticator.AuthenticatorActivity;
 import nz.net.catalyst.KiritakiKoha.hold.PlaceHoldFormActivity;
 import nz.net.catalyst.KiritakiKoha.log.LogConfig;
 
@@ -47,6 +48,7 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import android.widget.BaseExpandableListAdapter;
+import android.widget.EditText;
 import android.widget.ExpandableListView;
 import android.widget.ExpandableListView.OnChildClickListener;
 import android.widget.ExpandableListView.OnGroupExpandListener;
@@ -83,10 +85,14 @@ public class SearchResultsActivity extends Activity implements OnChildClickListe
         
         mPrefs = PreferenceManager.getDefaultSharedPreferences(this);
         
+
+
         setContentView(R.layout.search_results);
         listview = (ExpandableListView) findViewById(R.id.listView);
         listview.setOnChildClickListener(this);
         listview.setOnGroupExpandListener(this);
+        
+        setUserString();
         
         m_extras = getIntent().getExtras();
         if (m_extras == null) {
@@ -154,7 +160,26 @@ public class SearchResultsActivity extends Activity implements OnChildClickListe
         showProgress();
         // Start search
         mSearchThread =	runSearch(mURL, listview, mHandler, this);
+        
+        String branchname = mPrefs.getString(getResources().getString(R.string.pref_branch_key).toString(), "");
+        ((TextView) findViewById(R.id.resultdefaultlibrary)).setText(branchname);
+
 	}
+    
+    public void setUserString() {
+    	
+    	String user = AuthenticatorActivity.getUserName();
+    	TextView userID = (TextView) this.findViewById(R.id.resultUsername);
+    	
+    	if (user==null){
+    		userID.setText("You are not logged in");
+    	}
+    	else {
+        
+        userID.setText("You are logged in as " + user);
+    	}
+    }
+
     public static Thread performOnBackgroundThread(final Runnable runnable) {
         final Thread t = new Thread() {
             @Override
@@ -201,6 +226,7 @@ public class SearchResultsActivity extends Activity implements OnChildClickListe
                 ((SearchResultsActivity) context).onSearchResult(result, listview);
             }
         });
+   
     }
     /*
      * {@inheritDoc}

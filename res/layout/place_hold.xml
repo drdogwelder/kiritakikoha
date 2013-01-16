@@ -10,6 +10,15 @@
 			  android:layout_width="fill_parent"
 			  android:layout_height="wrap_content"
 			  android:orientation="vertical">
+			  
+		        <TextView
+						android:id="@+id/holdUsername"
+						style="@android:style/TextAppearance.Small"
+						android:layout_width="match_parent"
+						android:layout_height="wrap_content"
+						android:layout_margin="2dp"
+						android:singleLine="true"
+						android:textStyle="italic" />
 
 					<TextView android:id="@+id/title"
 							  android:layout_width="fill_parent"
@@ -49,18 +58,16 @@
 		    android:layout_height="wrap_content"
 		    android:orientation="horizontal" >
 
-			<Button
+			<DatePicker
 			    android:id="@+id/pickBeforeDate"
 			    android:layout_width="wrap_content"
-			    android:layout_height="wrap_content"
-			    android:layout_weight="0.15"
-			    android:enabled="false" />
+			    android:layout_height="wrap_content" />
 
-		    <CheckBox
-		        android:id="@+id/beforeCheckbox"
-		        android:layout_width="wrap_content"
-		        android:layout_height="wrap_content"
-		        android:layout_marginTop="3dp" />
+			<CheckBox
+			    android:id="@+id/beforeCheckbox"
+			    android:layout_width="wrap_content"
+			    android:layout_height="match_parent"
+			    android:layout_marginTop="3dp" />
 
 		</LinearLayout>
   		
@@ -77,21 +84,19 @@
   		    android:layout_height="wrap_content"
   		    android:orientation="horizontal" >
 
-  		    <Button
-  		        android:id="@+id/pickExpiryDate"
-  		        android:layout_width="wrap_content"
-  		        android:layout_height="wrap_content"
-  		        android:layout_weight="0.15"
-  		    	android:enabled="false" />
+  			<DatePicker
+  			    android:id="@+id/pickExpiryDate"
+  			    android:layout_width="wrap_content"
+  			    android:layout_height="wrap_content" />
 
   		    <CheckBox
   		        android:id="@+id/expiryCheckbox"
   		        android:layout_width="wrap_content"
-  		        android:layout_height="wrap_content"
+  		        android:layout_height="match_parent"
   		        android:layout_marginTop="3dp" />
 
   		</LinearLayout>
-					
+				
 				<Button android:text="@string/hold_form_go"
 						android:id="@+id/btnHoldGo"
 						android:layout_marginTop="20dp"
@@ -99,6 +104,12 @@
 						android:layout_width="fill_parent"
 						android:layout_height="wrap_content"
 						/>
+
+				<Button
+				    android:id="@+id/button_share"
+				    android:layout_width="match_parent"
+				    android:layout_height="wrap_content"
+				    android:text="Share Link" />
 								
 			</LinearLayout>
 </ScrollView>

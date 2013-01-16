@@ -1,8 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+    <string name="intro_line1">Kiritaki -(noun) client,customer, consumer</string>
+    <string name="intro_line2">Koha- (noun) gift, present, offering, donation,contribution</string>
+    <string name="koha_paragraph">Koha is the first free and open source software library automation package(ILS). Developement is sponsored by libraries of varying types and sizes, volunteers and support companies from around the world.</string>
     <string name="app_name">Kiritaki Koha</string>
     <string name="label">Kiritaki Koha</string>
 
+     <string name="search_button">Search</string>
     <string name="searchresults">Search Results</string>
     <string name="itemdetails">Details</string>
 
@@ -26,7 +30,9 @@
     <string name="pref_login_url_title">Login URL</string>
     <string name="pref_login_url_summary">Enter the login URL (will be appended to base URL).</string>
     <string name="login_url">opac-user.pl</string>
-
+    
+    <string name="add_button">Add</string>
+    <string name="reset_button">Reset</string>
     <string name="searchform">Library Search</string>
     <string name="search_options_prompt">Search by?</string>
     <string-array name="search_options_array">
@@ -53,13 +59,13 @@
         <item>not</item>
     </string-array>
     <string name="search_pub_date_range">Publication Date Range</string>
-    <string name="search_pub_date_range_desc">(e.g. "1999-2001" or "-1987" or "2008-" )</string>
+    <string name="search_pub_date_range_desc">(e.g. "1999-2001")</string>
     <string name="search_form_go">Run search</string>
     <string name="pref_search_url_key">search.url</string>
     <string name="pref_search_url_title">Search URL</string>
     <string name="pref_search_url_summary">Enter the search URL components (will be appended to base URL).</string>
     <string name="search_url">opac-search.pl?format=rss2</string>
-    <string name="search_inprogress">Searching ...</string>
+    <string name="search_inprogress">Searching</string>
     <string name="placeholdform">Place Hold</string>
     <string name="pickup_location">Pickup location:</string>
     <string name="needed_before_date">Hold Starts on Date (optional):</string>
@@ -90,7 +96,7 @@
         <string name="password">member1</string>
     <string name="login_submit">Submit</string>
     <string name="login_message">Please login</string>
-    <string name="login_authenticating">Authenticating...</string>
+    <string name="login_authenticating">Authenticating</string>
     <string name="only_one_account">Currently you may only have at most one account at any one time.</string>
     
     <!--  Error strings -->
@@ -124,6 +130,7 @@
     <string name="my_books">My Books</string>
     <string name="ils_disabled_error">Sorry, Your Koha does not allow that operation</string>
     <string name="book_list_load_error">Error Loading My Books</string>
-    <string name="menu_refresh">Refresh</string>    
+    <string name="menu_refresh">Refresh</string>
+       
     
 </resources>
