@@ -5,10 +5,19 @@
 		android:layout_height="fill_parent">
 		
 		<LinearLayout
-		    xmlns:android="http://schemas.android.com/apk/res/android"
-		    android:layout_width="wrap_content"
-		    android:layout_height="wrap_content"
-		    android:orientation="vertical" >
+			  xmlns:android="http://schemas.android.com/apk/res/android"
+			  android:layout_width="fill_parent"
+			  android:layout_height="wrap_content"
+			  android:orientation="vertical">
+			  
+		        <TextView
+						android:id="@+id/holdUsername"
+						style="@android:style/TextAppearance.Small"
+						android:layout_width="match_parent"
+						android:layout_height="wrap_content"
+						android:layout_margin="2dp"
+						android:singleLine="true"
+						android:textStyle="italic" />
 
 					<TextView android:id="@+id/title"
 							  android:layout_width="fill_parent"
@@ -80,14 +89,20 @@
   		        android:layout_marginTop="3dp" />
 
   		</LinearLayout>
-					
+				
+				<Button android:text="@string/hold_form_go"
+						android:id="@+id/btnHoldGo"
+						android:layout_marginTop="20dp"
+						android:layout_weight="1"
+						android:layout_width="fill_parent"
+						android:layout_height="wrap_content"
+						/>
+
 				<Button
-				    android:id="@+id/btnHoldGo"
-				    android:layout_width="315dp"
-				    android:layout_height="0dp"
-				    android:layout_marginTop="20dp"
-				    android:layout_weight="1.62"
-				    android:text="@string/hold_form_go" />
+				    android:id="@+id/button_share"
+				    android:layout_width="match_parent"
+				    android:layout_height="wrap_content"
+				    android:text="Share Link" />
 								
 			</LinearLayout>
 </ScrollView>

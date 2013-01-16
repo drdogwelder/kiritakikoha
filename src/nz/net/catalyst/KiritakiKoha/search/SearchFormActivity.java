@@ -5,7 +5,10 @@ import java.util.ArrayList;
 import nz.net.catalyst.KiritakiKoha.Constants;
 import nz.net.catalyst.KiritakiKoha.EditPreferences;
 import nz.net.catalyst.KiritakiKoha.R;
+import nz.net.catalyst.KiritakiKoha.authenticator.AuthenticatorActivity;
 import nz.net.catalyst.KiritakiKoha.log.LogConfig;
+import android.accounts.Account;
+import android.accounts.AccountManager;
 import android.app.Activity;
 import android.content.ActivityNotFoundException;
 import android.content.Context;
@@ -50,7 +53,7 @@ public class SearchFormActivity extends Activity implements OnClickListener  {
         super.onCreate(savedInstanceState);
         
         setContentView(R.layout.search_form);
-        
+        setUserString();
         // Set up click handlers for the text field and button
         ((Button) this.findViewById(R.id.btnSearchGo)).setOnClickListener(this);
         
@@ -60,6 +63,22 @@ public class SearchFormActivity extends Activity implements OnClickListener  {
         String branchname = mPrefs.getString(getResources().getString(R.string.pref_branch_key).toString(), "");
         ((TextView) findViewById(R.id.defaultlibrary)).setText(branchname);
     }
+    
+    public void setUserString() {
+    	
+    	String user = AuthenticatorActivity.getUserName();
+    	TextView userID = (TextView) this.findViewById(R.id.searchUsername);
+    	
+    	if (user==null){
+    		userID.setText("You are not logged in");
+    	}
+    	else {
+        
+        userID.setText("You are logged in as " + user);
+    	}
+    }
+    
+
     
     public void addSearch(View v) {
 		LinearLayout first = (LinearLayout) this.findViewById(R.id.searchGroup2);
@@ -141,23 +160,35 @@ public class SearchFormActivity extends Activity implements OnClickListener  {
 	        if ( mText.getText().toString().trim().length() > 0 ) {
 				pos = ((Spinner) this.findViewById(R.id.spinner1)).getSelectedItemPosition();				
 				idxValues.add(av[pos]);
-				qValues.add(mText.getText().toString().trim());
+				String preParse = mText.getText().toString();
+				String delims = "[ ]+";
+				String[] tokens = preParse.split(delims);
+				for (int i = 0; i < tokens.length; i++) {
+					qValues.add(tokens[i]);	
+				}
+				
 	        }
 	        mText = (EditText) this.findViewById(R.id.searchTerms2);
 	        if ( mText.getText().toString().trim().length() > 0 ) {
 				pos = ((Spinner) this.findViewById(R.id.spinner2)).getSelectedItemPosition();
 				idxValues.add(av[pos]);
-				String op = (String)((Spinner) this.findViewById(R.id.andornot1)).getSelectedItem();
-				opValues.add(op);
-				qValues.add(mText.getText().toString().trim());
+				String preParse = mText.getText().toString();
+				String delims = "[ ]+";
+				String[] tokens = preParse.split(delims);
+				for (int i = 0; i < tokens.length; i++) {
+					qValues.add(tokens[i]);	
+				}
 	        }
 	        mText = (EditText) this.findViewById(R.id.searchTerms3);
 	        if ( mText.getText().toString().trim().length() > 0 ) {
 				pos = ((Spinner) this.findViewById(R.id.spinner3)).getSelectedItemPosition();
 				idxValues.add(av[pos]);
-				String op = (String)((Spinner) this.findViewById(R.id.andornot2)).getSelectedItem();
-				opValues.add(op);
-				qValues.add(mText.getText().toString().trim());
+				String preParse = mText.getText().toString();
+				String delims = "[ ]+";
+				String[] tokens = preParse.split(delims);
+				for (int i = 0; i < tokens.length; i++) {
+					qValues.add(tokens[i]);	
+				}
 	        }
 	        //limit-yr=1999-2000
 	        mText = (EditText) this.findViewById(R.id.pub_date_range);
@@ -180,8 +211,8 @@ public class SearchFormActivity extends Activity implements OnClickListener  {
 				if ( mPrefs.getBoolean(getResources().getString(R.string.pref_limit_available_key).toString(), false) ) 
 					d.putExtra(Constants.LIMIT_AVAILABLE,	"something-non-empty");
 				startActivity(d);
-        	}
-		}
+        	}}
+        	
 	}
 
 	public boolean onSearchRequested() {
