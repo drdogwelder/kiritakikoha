@@ -5,6 +5,15 @@
 		  android:layout_height="fill_parent"
 		  android:orientation="vertical"
 		  >
+
+    <TextView
+        android:id="@+id/resultdefaultlibrary"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="#D1D1D1"
+        android:text="Result Default Library" 
+        android:textColor="#000000"
+        />
 		  
     <TextView
 		android:id="@+id/resultUsername"

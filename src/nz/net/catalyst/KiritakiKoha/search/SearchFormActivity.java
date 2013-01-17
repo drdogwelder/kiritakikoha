@@ -1,6 +1,7 @@
 package nz.net.catalyst.KiritakiKoha.search;
 
 import java.util.ArrayList;
+import java.util.EmptyStackException;
 
 import nz.net.catalyst.KiritakiKoha.Constants;
 import nz.net.catalyst.KiritakiKoha.EditPreferences;
@@ -56,6 +57,20 @@ public class SearchFormActivity extends Activity implements OnClickListener  {
         setUserString();
         // Set up click handlers for the text field and button
         ((Button) this.findViewById(R.id.btnSearchGo)).setOnClickListener(this);
+        
+        SharedPreferences mPrefs = PreferenceManager.getDefaultSharedPreferences(this);
+
+        
+        String branchname = mPrefs.getString(getResources().getString(R.string.pref_branch_key).toString(), "");
+        TextView textViewBranchName = (TextView) findViewById(R.id.defaultlibrary);        
+        if(branchname!=null && !branchname.trim().equals("")){
+        	textViewBranchName.setText(branchname);
+        	textViewBranchName.setVisibility(View.VISIBLE);
+        } else {
+        	textViewBranchName.setVisibility(View.GONE);
+        }
+
+        	
     }
     
     public void setUserString() {
@@ -213,6 +228,7 @@ public class SearchFormActivity extends Activity implements OnClickListener  {
 		initiateScan();
 		return true;
 	}
+	
 	
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
