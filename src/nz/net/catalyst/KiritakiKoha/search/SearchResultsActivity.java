@@ -162,9 +162,19 @@ public class SearchResultsActivity extends Activity implements OnChildClickListe
         mSearchThread =	runSearch(mURL, listview, mHandler, this);
         
         String branchname = mPrefs.getString(getResources().getString(R.string.pref_branch_key).toString(), "");
-        ((TextView) findViewById(R.id.resultdefaultlibrary)).setText(branchname);
+        TextView textViewBranchName = (TextView) findViewById(R.id.resultdefaultlibrary);
+        if(branchname!=null && !branchname.trim().equals("")) {
+        	textViewBranchName.setText(branchname);
+        	textViewBranchName.setVisibility(View.VISIBLE);
+        } else {
+        	textViewBranchName.setVisibility(View.GONE);
+        	
+        }
+        
 
 	}
+
+	
     
     public void setUserString() {
     	
