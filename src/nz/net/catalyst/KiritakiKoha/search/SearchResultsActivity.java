@@ -165,7 +165,7 @@ public class SearchResultsActivity extends Activity implements OnChildClickListe
     	TextView userID = (TextView) this.findViewById(R.id.resultUsername);
     	
     	if (user==null){
-    		userID.setText("You are not logged in");
+    		userID.setText(R.string.user_not_logged);
     	}
     	else {
         

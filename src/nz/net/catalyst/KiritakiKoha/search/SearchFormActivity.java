@@ -64,7 +64,7 @@ public class SearchFormActivity extends Activity implements OnClickListener  {
     	TextView userID = (TextView) this.findViewById(R.id.searchUsername);
     	
     	if (user==null){
-    		userID.setText("You are not logged in");
+    		userID.setText(R.string.user_not_logged);
     	}
     	else {
         

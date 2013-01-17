@@ -25,8 +25,12 @@ import org.apache.http.message.BasicNameValuePair;
 import android.accounts.Account;
 import android.accounts.AccountManager;
 import android.app.Activity;
+import android.content.ComponentName;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.pm.ActivityInfo;
+import android.content.pm.PackageManager;
+import android.content.pm.ResolveInfo;
 import android.net.Uri;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
@@ -100,12 +104,11 @@ public class PlaceHoldFormActivity extends Activity implements OnClickListener {
         	setOnClickListener(new OnClickListener() {
 				
 				@Override
-				public void onClick(View v) {Intent i = new Intent(Intent.ACTION_VIEW);
-				i.setType("application/facebook");
-				i.putExtra(Intent.EXTRA_SUBJECT, "Share URL");
+				public void onClick(View v) {Intent i = new Intent(Intent.ACTION_SEND);
+				i.setType("text/plain");
 				i.putExtra(Intent.EXTRA_TEXT, bib.getURL());
 				startActivity(Intent.createChooser(i, "Share URL"));
-					
+
 				}
 			});
         
@@ -154,11 +157,11 @@ public class PlaceHoldFormActivity extends Activity implements OnClickListener {
     	TextView userID = (TextView) this.findViewById(R.id.holdUsername);
     	
     	if (user==null){
-    		userID.setText("You are not logged in");
+    		userID.setText(R.string.user_not_logged);
     	}
     	else {
         
-        userID.setText("You are logged in as " + user);
+        userID.setText(R.string.user_logged + user);
     	}
     }
     
