@@ -25,8 +25,12 @@ import org.apache.http.message.BasicNameValuePair;
 import android.accounts.Account;
 import android.accounts.AccountManager;
 import android.app.Activity;
+import android.content.ComponentName;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.pm.ActivityInfo;
+import android.content.pm.PackageManager;
+import android.content.pm.ResolveInfo;
 import android.net.Uri;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
@@ -78,7 +82,7 @@ public class PlaceHoldFormActivity extends Activity implements OnClickListener {
         setContentView(R.layout.place_hold);
         
         mPrefs = PreferenceManager.getDefaultSharedPreferences(this);
-        
+        setUserString();
         m_extras = getIntent().getExtras();
         if (m_extras == null) {
 			Toast.makeText(this, getString(R.string.place_hold_on_nothing), Toast.LENGTH_SHORT).show();
@@ -96,6 +100,17 @@ public class PlaceHoldFormActivity extends Activity implements OnClickListener {
         ((Button) this.findViewById(R.id.btnHoldGo)).setOnClickListener(this);
         ((TextView) this.findViewById(R.id.title)).setText(bib.getTitle());
         
+        ((Button) this.findViewById(R.id.button_share)).
+        	setOnClickListener(new OnClickListener() {
+				
+				@Override
+				public void onClick(View v) {Intent i = new Intent(Intent.ACTION_SEND);
+				i.setType("text/plain");
+				i.putExtra(Intent.EXTRA_TEXT, bib.getURL());
+				startActivity(Intent.createChooser(i, "Share URL"));
+
+				}
+			});
         
         final DatePicker pickBeforeDate = (DatePicker) this.findViewById(R.id.pickBeforeDate);
         final DatePicker pickExpiryDate = (DatePicker) this.findViewById(R.id.pickExpiryDate);
@@ -134,6 +149,32 @@ public class PlaceHoldFormActivity extends Activity implements OnClickListener {
     	EditText pickupLocation = (EditText) findViewById(R.id.pickupLocation);
     	pickupLocation.setText(getBranch());
     	
+        ((Button) findViewById(R.id.buttonmoredetails)).setOnClickListener(new OnClickListener() {
+			
+			@Override
+			public void onClick(View v) {
+		        Intent browse = new Intent( Intent.ACTION_VIEW , 
+		        		Uri.parse( bib.getURL().toString() ));
+
+		        startActivity( browse );
+				
+			}
+		});
+    	
+    }
+    
+    public void setUserString() {
+    	
+    	String user = AuthenticatorActivity.getUserName();
+    	TextView userID = (TextView) this.findViewById(R.id.holdUsername);
+    	
+    	if (user==null){
+    		userID.setText(R.string.user_not_logged);
+    	}
+    	else {
+        
+        userID.setText(R.string.user_logged + user);
+    	}
     }
     
 	public boolean onSearchRequested() {
