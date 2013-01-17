@@ -379,7 +379,9 @@ public class SearchResultsActivity extends Activity implements OnChildClickListe
 	        tv.setText(text);
 	        
 	        tv = (TextView) convertView.findViewById(R.id.description);
-	        tv.setText(Html.fromHtml(rec.getDescription()));
+	        String parsing = rec.getDescription();
+	        tv.setText(Html.fromHtml(parsing.substring(0, parsing.indexOf("<a")-4)));
+	        
 	        Log.d(TAG, "Decription= "+rec.getDescription());
 	        
 	        boolean showImages = mPrefs.getBoolean("show.image", true);
