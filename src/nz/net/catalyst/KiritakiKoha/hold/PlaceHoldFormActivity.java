@@ -146,6 +146,18 @@ public class PlaceHoldFormActivity extends Activity implements OnClickListener {
     	EditText pickupLocation = (EditText) findViewById(R.id.pickupLocation);
     	pickupLocation.setText(getBranch());
     	
+        ((Button) findViewById(R.id.buttonmoredetails)).setOnClickListener(new OnClickListener() {
+			
+			@Override
+			public void onClick(View v) {
+		        Intent browse = new Intent( Intent.ACTION_VIEW , 
+		        		Uri.parse( bib.getURL().toString() ));
+
+		        startActivity( browse );
+				
+			}
+		});
+    	
     }
     
     public void setUserString() {
