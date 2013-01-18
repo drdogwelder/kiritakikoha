@@ -17,6 +17,7 @@
 package nz.net.catalyst.KiritakiKoha.authenticator;
 
 import nz.net.catalyst.KiritakiKoha.Constants;
+import nz.net.catalyst.KiritakiKoha.InfoActivity;
 import nz.net.catalyst.KiritakiKoha.R;
 import nz.net.catalyst.KiritakiKoha.log.LogConfig;
 import android.accounts.Account;
@@ -232,6 +233,9 @@ public class AuthenticatorActivity extends AccountAuthenticatorActivity implemen
             if (!mConfirmCredentials) {
                 finishLogin();
             	Toast.makeText(this, "Logged in", Toast.LENGTH_LONG).show();
+            	InfoActivity.loginButton.setVisibility(View.GONE);
+            	InfoActivity.userLoggedInTextView.setText(getResources().getString(R.string.user_logged) + " " + mUsername);
+            	InfoActivity.userLoggedInTextView.setVisibility(View.VISIBLE);
             } else {
                 finishConfirmCredentials(true);
             }

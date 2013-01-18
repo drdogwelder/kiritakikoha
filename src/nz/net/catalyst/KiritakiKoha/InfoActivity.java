@@ -12,6 +12,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
+import android.widget.TextView;
 
 public class InfoActivity extends Activity {
 	static final String TAG = LogConfig.getLogTag(InfoActivity.class);
@@ -21,6 +22,8 @@ public class InfoActivity extends Activity {
 	// whether VERBOSE level logging is enabled
 	static final boolean VERBOSE = LogConfig.VERBOSE;
 
+	public static Button loginButton;
+	public static TextView userLoggedInTextView;
 	
 	/** Called when the activity is first created. */
 	@Override
@@ -48,7 +51,11 @@ public class InfoActivity extends Activity {
 				Intent intent = new Intent(InfoActivity.this, IssueListActivity.class);
 				InfoActivity.this.startActivity(intent);
 			}
-		}) ;}
+		}) ;
+		
+		loginButton = (Button) findViewById(R.id.login_button);
+		userLoggedInTextView = (TextView) findViewById(R.id.userLoggedTextView);
+	}
 
 	/** Called when the user clicks the login button */
 	public void login(View view) {
