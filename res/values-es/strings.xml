@@ -1,0 +1,141 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="intro_line1">Kiritaki -(sustantivo) cliente, consumidor</string>
+    <string name="intro_line2">Koha- (sustantivo) regalo, presente, ofrenda, obsequio, contribución</string>
+    <string name="koha_paragraph">Koha es el primer paquete de software de código abierto para bibliotecas automatizadas (ILS). El desarrollo está auspiciado por bibliotecas de diferentes tipos y magnitudes, lo mismo que por voluntarios y el apoyo de empresas de alrededor del mundo.</string>
+    <string name="app_name">Kiritaki Koha</string>
+    <string name="label">Kiritaki Koha</string>
+    <string name="my_books_button">Mis Libros</string>
+    <string name="login_button">Iniciar sesión</string>
+    <string name="share_button">Compartir URL</string>
+    <string name="user_not_logged">No ha iniciado su sesión</string>
+    <string name="user_logged">Usuario en sesión </string>
+
+    <string name="search_button">Buscar</string>
+    <string name="searchresults">Resultados de la búsqueda</string>
+    <string name="itemdetails">Detalles</string>
+
+    <string name="menu_preferences">Configuración</string>
+    <string name="menu_search">Buscar</string>
+    <string name="menu_info">Información</string>
+    <string name="menu_login">Iniciar sesión</string>
+    <string name="menu_logout">Terminar sesión</string>
+    <string name="menu_reset">Reiniciar</string>
+    <string name="menu_scan">Scan</string>
+    
+    <string name="prefcat_advanced">Avanzado</string>
+    <string name="prefcat_debug">Depurar</string>
+
+    <string name="pref_base_url_key">base.url</string>
+    <string name="pref_base_url_title">URL Base</string>
+    <string name="pref_base_url_summary">Ingrese la URL para Koha.</string>
+    <string name="base_url">http://demo.mykoha.co.nz/cgi-bin/koha/</string>
+
+    <string name="pref_login_url_key">login.url</string>
+    <string name="pref_login_url_title">URL para iniciar sesión</string>
+    <string name="pref_login_url_summary">Ingrese la URL para iniciar sesión (será agregada a la URL Base).</string>
+    <string name="login_url">opac-user.pl</string>
+    
+    <string name="add_button">Agregar</string>
+    <string name="reset_button">Reiniciar</string>
+    <string name="searchform">Búsqueda en biblioteca</string>
+    <string name="search_options_prompt">Buscar por?</string>
+    <string-array name="search_options_array">
+        <item>Palabra clave</item>
+        <item>Materia</item>
+        <item>Título</item>
+        <item>Autor</item>
+        <item>Publicación</item>
+        <item>Lugar de publicación</item>
+        <item>ISBN</item>
+    </string-array>
+    <string-array name="search_options_arrayValues">
+        <item>kw</item>
+        <item>su,wrdl</item>
+        <item>ti,wrdl</item>
+        <item>au,wrdl</item>
+        <item>pb,wrdl</item>
+        <item>pl,wrdl</item>
+        <item>nb</item>
+    </string-array>
+    <string-array name="searchLogicOperators">
+        <item>y</item>
+        <item>o</item>
+        <item>no</item>
+    </string-array>
+    <string name="search_pub_date_range">Período de publicación</string>
+    <string name="search_pub_date_range_desc">(ejemplo "1999-2001")</string>
+    <string name="search_form_go">Realizar búsqueda</string>
+    <string name="pref_search_url_key">search.url</string>
+    <string name="pref_search_url_title">Buscar URL</string>
+    <string name="pref_search_url_summary">Ingrese los componentes de la URL (serán agregados a la URL Base).</string>
+    <string name="search_url">opac-search.pl?format=rss2</string>
+    <string name="search_inprogress">Buscando</string>
+    <string name="placeholdform">Reservar</string>
+    <string name="pickup_location">Lugar de retiro:</string>
+    <string name="needed_before_date">Reservar desde (opcional):</string>
+    <string name="pickup_expiry_date">Reservar hasta (opcional):</string>
+    <string name="hold_form_go">Reservar</string>
+    <string name="pref_placehold_url_key">placehold.url</string>
+    <string name="pref_placehold_url_title">URL de reserva</string>
+    <string name="pref_placehold_url_summary">Ingrese los componentes de la URL (serán agregados a la URL Base).</string>
+    <string name="placehold_url">opac-reserve.pl</string>
+
+    <string name="pref_hold_via_web_key">hold.web</string>
+    <string name="pref_hold_via_web_title">Reservar vía Web</string>
+    <string name="pref_hold_via_web_summary">Use el sitio web para reservar (externo a esta aplicación).</string>
+
+    <string name="pref_branch_key">koha.branch</string>
+    <string name="pref_branch_title">Sucursal</string>
+    <string name="pref_branch_summary">Sucursal de la biblioteca (Dejar en blanco si no lo sabe).</string>
+
+    <string name="pref_limit_available_key">limit.available</string>
+    <string name="pref_limit_available_title">Solamente items disponibles</string>
+    <string name="pref_limit_available_summary">Limitar la búsqueda solamente a items disponibles.</string>
+    
+    <string name="login">Iniciar sesión</string>
+    <string name="login_username">Iniciar sesión:</string>
+        <string name="username">member</string>
+    
+    <string name="login_password">Contraseña:</string>
+        <string name="password">member1</string>
+    <string name="login_submit">Enviar</string>
+    <string name="login_message">Por favor inicie su sesión</string>
+    <string name="login_authenticating">Autenticando</string>
+    <string name="only_one_account">Solo puede tener una cuenta activa por vez.</string>
+    
+    <!--  Error strings -->
+    <string name="search_bad_request">Disculpe, no es válido su pedido.</string>
+    <string name="search_url_invalid">La URL ingresada no es válida.</string>
+    <string name="search_connection_failure">Disculpe la búsqueda ha fallado por falla de conexión.</string>
+    <string name="search_no_results">Disculpe la búsqueda no ha producido resultados.</string>
+    <string name="search_no_search_terms">Disculpe, no ha ingresado los criterios de búsqueda.</string>
+        
+    <string name="login_no_name">Por favor ingrese un nombre de usuario</string>
+    <string name="login_no_password">Por favor ingrese su contraseña</string>
+    <string name="auth_result_no_connection">Dirección del Server y/o número de Puerto son incorrectos</string>
+    <string name="auth_result_success">¡Autenticación exitosa!</string>
+    <string name="auth_result_fail">La autenticación ha fallado.</string>
+  
+    <string name="place_hold_not_logged_in">Disculpe, no puede reservar hasta que no haya iniciado su sesión.</string>
+    <string name="place_hold_on_nothing">Disculpe, ha ocurrido un problema con su pedido de reserva.</string>
+
+    <string name="load_config_download_error">Disculpe, ha ocurrido un error al descargar el archivo de configuración.</string>
+    <string name="load_config_error">Disculpe, ha ocurrido un error al examinar el archivo de configuración.</string>
+    <string name="load_config_success">El archivo de configuración ha sido cargado correctamente.</string>
+    <string name="scan_not_available">Disculpe, necesita instalar ZXing Barcode Scanner para esta tarea.</string>
+    <string name="cover_dec">cover</string>
+    <string name="pref_show_image_key">show.image</string>
+    <string name="pref_show_image_title">Mostrar imágenes</string>
+    <string name="pref_show_image_summary">Mostrar imágenes en la búsqueda</string>
+    <string name="pref_limit_items_key">limit.items</string>
+    <string name="pref_limit_items_title">Limitar a items abiertos</string>
+    <string name="pref_limit_items_summary">En la búsqueda abrir de a un item por vez</string>
+    <string name="invalid_data_error">Los datos encontrados fueron muy reducidos</string>
+    <string name="my_books">Mis Libros</string>
+    <string name="ils_disabled_error">Disculpe, Su Koha no permite esta operación</string>
+    <string name="book_list_load_error">Ha ocurrido una falla al cargar Mis Libros</string>
+    <string name="menu_refresh">Refrescar</string>
+    <string name="no_library_branch_defined">(Sucursal de biblioteca no definida)</string>
+    <string name="view_more_details">Mas detalles</string>
+</resources>

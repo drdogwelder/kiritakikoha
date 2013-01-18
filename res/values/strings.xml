@@ -137,5 +137,6 @@
     <string name="book_list_load_error">Error Loading My Books</string>
     <string name="menu_refresh">Refresh</string>
     <string name="no_library_branch_defined">(No Library Branch is defined)</string>
+    <string name="view_more_details">View More Details</string>
     
 </resources>

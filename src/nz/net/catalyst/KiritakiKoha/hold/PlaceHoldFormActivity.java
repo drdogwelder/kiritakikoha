@@ -206,7 +206,7 @@ public class PlaceHoldFormActivity extends Activity implements OnClickListener {
     		userID.setText(R.string.user_not_logged);
     	}
     	else {
-    		userID.setText(getResources().getString(R.string.user_logged) + user);
+    		userID.setText(getResources().getString(R.string.user_logged) + " " + user);
     	}
     }
     

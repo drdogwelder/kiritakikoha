@@ -1,15 +1,12 @@
 package nz.net.catalyst.KiritakiKoha.search;
 
 import java.util.ArrayList;
-import java.util.EmptyStackException;
 
 import nz.net.catalyst.KiritakiKoha.Constants;
 import nz.net.catalyst.KiritakiKoha.EditPreferences;
 import nz.net.catalyst.KiritakiKoha.R;
 import nz.net.catalyst.KiritakiKoha.authenticator.AuthenticatorActivity;
 import nz.net.catalyst.KiritakiKoha.log.LogConfig;
-import android.accounts.Account;
-import android.accounts.AccountManager;
 import android.app.Activity;
 import android.content.ActivityNotFoundException;
 import android.content.Context;
@@ -81,9 +78,8 @@ public class SearchFormActivity extends Activity implements OnClickListener  {
     	if (user==null){
     		userID.setText(R.string.user_not_logged);
     	}
-    	else {
-        
-        userID.setText("You are logged in as " + user);
+    	else {        
+    		userID.setText(getResources().getString(R.string.user_logged) + " " + user);
     	}
     }
     
@@ -208,7 +204,7 @@ public class SearchFormActivity extends Activity implements OnClickListener  {
         	if ( ! ( idxValues.size() > 0 && qValues.size() > 0 ) ) {
     			Toast.makeText(this, getString(R.string.search_no_search_terms), Toast.LENGTH_SHORT).show();
         	} else {
-        		Toast.makeText(this, "toast", Toast.LENGTH_SHORT);
+        		Toast.makeText(this, getString(R.string.search_inprogress), Toast.LENGTH_SHORT).show();
             	
         		// Load up the search results intent
 		        Intent d = new Intent(this, SearchResultsActivity.class);

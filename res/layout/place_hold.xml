@@ -35,7 +35,7 @@
 		                android:id="@+id/buttonmoredetails"
 		                android:layout_width="wrap_content"
 		                android:layout_height="wrap_content"
-		                android:text="View More Details" />
+		                android:text="@string/view_more_details" />
 
 		        </LinearLayout>
 
