@@ -111,6 +111,7 @@
     <string name="ils_disabled_error">申し訳ありませんが、あなたのコハ、その操作を許可しない</string>
     <string name="book_list_load_error">私の本のロード中にエラー</string>
     <string name="menu_refresh">リフレッシュ</string>    
+    <string name="no_library_branch_defined">(いいえライブラリ支店は定義されていません)</string>
     
     
 </resources>

@@ -65,15 +65,17 @@
 
 	<Button
 	    android:id="@+id/searchbutton"
-	    android:layout_width="match_parent"
+	    android:layout_width="fill_parent"
 	    android:layout_height="wrap_content"
+	    android:layout_gravity="center_horizontal"
 	    android:text="@string/search_button" />
 
 	<Button
 	    android:id="@+id/mybooksbutton"
-	    android:layout_width="match_parent"
+	    android:layout_width="fill_parent"
 	    android:layout_height="wrap_content"
-	    android:text="@string/my_books_button" />
+	    android:text="@string/my_books_button"
+	    android:visibility="gone" />
 
 	<ImageView
 			android:id="@+id/logo"
@@ -97,7 +99,6 @@
 	    android:id="@+id/login_button"
 	    android:layout_width="fill_parent"
 	    android:layout_height="wrap_content"
-	    android:layout_weight="1"
 	    android:onClick="login"
 	    android:text="@string/login_button" >
 

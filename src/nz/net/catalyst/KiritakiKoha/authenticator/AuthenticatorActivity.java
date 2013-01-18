@@ -108,10 +108,6 @@ public class AuthenticatorActivity extends AccountAuthenticatorActivity implemen
         
 
     }
-    
-
-    
-    
 
     /*
      * {@inheritDoc}
@@ -236,6 +232,7 @@ public class AuthenticatorActivity extends AccountAuthenticatorActivity implemen
             	InfoActivity.loginButton.setVisibility(View.GONE);
             	InfoActivity.userLoggedInTextView.setText(getResources().getString(R.string.user_logged) + " " + mUsername);
             	InfoActivity.userLoggedInTextView.setVisibility(View.VISIBLE);
+            	InfoActivity.myBooksButton.setVisibility(View.VISIBLE);
             } else {
                 finishConfirmCredentials(true);
             }

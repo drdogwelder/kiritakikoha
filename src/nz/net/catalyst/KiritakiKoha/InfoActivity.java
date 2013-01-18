@@ -23,6 +23,7 @@ public class InfoActivity extends Activity {
 	static final boolean VERBOSE = LogConfig.VERBOSE;
 
 	public static Button loginButton;
+	public static Button myBooksButton;
 	public static TextView userLoggedInTextView;
 	
 	/** Called when the activity is first created. */
@@ -42,8 +43,8 @@ public class InfoActivity extends Activity {
 			}
 		})   ; 
 		/** My Books button**/
-		Button mybooksbutton =(Button) findViewById(R.id.mybooksbutton);
-		mybooksbutton.setOnClickListener(new OnClickListener() 
+		myBooksButton = (Button) findViewById(R.id.mybooksbutton);
+		myBooksButton.setOnClickListener(new OnClickListener() 
 		{
 
 			@Override
@@ -51,7 +52,7 @@ public class InfoActivity extends Activity {
 				Intent intent = new Intent(InfoActivity.this, IssueListActivity.class);
 				InfoActivity.this.startActivity(intent);
 			}
-		}) ;
+		}) ;		
 		
 		loginButton = (Button) findViewById(R.id.login_button);
 		userLoggedInTextView = (TextView) findViewById(R.id.userLoggedTextView);

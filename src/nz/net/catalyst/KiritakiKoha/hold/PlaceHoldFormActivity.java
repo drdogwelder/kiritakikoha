@@ -33,10 +33,11 @@ import android.preference.PreferenceManager;
 import android.util.Log;
 import android.view.View;
 import android.view.View.OnClickListener;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.DatePicker;
-import android.widget.EditText;
+import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -70,6 +71,7 @@ public class PlaceHoldFormActivity extends Activity implements OnClickListener {
 	
 	private Record bib;
 	private Bundle m_extras;
+	private Spinner pickupLocationSpinner;
 	
     /** Called when the activity is first created. */
     @Override
@@ -110,6 +112,9 @@ public class PlaceHoldFormActivity extends Activity implements OnClickListener {
         
         final DatePicker pickBeforeDate = (DatePicker) this.findViewById(R.id.pickBeforeDate);
         final DatePicker pickExpiryDate = (DatePicker) this.findViewById(R.id.pickExpiryDate);
+        pickBeforeDate.setEnabled(false);
+        pickExpiryDate.setEnabled(false);
+        
         Calendar calendar = Calendar.getInstance();
         calendar.add(Calendar.DAY_OF_MONTH, 1);
         pickExpiryDate.updateDate(
@@ -141,10 +146,14 @@ public class PlaceHoldFormActivity extends Activity implements OnClickListener {
     	        }
     	    }
     	});
-     
-    	EditText pickupLocation = (EditText) findViewById(R.id.pickupLocation);
-    	pickupLocation.setText(getBranch());
+
     	
+    	pickupLocationSpinner = (Spinner) findViewById(R.id.pickUpLocationSpinner);
+		ArrayAdapter<String> spinnerArrayAdapter = 
+				new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, getBranchesArray());
+		spinnerArrayAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+		pickupLocationSpinner.setAdapter(spinnerArrayAdapter);
+		
         ((Button) findViewById(R.id.buttonmoredetails)).setOnClickListener(new OnClickListener() {
 			
 			@Override
@@ -159,7 +168,38 @@ public class PlaceHoldFormActivity extends Activity implements OnClickListener {
     	
     }
     
-    public void setUserString() {    	
+    /**
+     * Gets an array of branches from the Library Server.
+     * 
+     * If the Library Server doesn't provide a list of branches then
+     *  the array will have only the default branch saved in preferences.
+     * If no branch is defined in preferences then show the message:
+     *  "no Library Branch is defined in preferences"
+     * 
+     */
+    private String[] getBranchesArray(){
+    	String branchesArray[] = new String[1];
+    	branchesArray[0] = mPrefs.getString(getResources().getString(R.string.pref_branch_key).toString(), "");
+    	if(branchesArray[0].trim().equals("")){
+    		branchesArray[0] = getResources().getString(R.string.no_library_branch_defined);
+    	}    	 
+    	
+    	/**
+    	 * TODO: insert in this section the call to the server to request the branches
+    	 *       and put them in branchesArray
+    	 * 
+    	 * 
+    	 * 
+    	 */
+    	
+    	return branchesArray;
+    }
+    
+    
+    /**
+     * Sets the current user logged for displaying
+     */
+    private void setUserString() {    	
     	String user = AuthenticatorActivity.getUserName();
     	TextView userID = (TextView) this.findViewById(R.id.holdUsername);    	
     	if (user==null){
@@ -242,7 +282,8 @@ public class PlaceHoldFormActivity extends Activity implements OnClickListener {
 												getResources().getString(R.string.base_url).toString());
 		aURI = aURI + mPrefs.getString(getResources().getString(R.string.pref_placehold_url_key).toString(),
 				getResources().getString(R.string.placehold_url).toString());
-		String branch = getBranch();
+		
+		String branch = pickupLocationSpinner.getSelectedItem().toString();
 		
 		aURI = aURI + "?biblionumber=" + Uri.encode(bib.getID());
 		
@@ -321,10 +362,6 @@ public class PlaceHoldFormActivity extends Activity implements OnClickListener {
         }
         return Constants.RESP_FAILED;
     }
-
-	private String getBranch() {
-		return mPrefs.getString(getResources().getString(R.string.pref_branch_key).toString(), "");			
-	}
 
 } 
 

@@ -88,7 +88,7 @@
     <string name="pref_branch_key">koha.branch</string>
     <string name="pref_branch_title">Library Branch</string>
     <string name="pref_branch_summary">The library branch (leave blank if unknown).</string>
-    
+
     <string name="pref_limit_available_key">limit.available</string>
     <string name="pref_limit_available_title">Available items only</string>
     <string name="pref_limit_available_summary">Limit the search to available items only.</string>
@@ -136,6 +136,6 @@
     <string name="ils_disabled_error">Sorry, Your Koha does not allow that operation</string>
     <string name="book_list_load_error">Error Loading My Books</string>
     <string name="menu_refresh">Refresh</string>
-       
+    <string name="no_library_branch_defined">(No Library Branch is defined)</string>
     
 </resources>
