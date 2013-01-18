@@ -48,7 +48,6 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import android.widget.BaseExpandableListAdapter;
-import android.widget.EditText;
 import android.widget.ExpandableListView;
 import android.widget.ExpandableListView.OnChildClickListener;
 import android.widget.ExpandableListView.OnGroupExpandListener;
@@ -173,11 +172,8 @@ public class SearchResultsActivity extends Activity implements OnChildClickListe
         
 
 	}
-
-	
     
-    public void setUserString() {
-    	
+    public void setUserString() {    	
     	String user = AuthenticatorActivity.getUserName();
     	TextView userID = (TextView) this.findViewById(R.id.resultUsername);
     	
@@ -185,8 +181,7 @@ public class SearchResultsActivity extends Activity implements OnChildClickListe
     		userID.setText(R.string.user_not_logged);
     	}
     	else {
-        
-        userID.setText("You are logged in as " + user);
+    		userID.setText(getResources().getString(R.string.user_logged) + " " + user);
     	}
     }
 

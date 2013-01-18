@@ -25,12 +25,8 @@ import org.apache.http.message.BasicNameValuePair;
 import android.accounts.Account;
 import android.accounts.AccountManager;
 import android.app.Activity;
-import android.content.ComponentName;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.content.pm.ActivityInfo;
-import android.content.pm.PackageManager;
-import android.content.pm.ResolveInfo;
 import android.net.Uri;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
@@ -163,17 +159,14 @@ public class PlaceHoldFormActivity extends Activity implements OnClickListener {
     	
     }
     
-    public void setUserString() {
-    	
+    public void setUserString() {    	
     	String user = AuthenticatorActivity.getUserName();
-    	TextView userID = (TextView) this.findViewById(R.id.holdUsername);
-    	
+    	TextView userID = (TextView) this.findViewById(R.id.holdUsername);    	
     	if (user==null){
     		userID.setText(R.string.user_not_logged);
     	}
     	else {
-        
-        userID.setText(R.string.user_logged + user);
+    		userID.setText(getResources().getString(R.string.user_logged) + user);
     	}
     }
     
