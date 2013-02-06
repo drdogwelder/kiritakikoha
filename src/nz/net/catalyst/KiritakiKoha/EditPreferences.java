@@ -126,6 +126,10 @@ public class EditPreferences extends PreferenceActivity implements OnSharedPrefe
 	{
 		if(DEBUG)Log.d(TAG, "Scan Starting");
 		IntentIntegrator integ = new IntentIntegrator(this);
+		// v1.7 had a fault raised java.lang.SecurityException: Permission Denial: starting Intent { act=com.google.zxing.client.android.SCAN
+		// A resolution was described on stackoverflow - Thanks to Sean Owen for the suggested fix. 
+		// http://stackoverflow.com/questions/11388450/using-zxing-barcode-scanner-causes-securityexception
+		integ.setTargetApplications(IntentIntegrator.TARGET_BARCODE_SCANNER_ONLY);
 		AlertDialog dialog = integ.initiateScan();
 		if(dialog == null)
 		{

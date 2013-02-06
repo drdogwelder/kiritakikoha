@@ -19,7 +19,6 @@ public class Constants {
 	public static final String AUTHTOKEN_TYPE = "nz.net.catalyst.KiritakiKoha.account";
     public static final String PARAM_USERNAME = "userid";
     public static final String PARAM_PASSWORD = "password";
-    public static final String USER_AGENT = "KiritakiKoha/1.0";
     public static final String AUTH_SESSION_KEY = "auth_session";
     public static final int REGISTRATION_TIMEOUT = 30 * 1000; // ms
     public static final String PARAM_CONFIRMCREDENTIALS = "confirmCredentials";
