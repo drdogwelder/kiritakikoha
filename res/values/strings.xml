@@ -2,7 +2,7 @@
 <resources>
     <string name="intro_line1">Kiritaki -(noun) client,customer, consumer</string>
     <string name="intro_line2">Koha- (noun) gift, present, offering, donation,contribution</string>
-    <string name="koha_paragraph">Koha is the first free and open source software library automation package(ILS). Developement is sponsored by libraries of varying types and sizes, volunteers and support companies from around the world.</string>
+    <string name="koha_paragraph">Koha is the first free and open source software library automation package(ILS). Development is sponsored by libraries of varying types and sizes, volunteers and support companies from around the world.</string>
     <string name="app_name">Kiritaki Koha</string>
     <string name="label">Kiritaki Koha</string>
     <string name="my_books_button">My Books</string>

@@ -38,10 +38,10 @@ public class BookThumbnailService {
 		try{
 			URL inputURL = new URL(aURI);
 			URLConnection connect = inputURL.openConnection();
-			String responce = KohaAuthHandler.convertStreamToString(connect.getInputStream());
-			responce = responce.substring(responce.indexOf('{'), responce.length()-2);
+			String response = KohaAuthHandler.convertStreamToString(connect.getInputStream());
+			response = response.substring(response.indexOf('{'), response.length()-2);
 			JsonParser parser = new JsonParser();
-			JsonObject j = parser.parse(responce).getAsJsonObject();
+			JsonObject j = parser.parse(response).getAsJsonObject();
 			if(j.get("ISBN:" + isbn) == null)return null;
 			j = j.get("ISBN:" + isbn).getAsJsonObject();
 			if(j.get("thumbnail_url") == null) return null;
